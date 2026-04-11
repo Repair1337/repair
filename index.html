@@ -99,24 +99,35 @@
             border-radius: 20px;
         }
 
-        .btn {
-            background-color: #e30613;
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            padding: 14px 28px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            white-space: nowrap;
+        .card-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
             margin-left: 16px;
             flex-shrink: 0;
         }
 
-        a.card-link {
-            display: block;
+        .btn {
+            display: inline-block;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            text-align: center;
             text-decoration: none;
-            color: inherit;
+        }
+
+        .btn-red {
+            background-color: #e30613;
+            color: #ffffff;
+        }
+
+        .btn-gray {
+            background-color: #f0f0f0;
+            color: #444444;
         }
     </style>
 </head>
@@ -129,7 +140,6 @@
     <div class="page">
         <h1>Автосервисы Риги</h1>
 
-        <a class="card-link" href="autopro.html">
         <div class="card">
             <div class="card-info">
                 <div class="card-name">AutoPro Riga</div>
@@ -147,9 +157,11 @@
                     <span class="tag">Mazda</span>
                 </div>
             </div>
-            <button class="btn">Записаться</button>
+            <div class="card-buttons">
+                <a class="btn btn-gray" href="autopro.html">Подробнее</a>
+                <a class="btn btn-red" href="zapis.html">Записаться</a>
+            </div>
         </div>
-        </a>
 
         <div class="card">
             <div class="card-info">
@@ -169,7 +181,10 @@
                     <span class="tag">Skoda</span>
                 </div>
             </div>
-            <button class="btn">Записаться</button>
+            <div class="card-buttons">
+                <a class="btn btn-gray" href="#">Подробнее</a>
+                <a class="btn btn-red" href="zapis.html">Записаться</a>
+            </div>
         </div>
 
         <div class="card">
@@ -189,7 +204,10 @@
                     <span class="tag">Opel</span>
                 </div>
             </div>
-            <button class="btn">Записаться</button>
+            <div class="card-buttons">
+                <a class="btn btn-gray" href="#">Подробнее</a>
+                <a class="btn btn-red" href="zapis.html">Записаться</a>
+            </div>
         </div>
 
         <div class="card">
@@ -210,7 +228,10 @@
                     <span class="tag">Hyundai</span>
                 </div>
             </div>
-            <button class="btn">Записаться</button>
+            <div class="card-buttons">
+                <a class="btn btn-gray" href="#">Подробнее</a>
+                <a class="btn btn-red" href="zapis.html">Записаться</a>
+            </div>
         </div>
 
     </div>
