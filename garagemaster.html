@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>GarageMaster — RepairTech</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            font-family: sans-serif;
+        }
+
+        header {
+            background-color: #ffffff;
+            padding: 16px 24px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        header a {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #e30613;
+            text-decoration: none;
+        }
+
+        .page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 24px;
+            color: #e30613;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #666666;
+            margin-bottom: 16px;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+
+        .stars {
+            color: #f5a623;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+
+        .rating-text {
+            font-size: 0.95rem;
+            color: #444444;
+        }
+
+        .section {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 20px 24px;
+            margin-bottom: 16px;
+        }
+
+        .section h2 {
+            font-size: 1.1rem;
+            color: #e30613;
+            margin: 0 0 12px 0;
+        }
+
+        .section p {
+            margin: 0;
+            line-height: 1.6;
+            color: #333333;
+        }
+
+        .hours-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95rem;
+        }
+
+        .hours-row:last-child {
+            border-bottom: none;
+        }
+
+        .hours-day {
+            color: #444444;
+        }
+
+        .hours-time {
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .hours-time.closed {
+            color: #999999;
+            font-weight: normal;
+        }
+
+        .contact-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .contact-row:last-child {
+            border-bottom: none;
+        }
+
+        .contact-label {
+            color: #666666;
+            width: 80px;
+        }
+
+        .contact-value {
+            color: #1a1a1a;
+        }
+
+        .service-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95rem;
+        }
+
+        .service-row:last-child {
+            border-bottom: none;
+        }
+
+        .service-price {
+            color: #e30613;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            background-color: #e30613;
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            text-align: center;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html">RepairTech</a>
+    </header>
+
+    <div class="page">
+
+        <a class="back-link" href="index.html">← Назад к списку сервисов</a>
+
+        <h1>GarageMaster</h1>
+        <div class="subtitle">ул. Краста 87, Рига</div>
+
+        <div class="rating">
+            <span class="stars">★★★★★</span>
+            <span class="rating-text">4.9 из 5 (217 отзывов)</span>
+        </div>
+
+        <div class="section">
+            <h2>О сервисе</h2>
+            <p>GarageMaster — один из самых высоко оцениваемых автосервисов Риги, специализирующийся на немецких автомобилях премиум-сегмента. Сервис оснащён современным диагностическим оборудованием Bosch и работает по стандартам авторизованных дилерских центров, но по более доступным ценам. Гарантия на все выполненные работы — 12 месяцев.</p>
+        </div>
+
+        <div class="section">
+            <h2>Часы работы</h2>
+            <div class="hours-row">
+                <span class="hours-day">Понедельник — Пятница</span>
+                <span class="hours-time">9:00 — 18:00</span>
+            </div>
+            <div class="hours-row">
+                <span class="hours-day">Суббота</span>
+                <span class="hours-time">10:00 — 15:00</span>
+            </div>
+            <div class="hours-row">
+                <span class="hours-day">Воскресенье</span>
+                <span class="hours-time closed">Выходной</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Контакты</h2>
+            <div class="contact-row">
+                <span class="contact-label">Телефон</span>
+                <span class="contact-value">+371 29 887 234</span>
+            </div>
+            <div class="contact-row">
+                <span class="contact-label">Email</span>
+                <span class="contact-value">info@garagemaster.lv</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Услуги и цены</h2>
+            <div class="service-row">
+                <span>Диагностика и ремонт тормозной системы</span>
+                <span class="service-price">от 50€</span>
+            </div>
+            <div class="service-row">
+                <span>Замена тормозных колодок</span>
+                <span class="service-price">от 70€</span>
+            </div>
+            <div class="service-row">
+                <span>Ремонт ходовой части</span>
+                <span class="service-price">от 120€</span>
+            </div>
+            <div class="service-row">
+                <span>Замена амортизаторов</span>
+                <span class="service-price">от 160€</span>
+            </div>
+            <div class="service-row">
+                <span>Развал-схождение</span>
+                <span class="service-price">от 45€</span>
+            </div>
+            <div class="service-row">
+                <span>Сезонная замена шин с балансировкой</span>
+                <span class="service-price">от 40€</span>
+            </div>
+        </div>
+
+        <a href="zapis.html" class="btn">Записаться</a>
+
+    </div>
+
+</body>
+</html>
