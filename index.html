@@ -44,6 +44,12 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
         }
 
         .card-info {
@@ -118,6 +124,7 @@
             white-space: nowrap;
             text-align: center;
             text-decoration: none;
+            transition: background-color 0.2s ease;
         }
 
         .btn-red {
@@ -125,9 +132,17 @@
             color: #ffffff;
         }
 
+        .btn-red:hover {
+            background-color: #c20510;
+        }
+
         .btn-gray {
             background-color: #f0f0f0;
             color: #444444;
+        }
+
+        .btn-gray:hover {
+            background-color: #dcdcdc;
         }
     </style>
 </head>
