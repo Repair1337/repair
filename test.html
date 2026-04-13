@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Тест JavaScript</title>
+  <style>
+    body {
+      padding: 40px;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Тест JavaScript</h1>
+  <p>Ниже карточки, созданные через JavaScript:</p>
+
+  <!-- Пустой контейнер. JavaScript найдёт его по id и вставит сюда карточки -->
+  <div id="services-container"></div>
+
+  <script>
+    // Создаём массив объектов. Каждый объект — это один сервис с именем и рейтингом
+    var services = [
+      { name: "Тестовый Сервис 1", rating: 4.5, address: "Paula Lejiņā iela 3" },
+      { name: "Тестовый Сервис 2", rating: 4.8, address: "Test455" },
+      { name: "Тестовый Сервис 3", rating: 2.3, address: "Origo" }
+    ];
+
+    // Находим контейнер в HTML по его id и сохраняем в переменную
+    var container = document.getElementById("services-container");
+
+    // Проходим по каждому элементу массива. Переменная service — это текущий объект на каждом шаге
+    services.forEach(function(service) {
+
+      // Создаём новый пустой div-элемент (он пока не виден на странице)
+      var card = document.createElement("div");
+
+      // Заполняем div HTML-содержимым: заголовок с именем и абзац с рейтингом
+      card.innerHTML = "<h3>" + service.name + "</h3><p>Рейтинг: " + service.rating + "</p><p>Адрес: " + service.address + "</p>";
+
+      // Задаём стили карточке напрямую через JavaScript
+      card.style.border = "1px solid gray"; // рамка вокруг карточки
+      card.style.padding = "16px";          // отступ внутри карточки
+      card.style.marginBottom = "12px";     // отступ снизу между карточками
+
+      // Добавляем готовую карточку в контейнер — теперь она появится на странице
+      container.appendChild(card);
+    });
+  </script>
+
+</body>
+</html>
