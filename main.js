@@ -143,7 +143,7 @@ const btnFilterAll  = document.getElementById('filter-all');
 // Mehanika 24 (4.5) не пройдёт, так как 4.5 не больше 4.5 (строгое >).
 btnFilterHigh.addEventListener('click', function() {
     const filtered = services.filter(function(service) {
-        return service.rating > 4.5;
+        return service.rating >= 4.5;
     });
     renderServices(filtered);
 });
