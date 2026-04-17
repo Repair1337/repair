@@ -202,6 +202,29 @@
             font-size: 0.8rem;
             color: #aaaaaa;
         }
+
+        /* Блок с кнопками фильтрации над списком сервисов */
+        .filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        /* Кнопки фильтра — скромные, серые, визуально отличаются от .btn на карточках */
+        .filter-btn {
+            background-color: #e8e8e8;
+            color: #444444;
+            border: 1px solid #d0d0d0;
+            border-radius: 6px;
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            background-color: #d8d8d8;
+        }
     </style>
 </head>
 <body>
@@ -212,6 +235,12 @@
 
     <div class="page">
         <h1>Автосервисы Риги</h1>
+
+        <!-- Кнопки фильтрации. JavaScript найдёт их по id и повесит обработчики -->
+        <div class="filters">
+            <button class="filter-btn" id="filter-high">Только с рейтингом выше 4.5</button>
+            <button class="filter-btn" id="filter-all">Показать все</button>
+        </div>
 
         <!-- Пустой контейнер. JavaScript найдёт его по id и вставит сюда карточки -->
         <div id="services-list"></div>
