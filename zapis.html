@@ -5,9 +5,13 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23e30613'/><text x='50' y='72' font-family='sans-serif' font-size='65' font-weight='bold' fill='white' text-anchor='middle'>R</text></svg>">
     <title>Запись на сервис — RepairTech</title>
     <style>
+
+        /* ===== СБРОС И БАЗОВЫЕ СТИЛИ ===== */
+        *, *::before, *::after { box-sizing: border-box; }
+
         body {
             margin: 0;
-            background-color: #f5f5f5;
+            background: #f5f5f5;
             color: #1a1a1a;
             font-family: sans-serif;
             display: flex;
@@ -15,8 +19,9 @@
             min-height: 100vh;
         }
 
+        /* ===== ШАПКА ===== */
         header {
-            background-color: #ffffff;
+            background: #fff;
             padding: 16px 24px;
             border-bottom: 1px solid #e0e0e0;
         }
@@ -28,79 +33,25 @@
             text-decoration: none;
         }
 
+        /* ===== ОСНОВНОЙ КОНТЕЙНЕР ===== */
         .page {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 32px 24px;
             flex: 1;
+            width: 100%;
         }
 
-        .back-link {
-            display: inline-block;
-            margin-bottom: 24px;
-            color: #e30613;
-            text-decoration: none;
-            font-size: 0.95rem;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        h1 {
-            font-size: 2rem;
-            color: #1a1a1a;
-            margin-bottom: 32px;
-        }
-
-        .placeholder {
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            padding: 48px 24px;
-            text-align: center;
-        }
-
-        .placeholder-icon {
-            font-size: 4rem;
-            margin-bottom: 16px;
-        }
-
-        .placeholder-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #1a1a1a;
-            margin-bottom: 10px;
-        }
-
-        .placeholder-text {
-            font-size: 0.95rem;
-            color: #888888;
-            max-width: 360px;
-            margin: 0 auto 32px auto;
-            line-height: 1.6;
-        }
-
-        .btn-back {
-            display: inline-block;
-            background-color: #e30613;
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 8px;
-            padding: 14px 28px;
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
+        /* ===== ФУТЕР ===== */
         footer {
-            background-color: #fafafa;
+            background: #fafafa;
             border-top: 1px solid #e0e0e0;
             padding: 32px 24px;
         }
 
         .footer-inner {
-            max-width: 800px;
-            margin: 0 auto 24px auto;
+            max-width: 900px;
+            margin: 0 auto 24px;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
@@ -116,7 +67,7 @@
 
         .footer-slogan {
             font-size: 0.85rem;
-            color: #888888;
+            color: #888;
             margin-top: 4px;
         }
 
@@ -129,47 +80,537 @@
 
         .footer-links a {
             text-decoration: none;
-            color: #666666;
+            color: #666;
             font-size: 0.9rem;
+            transition: color 0.2s;
         }
 
-        .footer-links a:hover {
-            color: #e30613;
-        }
+        .footer-links a:hover { color: #e30613; }
 
         .footer-copy {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             text-align: center;
             font-size: 0.8rem;
-            color: #aaaaaa;
+            color: #aaa;
         }
+
+        /* ===== ОБЩИЕ ЭЛЕМЕНТЫ ===== */
+        .section-title {
+            font-size: 2rem;
+            color: #1a1a1a;
+            margin: 0 0 6px;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: #666;
+            margin: 0 0 28px;
+        }
+
+        /* Кнопка "← Назад" */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            background: none;
+            border: none;
+            color: #e30613;
+            cursor: pointer;
+            font-size: 0.95rem;
+            padding: 0;
+            margin-bottom: 20px;
+            transition: opacity 0.2s;
+        }
+
+        .back-btn:hover { opacity: 0.7; text-decoration: underline; }
+
+        /* Универсальные кнопки */
+        .btn {
+            display: inline-block;
+            border: none;
+            border-radius: 8px;
+            padding: 11px 22px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-red { background: #e30613; color: #fff; }
+        .btn-red:hover { background: #c20510; }
+        .btn-gray { background: #e0e0e0; color: #444; }
+        .btn-gray:hover { background: #ccc; }
+
+        /* Плавное появление блоков */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .anim-fade { animation: fadeUp 0.22s ease; }
+
+
+        /* ===== УРОВЕНЬ 1: СЕТКА МЕСЯЦЕВ ===== */
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .month-card {
+            border-radius: 12px;
+            padding: 20px 14px;
+            text-align: center;
+        }
+
+        .month-available {
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+
+        .month-available:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+            transform: translateY(-3px);
+        }
+
+        .month-past {
+            background: #eee;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .month-name {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .month-spots {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .month-past .month-spots { color: #bbb; }
+
+
+        /* ===== УРОВЕНЬ 2: НЕДЕЛЬНЫЙ ВИД ===== */
+
+        /* Строка навигации по неделям */
+        .week-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .week-nav-btn {
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .week-nav-btn:hover:not(:disabled) { background: #ddd; }
+
+        .week-nav-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .week-range-label {
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+            flex: 1;
+        }
+
+        /* Обёртка для горизонтального скролла на малых экранах */
+        .week-grid-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Сетка из 7 столбцов — один на каждый день */
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            min-width: 630px;
+            align-items: stretch;
+        }
+
+        /* Столбец одного дня */
+        .day-col {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        /* Заголовок столбца: "Пн / 21.04" */
+        .day-header {
+            text-align: center;
+            padding: 10px 4px 8px;
+            border-radius: 8px;
+            font-size: 0.76rem;
+            line-height: 1.5;
+            font-weight: bold;
+            background: #f0f0f0;
+            color: #555;
+        }
+
+        .day-header-today {
+            background: #e30613;
+            color: #fff;
+        }
+
+        .day-header-past {
+            background: #e8e8e8;
+            color: #aaa;
+        }
+
+        .day-header-sunday {
+            background: #e8e8e8;
+            color: #bbb;
+        }
+
+        /* Временной слот */
+        .slot {
+            padding: 7px 4px;
+            border-radius: 6px;
+            font-size: 0.71rem;
+            text-align: center;
+            line-height: 1.45;
+            user-select: none;
+        }
+
+        /* Свободный слот — зелёный, кликабельный */
+        .slot-free {
+            background: #e8f5e9;
+            color: #2e7d32;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.15s, transform 0.12s;
+        }
+
+        .slot-free:hover {
+            background: #c8e6c9;
+            transform: translateY(-1px);
+        }
+
+        /* Занятый слот — красноватый, некликабельный */
+        .slot-busy {
+            background: #ffebee;
+            color: #b71c1c;
+        }
+
+        /* Прошедший слот — серый, некликабельный */
+        .slot-past {
+            background: #f0f0f0;
+            color: #ccc;
+        }
+
+        /* Плашка "Выходной" для воскресенья — растягивается на всю высоту */
+        .slot-sunday {
+            flex: 1;
+            background: #f0f0f0;
+            color: #bbb;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            min-height: 100px;
+        }
+
+
+        /* ===== МОДАЛЬНОЕ ОКНО ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.52);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-box {
+            background: #fff;
+            border-radius: 14px;
+            padding: 28px 30px;
+            max-width: 490px;
+            width: 100%;
+            max-height: 92vh;
+            overflow-y: auto;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.22);
+            animation: fadeUp 0.2s ease;
+        }
+
+        .modal-title {
+            font-size: 1.12rem;
+            font-weight: bold;
+            margin: 0 0 4px;
+            color: #1a1a1a;
+        }
+
+        .modal-subtitle {
+            font-size: 0.88rem;
+            color: #999;
+            margin: 0 0 20px;
+        }
+
+        /* Поля формы */
+        .form-group { margin-bottom: 14px; }
+
+        .form-label {
+            display: block;
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 5px;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 0.9rem;
+            font-family: sans-serif;
+            color: #1a1a1a;
+            outline: none;
+            transition: border-color 0.2s;
+            background: #fff;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus { border-color: #e30613; }
+
+        .form-input.invalid { border-color: #e30613; }
+
+        .form-textarea {
+            min-height: 72px;
+            resize: vertical;
+        }
+
+        /* Группа чекбоксов "Цель визита" */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 0.88rem;
+            cursor: pointer;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            accent-color: #e30613;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        /* Кнопки формы */
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .form-actions .btn-red { flex: 1; }
+
+        /* Экран успеха */
+        .success-view {
+            text-align: center;
+            padding: 8px 0 4px;
+        }
+
+        .success-icon {
+            font-size: 3.2rem;
+            margin-bottom: 14px;
+        }
+
+        .success-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0 0 16px;
+            color: #1a1a1a;
+        }
+
+        .success-text {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.75;
+            margin: 0 0 26px;
+            text-align: left;
+        }
+
+
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 540px) {
+            .month-grid { grid-template-columns: repeat(3, 1fr); }
+
+            .modal-box { padding: 20px 16px; }
+
+            .week-nav-btn {
+                padding: 6px 8px;
+                font-size: 0.74rem;
+            }
+
+            .form-actions { flex-direction: column; }
+            .form-actions .btn { width: 100%; text-align: center; }
+        }
+
     </style>
 </head>
 <body>
 
+    <!-- ===== ШАПКА ===== -->
     <header>
         <a href="index.html">RepairTech</a>
     </header>
 
     <div class="page">
 
-        <a class="back-link" href="index.html">← Назад</a>
+        <!-- ===== УРОВЕНЬ 1: ВЫБОР МЕСЯЦА ===== -->
+        <div id="level-month">
+            <h1 class="section-title">Запись на сервис</h1>
+            <p class="section-subtitle">AutoPro Riga — выберите месяц</p>
+            <div id="month-grid" class="month-grid"></div>
+        </div>
 
-        <h1>Запись на сервис</h1>
+        <!-- ===== УРОВЕНЬ 2: НЕДЕЛЬНЫЙ ВИД ===== -->
+        <div id="level-week" style="display:none">
 
-        <div class="placeholder">
-            <div class="placeholder-icon">📅</div>
-            <div class="placeholder-title">Скоро здесь будет онлайн-запись</div>
-            <div class="placeholder-text">Мы работаем над календарём с выбором свободного времени. Эта функция находится в разработке и появится совсем скоро.</div>
-            <a class="btn-back" href="index.html">Вернуться к списку сервисов</a>
+            <button class="back-btn" onclick="showLevel('level-month')">← Назад к месяцам</button>
+
+            <!-- Заголовок: "Апрель 2026" -->
+            <h1 class="section-title" id="week-month-title"></h1>
+            <!-- Подзаголовок: "Неделя 17 — выберите удобный слот" -->
+            <p class="section-subtitle" id="week-subtitle"></p>
+
+            <!-- Навигация по неделям -->
+            <div class="week-nav">
+                <button class="week-nav-btn" id="btn-prev" onclick="changeWeek(-1)">← Предыдущая неделя</button>
+                <span class="week-range-label" id="week-range-label"></span>
+                <button class="week-nav-btn" id="btn-next" onclick="changeWeek(1)">Следующая неделя →</button>
+            </div>
+
+            <!-- Сетка 7 столбцов с временными слотами внутри -->
+            <div class="week-grid-wrapper">
+                <div id="week-grid" class="week-grid"></div>
+            </div>
+
         </div>
 
     </div>
 
+
+    <!-- ===== МОДАЛЬНОЕ ОКНО ===== -->
+    <div id="modal-overlay" class="modal-overlay" onclick="handleOverlayClick(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+
+            <!-- Форма записи -->
+            <div id="modal-form-view">
+                <h2 class="modal-title" id="modal-title">Запись на ...</h2>
+                <p class="modal-subtitle">AutoPro Riga, ул. Бривибас 145</p>
+
+                <form id="booking-form" onsubmit="submitForm(event)" novalidate>
+
+                    <div class="form-group">
+                        <label class="form-label">Имя и фамилия *</label>
+                        <input type="text" class="form-input" id="field-name" placeholder="Иван Иванов">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Телефон *</label>
+                        <input type="tel" class="form-input" id="field-phone" placeholder="+371 ">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Марка и модель автомобиля *</label>
+                        <input type="text" class="form-input" id="field-car" placeholder="Например: VW Golf 7">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Гос. номер автомобиля *</label>
+                        <input type="text" class="form-input" id="field-plate" placeholder="Например: AB-1234">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Цель визита</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="purpose" value="oil"> Замена масла
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="purpose" value="diag"> Диагностика
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="purpose" value="brakes"> Замена тормозных колодок
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="purpose" value="lights"> Замена лампочек / мелкий ремонт
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="purpose" value="suspension"> Проверка подвески
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="purpose" value="custom" id="cb-custom" onchange="toggleCustomField()">
+                                Свой вариант
+                            </label>
+                            <!-- Поле появляется только при выборе "Свой вариант" -->
+                            <input type="text" class="form-input" id="field-custom"
+                                   style="display:none; margin-top: 2px;"
+                                   placeholder="Опишите причину визита">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Комментарий <span style="font-weight:400;color:#999">(необязательно)</span></label>
+                        <textarea class="form-textarea" id="field-comment"
+                                  placeholder="Дополнительные пожелания, уточнения..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-red">Записаться</button>
+                        <button type="button" class="btn btn-gray" onclick="closeModal()">Отмена</button>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Экран успешной отправки (скрыт до сабмита) -->
+            <div id="modal-success-view" style="display:none" class="success-view">
+                <div class="success-icon">✅</div>
+                <h2 class="success-title">Ваша заявка отправлена!</h2>
+                <p class="success-text" id="success-text"></p>
+                <button class="btn btn-red" onclick="closeModal()">Вернуться к календарю</button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ===== ФУТЕР ===== -->
     <footer>
         <div class="footer-inner">
-            <div class="footer-brand">
+            <div>
                 <div class="footer-logo">RepairTech</div>
                 <div class="footer-slogan">Найди надёжный автосервис в Латвии</div>
             </div>
@@ -181,6 +622,382 @@
         </div>
         <div class="footer-copy">© 2026 RepairTech. Все права защищены.</div>
     </footer>
+
+
+    <script>
+
+        // ============================================================
+        // КОНСТАНТЫ
+        // ============================================================
+
+        var TODAY      = new Date();
+        var TODAY_NORM = new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
+
+        var CURRENT_YEAR  = TODAY.getFullYear();
+        var CURRENT_MONTH = TODAY.getMonth(); // 0 = январь, 11 = декабрь
+
+        var MONTH_NAMES = [
+            'Январь','Февраль','Март','Апрель','Май','Июнь',
+            'Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'
+        ];
+
+        var MONTH_NAMES_GEN = [
+            'января','февраля','марта','апреля','мая','июня',
+            'июля','августа','сентября','октября','ноября','декабря'
+        ];
+
+        // Короткие названия дней (индекс 0 = Пн, 6 = Вс)
+        var DAY_SHORT = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+
+        // Количество свободных мест — случайное, генерируется один раз
+        var FREE_SPOTS = [];
+        for (var _i = 0; _i < 12; _i++) {
+            FREE_SPOTS.push(Math.floor(Math.random() * 18) + 3);
+        }
+
+        // Кэш занятости слотов: ключ "YYYY-M-D", значение — массив boolean (true = свободно)
+        var slotCache = {};
+
+        // Текущее состояние навигации
+        var selectedMonth    = null;
+        var currentWeekStart = null;
+
+        // Данные выбранного слота для формы
+        var pendingDate = null;
+        var pendingTime = null;
+
+
+        // ============================================================
+        // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+        // ============================================================
+
+        // Возвращает понедельник недели для переданной даты
+        function getMondayOfWeek(date) {
+            var d = new Date(date);
+            d.setHours(0, 0, 0, 0);
+            var jsDay = d.getDay(); // 0 = вс, 1 = пн, ..., 6 = сб
+            var diff  = (jsDay === 0) ? -6 : 1 - jsDay;
+            d.setDate(d.getDate() + diff);
+            return d;
+        }
+
+        // "21 апреля 2026"
+        function formatDateFull(date) {
+            return date.getDate() + ' ' + MONTH_NAMES_GEN[date.getMonth()] + ' ' + date.getFullYear();
+        }
+
+        // "21.04" — для заголовка столбца
+        function formatShortDate(date) {
+            var d = date.getDate();
+            var m = date.getMonth() + 1;
+            return (d < 10 ? '0' + d : d) + '.' + (m < 10 ? '0' + m : m);
+        }
+
+        // "13–19 апр" или "28 апр – 4 май" (если неделя на стыке месяцев)
+        function formatWeekRange(monday) {
+            var sunday = new Date(monday);
+            sunday.setDate(sunday.getDate() + 6);
+
+            var m1 = MONTH_NAMES_GEN[monday.getMonth()].substring(0, 3);
+            var m2 = MONTH_NAMES_GEN[sunday.getMonth()].substring(0, 3);
+
+            if (monday.getMonth() === sunday.getMonth()) {
+                return monday.getDate() + '–' + sunday.getDate() + ' ' + m1;
+            }
+            return monday.getDate() + ' ' + m1 + ' – ' + sunday.getDate() + ' ' + m2;
+        }
+
+        // Номер недели в году (ISO-приближение)
+        function getWeekNumber(date) {
+            var d = new Date(date);
+            d.setHours(0, 0, 0, 0);
+            d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
+            var jan4 = new Date(d.getFullYear(), 0, 4);
+            return 1 + Math.round(((d - jan4) / 86400000 - 3 + (jan4.getDay() + 6) % 7) / 7);
+        }
+
+
+        // ============================================================
+        // НАВИГАЦИЯ МЕЖДУ УРОВНЯМИ
+        // ============================================================
+
+        function showLevel(id) {
+            var ids = ['level-month', 'level-week'];
+            ids.forEach(function(lid) {
+                var el = document.getElementById(lid);
+                if (lid === id) {
+                    el.style.display = 'block';
+                    el.classList.remove('anim-fade');
+                    void el.offsetWidth; // принудительный reflow для перезапуска анимации
+                    el.classList.add('anim-fade');
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+        }
+
+
+        // ============================================================
+        // УРОВЕНЬ 1: СЕТКА МЕСЯЦЕВ
+        // ============================================================
+
+        function renderMonths() {
+            var grid = document.getElementById('month-grid');
+            grid.innerHTML = '';
+
+            for (var m = 0; m < 12; m++) {
+                var isPast = (m < CURRENT_MONTH);
+
+                var card = document.createElement('div');
+                card.className = 'month-card ' + (isPast ? 'month-past' : 'month-available');
+
+                var nameEl = document.createElement('div');
+                nameEl.className = 'month-name';
+                nameEl.textContent = MONTH_NAMES[m];
+
+                var spotsEl = document.createElement('div');
+                spotsEl.className = 'month-spots';
+                spotsEl.textContent = isPast ? 'Нет мест' : FREE_SPOTS[m] + ' свободных мест';
+
+                card.appendChild(nameEl);
+                card.appendChild(spotsEl);
+
+                // Замыкание нужно, чтобы m не "уехал" к концу цикла
+                if (!isPast) {
+                    card.addEventListener('click', (function(idx) {
+                        return function() { selectMonth(idx); };
+                    })(m));
+                }
+
+                grid.appendChild(card);
+            }
+        }
+
+
+        // ============================================================
+        // УРОВЕНЬ 2: НЕДЕЛЬНЫЙ ВИД
+        // ============================================================
+
+        function selectMonth(monthIdx) {
+            selectedMonth = monthIdx;
+
+            // Для текущего месяца начинаем с недели сегодняшнего дня
+            if (monthIdx === CURRENT_MONTH) {
+                currentWeekStart = getMondayOfWeek(TODAY);
+            } else {
+                currentWeekStart = getMondayOfWeek(new Date(CURRENT_YEAR, monthIdx, 1));
+            }
+
+            document.getElementById('week-month-title').textContent =
+                MONTH_NAMES[monthIdx] + ' ' + CURRENT_YEAR;
+
+            showLevel('level-week');
+            renderWeek();
+        }
+
+        // Самая ранняя допустимая неделя
+        function getMinWeek() {
+            if (selectedMonth === CURRENT_MONTH) {
+                return getMondayOfWeek(TODAY);
+            }
+            return getMondayOfWeek(new Date(CURRENT_YEAR, selectedMonth, 1));
+        }
+
+        // Самая поздняя допустимая неделя (неделя последнего дня месяца)
+        function getMaxWeek() {
+            var lastDay = new Date(CURRENT_YEAR, selectedMonth + 1, 0);
+            return getMondayOfWeek(lastDay);
+        }
+
+        function changeWeek(dir) {
+            var next = new Date(currentWeekStart);
+            next.setDate(next.getDate() + dir * 7);
+            if (+next >= +getMinWeek() && +next <= +getMaxWeek()) {
+                currentWeekStart = next;
+                renderWeek();
+            }
+        }
+
+        function renderWeek() {
+            var grid = document.getElementById('week-grid');
+            grid.innerHTML = '';
+
+            // Обновляем подпись недели и навигацию
+            var weekNum = getWeekNumber(currentWeekStart);
+            document.getElementById('week-subtitle').textContent =
+                'Неделя ' + weekNum + ' — выберите удобный слот';
+            document.getElementById('week-range-label').textContent =
+                formatWeekRange(currentWeekStart);
+
+            document.getElementById('btn-prev').disabled = (+currentWeekStart <= +getMinWeek());
+            document.getElementById('btn-next').disabled = (+currentWeekStart >= +getMaxWeek());
+
+            // Рисуем 7 столбцов: 0 = Пн, 6 = Вс
+            for (var i = 0; i < 7; i++) {
+                var date = new Date(currentWeekStart);
+                date.setDate(date.getDate() + i);
+
+                var jsDay  = date.getDay();               // 0 = вс, 1 = пн, ..., 6 = сб
+                var isSun  = (jsDay === 0);
+                var isSat  = (jsDay === 6);
+                var isPast = (date < TODAY_NORM);
+                var isToday = (+date === +TODAY_NORM);
+
+                var col = document.createElement('div');
+                col.className = 'day-col';
+
+                // --- Заголовок столбца ---
+                var header = document.createElement('div');
+                header.className = 'day-header';
+                if (isToday)     header.className += ' day-header-today';
+                else if (isPast) header.className += ' day-header-past';
+                else if (isSun)  header.className += ' day-header-sunday';
+
+                header.innerHTML = '<strong>' + DAY_SHORT[i] + '</strong><br>' + formatShortDate(date);
+                col.appendChild(header);
+
+                // --- Содержимое столбца ---
+                if (isSun) {
+                    // Воскресенье — одна большая серая плашка "Выходной"
+                    var sunBlock = document.createElement('div');
+                    sunBlock.className = 'slot-sunday';
+                    sunBlock.textContent = 'Выходной';
+                    col.appendChild(sunBlock);
+
+                } else {
+                    // Рабочий день: суббота до 14:00, остальные до 17:00
+                    var lastHour = isSat ? 14 : 17;
+                    var hours = [];
+                    for (var h = 10; h <= lastHour; h++) hours.push(h);
+
+                    // Получаем или генерируем кэш занятости для этого дня
+                    var key = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+                    if (!slotCache[key]) {
+                        slotCache[key] = hours.map(function() {
+                            // ~45–55% слотов свободны
+                            return Math.random() > 0.48;
+                        });
+                    }
+                    var avail = slotCache[key];
+
+                    hours.forEach(function(hour, idx) {
+                        var isFree  = avail[idx];
+                        var timeStr = hour + ':00';
+
+                        var slot = document.createElement('div');
+
+                        if (isPast) {
+                            // Прошедший день — все слоты серые
+                            slot.className = 'slot slot-past';
+                            slot.innerHTML = timeStr + '<br>—';
+
+                        } else if (isFree) {
+                            // Свободный слот — зелёный, кликабельный
+                            slot.className = 'slot slot-free';
+                            slot.innerHTML = timeStr + '<br>Свободно';
+                            slot.addEventListener('click', (function(d, t) {
+                                return function() { openModal(d, t); };
+                            })(new Date(date), timeStr));
+
+                        } else {
+                            // Занятый слот — красноватый
+                            slot.className = 'slot slot-busy';
+                            slot.innerHTML = timeStr + '<br>Занято';
+                        }
+
+                        col.appendChild(slot);
+                    });
+                }
+
+                grid.appendChild(col);
+            }
+        }
+
+
+        // ============================================================
+        // МОДАЛЬНОЕ ОКНО
+        // ============================================================
+
+        function openModal(date, time) {
+            pendingDate = date;
+            pendingTime = time;
+
+            // Заголовок модалки
+            document.getElementById('modal-title').textContent =
+                'Запись на ' + formatDateFull(date) + ', ' + time;
+
+            // Сбрасываем форму и прячем экран успеха
+            document.getElementById('booking-form').reset();
+            document.getElementById('field-custom').style.display = 'none';
+            ['field-name','field-phone','field-car','field-plate'].forEach(function(id) {
+                document.getElementById(id).classList.remove('invalid');
+            });
+
+            document.getElementById('modal-form-view').style.display  = 'block';
+            document.getElementById('modal-success-view').style.display = 'none';
+            document.getElementById('modal-overlay').style.display    = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').style.display = 'none';
+        }
+
+        // Клик на затемнённый фон закрывает модалку
+        function handleOverlayClick(event) {
+            if (event.target === document.getElementById('modal-overlay')) {
+                closeModal();
+            }
+        }
+
+        // Показать / скрыть поле "Свой вариант"
+        function toggleCustomField() {
+            var checked = document.getElementById('cb-custom').checked;
+            document.getElementById('field-custom').style.display = checked ? 'block' : 'none';
+        }
+
+        function submitForm(event) {
+            event.preventDefault();
+
+            // Проверяем обязательные поля
+            var fields = [
+                { id: 'field-name',  val: document.getElementById('field-name').value.trim() },
+                { id: 'field-phone', val: document.getElementById('field-phone').value.trim() },
+                { id: 'field-car',   val: document.getElementById('field-car').value.trim() },
+                { id: 'field-plate', val: document.getElementById('field-plate').value.trim() }
+            ];
+
+            var hasError = false;
+            fields.forEach(function(f) {
+                var el = document.getElementById(f.id);
+                if (!f.val) {
+                    el.classList.add('invalid');
+                    hasError = true;
+                } else {
+                    el.classList.remove('invalid');
+                }
+            });
+
+            if (hasError) return;
+
+            // Показываем экран успешной отправки
+            var dateStr = formatDateFull(pendingDate);
+            document.getElementById('success-text').innerHTML =
+                'Сервис <strong>AutoPro Riga</strong> получил вашу заявку на ' +
+                '<strong>' + dateStr + '</strong> в <strong>' + pendingTime + '</strong>.<br><br>' +
+                'Когда сервис подтвердит или отклонит вашу запись, вам поступит push-уведомление.<br><br>' +
+                '<em>Спасибо, что выбрали RepairTech!</em>';
+
+            document.getElementById('modal-form-view').style.display   = 'none';
+            document.getElementById('modal-success-view').style.display = 'block';
+        }
+
+
+        // ============================================================
+        // ИНИЦИАЛИЗАЦИЯ
+        // ============================================================
+        renderMonths();
+
+    </script>
 
 </body>
 </html>
