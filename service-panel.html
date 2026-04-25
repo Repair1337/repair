@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23e30613'/><text x='50' y='72' font-family='sans-serif' font-size='65' font-weight='bold' fill='white' text-anchor='middle'>R</text></svg>">
+    <title>RepairTech — Панель управления</title>
+    <style>
+        /* ===== СБРОС И БАЗОВЫЕ СТИЛИ ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: sans-serif;
+            color: #1a1a1a;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* ===== ЭКРАН ЛОГИНА ===== */
+        #login-screen {
+            min-height: 100vh;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+            padding: 40px 36px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #e30613;
+            text-align: center;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 32px;
+        }
+
+        .login-card label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 6px;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: sans-serif;
+            color: #1a1a1a;
+            background: #fafafa;
+            margin-bottom: 20px;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        .login-card input:focus { border-color: #e30613; background: #fff; }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #e30613;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            font-family: sans-serif;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 4px;
+        }
+
+        .login-btn:hover  { background: #c0050f; }
+        .login-btn:active { transform: scale(0.98); }
+
+        .login-note {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #999;
+            margin-top: 20px;
+        }
+
+        /* ===== ПАНЕЛЬ УПРАВЛЕНИЯ ===== */
+        #dashboard-screen {
+            display: none;
+            min-height: 100vh;
+            flex-direction: row;
+        }
+
+        /* ===== БОКОВОЕ МЕНЮ ===== */
+        .sidebar {
+            width: 240px;
+            min-height: 100vh;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 100;
+        }
+
+        .sidebar-header { padding: 24px 20px 18px; }
+
+        .sidebar-service-name {
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.05rem;
+        }
+
+        .sidebar-address {
+            color: #888;
+            font-size: 0.8rem;
+            margin-top: 3px;
+        }
+
+        .sidebar-divider {
+            border: none;
+            border-top: 1px solid #333;
+            margin: 0 0 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 20px;
+            cursor: pointer;
+            color: #bbb;
+            font-size: 0.92rem;
+            position: relative;
+            transition: background 0.15s, color 0.15s;
+            user-select: none;
+        }
+
+        .nav-item:hover { background: #2a2a2a; color: #fff; }
+
+        .nav-item.active { background: #252525; color: #fff; }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: #e30613;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .nav-icon { font-size: 1.1rem; width: 22px; text-align: center; }
+
+        .sidebar-logout {
+            margin-top: auto;
+            padding: 20px;
+            border-top: 1px solid #2a2a2a;
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid #444;
+            border-radius: 7px;
+            color: #888;
+            font-size: 0.85rem;
+            font-family: sans-serif;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, border-color 0.15s;
+        }
+
+        .logout-btn:hover { background: #2a2a2a; color: #ccc; border-color: #555; }
+
+        /* ===== ОБЛАСТЬ КОНТЕНТА ===== */
+        .content-area {
+            margin-left: 240px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .content-header {
+            height: 60px;
+            background: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .content-header-title { font-size: 1.05rem; font-weight: bold; color: #1a1a1a; }
+
+        .header-online {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .online-dot {
+            width: 8px; height: 8px;
+            background: #e30613;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.4; }
+        }
+
+        .content-body { padding: 28px; flex: 1; }
+
+        /* ===== ПЕРЕКЛЮЧЕНИЕ СЕКЦИЙ ===== */
+        .section { display: none; animation: fadeIn 0.2s ease; }
+        .section.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .stub { text-align: center; padding: 80px 20px; color: #999; }
+        .stub-icon { font-size: 4rem; margin-bottom: 16px; display: block; }
+        .stub h2 { font-size: 1.4rem; color: #555; margin-bottom: 10px; }
+        .stub p   { font-size: 0.9rem; }
+        .stub small { font-size: 0.8rem; color: #bbb; margin-top: 8px; display: block; }
+
+        /* ===== ОБЩИЕ ВКЛАДКИ (tab-btn) ===== */
+        .booking-tabs, .hours-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 8px 18px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 20px;
+            background: #fff;
+            font-size: 0.875rem;
+            font-family: sans-serif;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .tab-btn:hover { border-color: #e30613; color: #e30613; }
+
+        .tab-btn.active {
+            background: #e30613;
+            border-color: #e30613;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* ===== РАЗДЕЛ: ЗАПИСИ ===== */
+        .bookings-list { display: flex; flex-direction: column; gap: 14px; }
+
+        .booking-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+            display: flex;
+            overflow: hidden;
+            transition: box-shadow 0.15s;
+        }
+
+        .booking-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.12); }
+
+        .booking-stripe { width: 4px; flex-shrink: 0; }
+        .stripe-new     { background: #f59e0b; }
+        .stripe-confirm { background: #22c55e; }
+        .stripe-decline { background: #9ca3af; }
+
+        .booking-body { padding: 16px 20px; flex: 1; }
+
+        .booking-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .booking-datetime { font-size: 0.85rem; color: #888; }
+
+        .status-badge {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            font-weight: bold;
+        }
+
+        .badge-new     { background: #fff3cd; color: #92650a; }
+        .badge-confirm { background: #d1fae5; color: #166534; }
+        .badge-decline { background: #f3f4f6; color: #6b7280; }
+
+        .booking-client { font-weight: bold; font-size: 1rem; margin-bottom: 4px; }
+
+        .booking-info { font-size: 0.875rem; color: #555; line-height: 1.6; }
+        .booking-info span { display: inline-block; margin-right: 6px; }
+
+        .booking-purpose { margin-top: 6px; font-size: 0.85rem; color: #777; }
+
+        .booking-actions { display: flex; gap: 10px; margin-top: 14px; }
+
+        .action-btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 7px;
+            font-size: 0.85rem;
+            font-family: sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.15s, transform 0.1s;
+        }
+
+        .action-btn:hover  { opacity: 0.85; }
+        .action-btn:active { transform: scale(0.97); }
+
+        .btn-confirm { background: #22c55e; color: #fff; }
+        .btn-decline { background: #e30613; color: #fff; }
+
+        /* Кнопка перехода в календарь из заявки */
+        .cal-link-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 0.78rem;
+            cursor: pointer;
+            padding: 0;
+            margin-top: 10px;
+            font-family: sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.15s;
+        }
+
+        .cal-link-btn:hover { color: #555; }
+
+        /* ===== РАЗДЕЛ: ПРОФИЛЬ ===== */
+        .profile-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .profile-name { font-size: 1.6rem; font-weight: bold; color: #1a1a1a; }
+
+        .btn-edit {
+            padding: 8px 20px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 7px;
+            background: #fff;
+            font-family: sans-serif;
+            font-size: 0.875rem;
+            color: #bbb;
+            cursor: not-allowed;
+        }
+
+        .profile-block {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 20px 24px;
+            margin-bottom: 16px;
+        }
+
+        .profile-block h3 {
+            font-size: 0.78rem;
+            font-weight: bold;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .profile-info-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #333;
+            align-items: flex-start;
+        }
+
+        .profile-info-row:last-child { margin-bottom: 0; }
+
+        .profile-info-label {
+            color: #888;
+            min-width: 150px;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .profile-desc { font-size: 0.9rem; color: #444; line-height: 1.6; }
+
+        .profile-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+        .tag { padding: 4px 13px; border-radius: 14px; font-size: 0.8rem; font-weight: bold; }
+        .tag-spec  { background: #fee2e2; color: #991b1b; }
+        .tag-brand { background: #e0f2fe; color: #0369a1; }
+
+        .profile-table { width: 100%; border-collapse: collapse; }
+        .profile-table tr { border-bottom: 1px solid #f0f0f0; }
+        .profile-table tr:last-child { border-bottom: none; }
+        .profile-table td { padding: 10px 0; font-size: 0.9rem; color: #333; }
+        .profile-table td:last-child { text-align: right; color: #e30613; font-weight: bold; }
+
+        /* ===== РАЗДЕЛ: СТАТИСТИКА ===== */
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 20px;
+        }
+
+        .stat-card-label { font-size: 0.78rem; color: #888; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-card-value { font-size: 2rem; font-weight: bold; color: #1a1a1a; margin-bottom: 6px; line-height: 1; }
+        .stat-card-sub { font-size: 0.82rem; color: #22c55e; }
+        .stat-card-sub.neutral { color: #6b7280; }
+        .stat-stars { color: #f59e0b; font-size: 1rem; }
+
+        .stats-block {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 20px 24px;
+            margin-bottom: 16px;
+        }
+
+        .stats-block h3 {
+            font-size: 0.78rem;
+            font-weight: bold;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .bar-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+        .bar-row:last-child { margin-bottom: 0; }
+        .bar-label { font-size: 0.875rem; color: #444; min-width: 210px; }
+        .bar-track { flex: 1; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+        .bar-fill  { height: 100%; background: #e30613; border-radius: 4px; }
+        .bar-count { font-size: 0.8rem; color: #888; min-width: 70px; text-align: right; }
+
+        .review-card { border-bottom: 1px solid #f0f0f0; padding: 14px 0; }
+        .review-card:first-child { padding-top: 0; }
+        .review-card:last-child  { border-bottom: none; padding-bottom: 0; }
+        .review-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+        .review-client { font-weight: bold; font-size: 0.9rem; color: #1a1a1a; }
+        .review-date   { font-size: 0.78rem; color: #bbb; }
+        .review-stars  { color: #f59e0b; font-size: 0.85rem; margin-bottom: 6px; }
+        .review-text   { font-size: 0.875rem; color: #555; line-height: 1.55; }
+
+        /* ===== РАЗДЕЛ: КАЛЕНДАРЬ (кликабельные слоты с механиками) ===== */
+        .cal-nav {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .cal-nav-btn {
+            padding: 8px 16px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 7px;
+            background: #fff;
+            font-family: sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: border-color 0.15s, color 0.15s;
+        }
+
+        .cal-nav-btn:hover { border-color: #e30613; color: #e30613; }
+
+        #cal-week-label {
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: #1a1a1a;
+            flex: 1;
+            text-align: center;
+        }
+
+        #cal-grid { overflow-x: auto; }
+
+        .cal-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            min-width: 840px;
+        }
+
+        .cal-day {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+        }
+
+        .cal-day-header {
+            background: #2a2a2a;
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: bold;
+            padding: 9px 8px;
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+
+        /* Сегодняшний день — красная шапка */
+        .cal-day-today .cal-day-header { background: #e30613; }
+
+        /* Воскресенье — серая шапка */
+        .cal-day-sunday .cal-day-header { background: #9ca3af; }
+
+        .cal-closed {
+            padding: 24px 8px;
+            text-align: center;
+            color: #ccc;
+            font-size: 0.8rem;
+        }
+
+        /* Кликабельный слот */
+        .cal-slot {
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            cursor: pointer;
+            user-select: none;
+            transition: filter 0.1s;
+        }
+
+        .cal-slot:last-child { border-bottom: none; }
+        .cal-slot:hover { filter: brightness(0.96); }
+
+        /* Цвет фона по загрузке */
+        .slot-free    { background: #f0fdf4; }
+        .slot-partial { background: #fffbeb; }
+        .slot-full    { background: #fff1f2; }
+
+        /* Заголовок слота (всегда виден) */
+        .cal-slot-header {
+            display: flex;
+            align-items: center;
+            padding: 7px 8px;
+            gap: 5px;
+        }
+
+        .cal-slot-time {
+            font-weight: bold;
+            color: #555;
+            font-size: 0.7rem;
+            min-width: 32px;
+        }
+
+        .cal-slot-summary {
+            flex: 1;
+            font-size: 0.68rem;
+            font-weight: bold;
+        }
+
+        /* Цвет текста сводки по загрузке */
+        .summary-free    { color: #16a34a; }
+        .summary-partial { color: #92650a; }
+        .summary-full    { color: #b91c1c; }
+
+        /* Стрелочка вращается при раскрытии */
+        .cal-slot-arrow {
+            font-size: 0.65rem;
+            color: #bbb;
+            transition: transform 0.25s ease;
+            line-height: 1;
+        }
+
+        .cal-slot.open .cal-slot-arrow { transform: rotate(180deg); }
+
+        /* Раскрывающееся тело слота */
+        .cal-slot-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        /* При раскрытии: 4 строки × ~28px + отступы */
+        .cal-slot.open .cal-slot-body { max-height: 160px; }
+
+        /* Строка механика */
+        .mech-row {
+            padding: 5px 8px;
+            font-size: 0.67rem;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .mech-name {
+            font-weight: bold;
+            min-width: 64px;
+            color: #333;
+            flex-shrink: 0;
+        }
+
+        .mech-row-busy   { background: #eff6ff; }
+        .mech-row-free   { background: #f0fdf4; }
+
+        /* Информация о занятом механике */
+        .mech-busy-info {
+            color: #1d4ed8;
+            font-size: 0.65rem;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Статус свободного механика */
+        .mech-free-label { color: #16a34a; font-size: 0.65rem; }
+
+        /* ===== РАЗДЕЛ: УЧЁТ РАБОЧИХ ЧАСОВ ===== */
+        .hours-table-wrap {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .hours-table { width: 100%; border-collapse: collapse; }
+
+        .hours-table th {
+            background: #2a2a2a;
+            color: #fff;
+            font-size: 0.78rem;
+            padding: 11px 14px;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: 0.3px;
+        }
+
+        .hours-table th:first-child { text-align: left; }
+
+        .hours-table td {
+            padding: 11px 14px;
+            font-size: 0.875rem;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+        }
+
+        .hours-table td:first-child { text-align: left; font-weight: bold; color: #1a1a1a; }
+        .hours-table tr:last-child td { border-bottom: none; }
+        .hours-table tr:hover td { background: #fafafa; }
+
+        .hours-role { font-size: 0.72rem; color: #888; font-weight: normal; display: block; }
+
+        /* Цветовая кодировка: зелёный ≥7ч, оранжевый 4-6ч, красный <4ч */
+        .h-good   { color: #16a34a; font-weight: bold; }
+        .h-medium { color: #d97706; font-weight: bold; }
+        .h-low    { color: #dc2626; font-weight: bold; }
+
+        .hours-summary {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 16px 24px;
+            display: flex;
+            gap: 40px;
+            font-size: 0.9rem;
+            color: #333;
+            flex-wrap: wrap;
+        }
+
+        .hours-summary strong { color: #1a1a1a; }
+    </style>
+</head>
+<body>
+
+<!-- ============================
+     ЭКРАН 1: ЛОГИН
+     ============================ -->
+<div id="login-screen">
+    <div class="login-card">
+        <div class="login-logo">RepairTech</div>
+        <div class="login-subtitle">Вход для автосервисов</div>
+
+        <label for="email">Email</label>
+        <input type="text" id="email" placeholder="например: info@autopro.lv">
+
+        <label for="password">Пароль</label>
+        <input type="password" id="password" placeholder="••••••••">
+
+        <button class="login-btn" onclick="doLogin()">Войти</button>
+
+        <p class="login-note">Нет аккаунта? Свяжитесь с нами для подключения</p>
+    </div>
+</div>
+
+<!-- ============================
+     ЭКРАН 2: ПАНЕЛЬ УПРАВЛЕНИЯ
+     ============================ -->
+<div id="dashboard-screen">
+
+    <!-- БОКОВОЕ МЕНЮ -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-service-name">AutoPro Riga</div>
+            <div class="sidebar-address">ул. Бривибас 145</div>
+        </div>
+
+        <hr class="sidebar-divider">
+
+        <nav>
+            <div class="nav-item" data-section="profile" onclick="switchSection(this)">
+                <span class="nav-icon">👤</span> Профиль
+            </div>
+            <div class="nav-item" data-section="stats" onclick="switchSection(this)">
+                <span class="nav-icon">📊</span> Статистика
+            </div>
+            <div class="nav-item active" data-section="bookings" onclick="switchSection(this)">
+                <span class="nav-icon">📋</span> Записи
+            </div>
+            <div class="nav-item" data-section="estimates" onclick="switchSection(this)">
+                <span class="nav-icon">🧾</span> Сметы
+            </div>
+            <div class="nav-item" data-section="calendar" onclick="switchSection(this)">
+                <span class="nav-icon">📅</span> Календарь
+            </div>
+            <!-- ИЗМЕНЕНИЕ 3: переименован пункт меню -->
+            <div class="nav-item" data-section="hours" onclick="switchSection(this)">
+                <span class="nav-icon">⏱</span> Учёт часов
+            </div>
+        </nav>
+
+        <div class="sidebar-logout">
+            <button class="logout-btn" onclick="doLogout()">Выйти</button>
+        </div>
+    </div>
+
+    <!-- ОБЛАСТЬ КОНТЕНТА -->
+    <div class="content-area">
+
+        <div class="content-header">
+            <div class="content-header-title" id="section-title">Записи</div>
+            <div class="header-online">
+                <div class="online-dot"></div>
+                AutoPro Riga
+            </div>
+        </div>
+
+        <div class="content-body">
+
+            <!-- ==================
+                 РАЗДЕЛ: ПРОФИЛЬ
+                 ================== -->
+            <div class="section" id="section-profile">
+                <div class="profile-top">
+                    <div class="profile-name">AutoPro Riga</div>
+                    <button class="btn-edit" disabled>Редактировать</button>
+                </div>
+
+                <div class="profile-block">
+                    <h3>Основная информация</h3>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Адрес</span>
+                        <span>ул. Бривибас 145, Рига</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Телефон</span>
+                        <span>+371 20 123 456</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Email</span>
+                        <span>info@autopro.lv</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Режим работы</span>
+                        <span>Пн–Пт: 10:00–18:00 &nbsp;·&nbsp; Сб: 10:00–15:00 &nbsp;·&nbsp; Вс: выходной</span>
+                    </div>
+                </div>
+
+                <div class="profile-block">
+                    <h3>Описание</h3>
+                    <p class="profile-desc">
+                        AutoPro Riga — сертифицированный автосервис в центре Риги с более чем 10 годами опыта.
+                        Специализируемся на диагностике, плановом ТО и ремонте ходовой части автомобилей европейских и японских марок.
+                        Работаем с гарантией на все виды работ, используем только оригинальные запчасти или сертифицированные аналоги.
+                    </p>
+                </div>
+
+                <div class="profile-block">
+                    <h3>Специализация</h3>
+                    <div class="profile-tags">
+                        <span class="tag tag-spec">Двигатели</span>
+                        <span class="tag tag-spec">Ходовая</span>
+                        <span class="tag tag-spec">Электрика</span>
+                        <span class="tag tag-spec">Диагностика</span>
+                        <span class="tag tag-spec">ТО</span>
+                        <span class="tag tag-spec">Тормозная система</span>
+                    </div>
+                </div>
+
+                <div class="profile-block">
+                    <h3>Обслуживаемые марки</h3>
+                    <div class="profile-tags">
+                        <span class="tag tag-brand">Volkswagen</span>
+                        <span class="tag tag-brand">Audi</span>
+                        <span class="tag tag-brand">BMW</span>
+                        <span class="tag tag-brand">Mercedes</span>
+                        <span class="tag tag-brand">Škoda</span>
+                        <span class="tag tag-brand">Все марки</span>
+                    </div>
+                </div>
+
+                <div class="profile-block">
+                    <h3>Прайс-лист</h3>
+                    <table class="profile-table">
+                        <tr><td>Замена масла и фильтра</td><td>от 35 €</td></tr>
+                        <tr><td>Компьютерная диагностика</td><td>20 €</td></tr>
+                        <tr><td>Замена тормозных колодок (ось)</td><td>от 45 €</td></tr>
+                        <tr><td>Замена ремня ГРМ</td><td>от 120 €</td></tr>
+                        <tr><td>Технический осмотр (подготовка)</td><td>от 30 €</td></tr>
+                    </table>
+                </div>
+            </div><!-- /section-profile -->
+
+            <!-- ==================
+                 РАЗДЕЛ: СТАТИСТИКА
+                 ================== -->
+            <div class="section" id="section-stats">
+                <div class="stat-cards">
+                    <div class="stat-card">
+                        <div class="stat-card-label">Записей за месяц</div>
+                        <div class="stat-card-value">47</div>
+                        <div class="stat-card-sub">↑ +12% к прошлому месяцу</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-label">Подтверждено</div>
+                        <div class="stat-card-value">38</div>
+                        <div class="stat-card-sub neutral">81% от всех заявок</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-label">Средний чек</div>
+                        <div class="stat-card-value">85 €</div>
+                        <div class="stat-card-sub">↑ +5 € к прошлому месяцу</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-label">Рейтинг</div>
+                        <div class="stat-card-value">4.7</div>
+                        <div class="stat-stars">★★★★★</div>
+                    </div>
+                </div>
+
+                <div class="stats-block">
+                    <h3>Популярные услуги</h3>
+                    <div class="bar-row">
+                        <span class="bar-label">Замена масла и фильтра</span>
+                        <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+                        <span class="bar-count">18 записей</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Диагностика</span>
+                        <div class="bar-track"><div class="bar-fill" style="width:67%"></div></div>
+                        <span class="bar-count">12 записей</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Замена тормозных колодок</span>
+                        <div class="bar-track"><div class="bar-fill" style="width:44%"></div></div>
+                        <span class="bar-count">8 записей</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Замена ремня ГРМ</span>
+                        <div class="bar-track"><div class="bar-fill" style="width:28%"></div></div>
+                        <span class="bar-count">5 записей</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label">Другое</span>
+                        <div class="bar-track"><div class="bar-fill" style="width:22%"></div></div>
+                        <span class="bar-count">4 записи</span>
+                    </div>
+                </div>
+
+                <div class="stats-block">
+                    <h3>Отзывы клиентов</h3>
+                    <div class="review-card">
+                        <div class="review-top">
+                            <span class="review-client">Мартиньш К.</span>
+                            <span class="review-date">18 апреля 2026</span>
+                        </div>
+                        <div class="review-stars">★★★★★</div>
+                        <div class="review-text">Быстро и качественно. Поменяли масло и фильтр за 40 минут, без очереди. Всё чисто, объяснили что поменяли. Буду ездить постоянно.</div>
+                    </div>
+                    <div class="review-card">
+                        <div class="review-top">
+                            <span class="review-client">Анна Л.</span>
+                            <span class="review-date">15 апреля 2026</span>
+                        </div>
+                        <div class="review-stars">★★★★☆</div>
+                        <div class="review-text">Записалась онлайн, приняли вовремя без ожидания. Диагностика заняла полчаса, всё объяснили понятно и показали на компьютере. Цена адекватная.</div>
+                    </div>
+                    <div class="review-card">
+                        <div class="review-top">
+                            <span class="review-client">Эдгарс В.</span>
+                            <span class="review-date">10 апреля 2026</span>
+                        </div>
+                        <div class="review-stars">★★★★★</div>
+                        <div class="review-text">Меняли ремень ГРМ на Golf 7. Сделали за один день, ровно по смете — никаких сюрпризов. Спасибо, приеду ещё на плановое ТО.</div>
+                    </div>
+                </div>
+            </div><!-- /section-stats -->
+
+            <!-- ==================
+                 РАЗДЕЛ: ЗАПИСИ
+                 ================== -->
+            <div class="section active" id="section-bookings">
+                <div class="booking-tabs">
+                    <button class="tab-btn active" onclick="filterBookings('new', this)">Новые (3)</button>
+                    <button class="tab-btn" onclick="filterBookings('confirmed', this)">Подтверждённые (2)</button>
+                    <button class="tab-btn" onclick="filterBookings('all', this)">Все (6)</button>
+                </div>
+                <div class="bookings-list" id="bookings-list"></div>
+            </div>
+
+            <!-- ==================
+                 РАЗДЕЛ: СМЕТЫ (заглушка)
+                 ================== -->
+            <div class="section" id="section-estimates">
+                <div class="stub">
+                    <span class="stub-icon">🧾</span>
+                    <h2>Сметы</h2>
+                    <p>Раздел находится в разработке</p>
+                    <small>Эта функция будет доступна в ближайшем обновлении</small>
+                </div>
+            </div>
+
+            <!-- ==================
+                 РАЗДЕЛ: КАЛЕНДАРЬ
+                 ИЗМЕНЕНИЕ 2: кликабельные слоты с механиками
+                 ================== -->
+            <div class="section" id="section-calendar">
+                <div class="cal-nav">
+                    <button class="cal-nav-btn" onclick="calPrevWeek()">← Предыдущая</button>
+                    <span id="cal-week-label"></span>
+                    <button class="cal-nav-btn" onclick="calNextWeek()">Следующая →</button>
+                </div>
+                <div id="cal-grid"></div>
+            </div>
+
+            <!-- ==================
+                 РАЗДЕЛ: УЧЁТ РАБОЧИХ ЧАСОВ
+                 ИЗМЕНЕНИЕ 3: новый раздел вместо "История"
+                 ================== -->
+            <div class="section" id="section-hours">
+                <div class="hours-tabs">
+                    <button class="tab-btn" onclick="switchHours('today', this)">Сегодня</button>
+                    <button class="tab-btn active" onclick="switchHours('week', this)">Эта неделя</button>
+                    <button class="tab-btn" onclick="switchHours('month', this)">Этот месяц</button>
+                </div>
+                <!-- Контент рендерится JavaScript-ом -->
+                <div id="hours-content"></div>
+            </div>
+
+        </div><!-- /content-body -->
+    </div><!-- /content-area -->
+</div><!-- /dashboard-screen -->
+
+<script>
+    // ============================
+    // ДАННЫЕ: 6 заявок — точные модели авто (ИЗМЕНЕНИЕ 1)
+    // ============================
+    const bookings = [
+        {
+            id: 1, status: 'new',
+            datetime: '28 апреля, 14:00',
+            client: 'Андрей Петров',
+            phone: '+371 29 123 456',
+            car: 'VW Golf VII 1.6 TDI, AB-1234',
+            purpose: 'Замена масла, Диагностика'
+        },
+        {
+            id: 2, status: 'new',
+            datetime: '29 апреля, 10:30',
+            client: 'Янис Берзиньш',
+            phone: '+371 26 789 012',
+            car: 'Toyota Corolla E210 1.8 Hybrid, BC-5678',
+            purpose: 'Замена тормозных колодок'
+        },
+        {
+            id: 3, status: 'new',
+            datetime: '29 апреля, 15:00',
+            client: 'Илзе Калниня',
+            phone: '+371 28 345 678',
+            car: 'Renault Mégane IV 1.5 dCi, CD-9012',
+            purpose: 'Техосмотр, Замена фильтров'
+        },
+        {
+            id: 4, status: 'confirmed',
+            datetime: '25 апреля, 09:00',
+            client: 'Мартиньш Озолс',
+            phone: '+371 27 456 789',
+            car: 'BMW 320d xDrive, DE-3456',
+            purpose: 'Замена ремня ГРМ'
+        },
+        {
+            id: 5, status: 'confirmed',
+            datetime: '25 апреля, 12:00',
+            client: 'Лига Страутиня',
+            phone: '+371 25 901 234',
+            car: 'Opel Astra K 1.4 Turbo, EF-7890',
+            purpose: 'Компьютерная диагностика'
+        },
+        {
+            id: 6, status: 'declined',
+            datetime: '24 апреля, 16:30',
+            client: 'Эдгарс Витолс',
+            phone: '+371 29 567 890',
+            car: 'Ford Focus III 1.5 EcoBoost, FG-1234',
+            purpose: 'Ремонт подвески'
+        }
+    ];
+
+    const statuses = {};
+    bookings.forEach(b => { statuses[b.id] = b.status; });
+    let currentFilter = 'new';
+
+    // ============================
+    // ЛОГИН / ВЫХОД
+    // ============================
+    function doLogin() {
+        document.getElementById('login-screen').style.display = 'none';
+        const dash = document.getElementById('dashboard-screen');
+        dash.style.display = 'flex';
+        renderBookings();
+    }
+
+    function doLogout() {
+        document.getElementById('dashboard-screen').style.display = 'none';
+        document.getElementById('login-screen').style.display = 'flex';
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+    }
+
+    // ============================
+    // ПЕРЕКЛЮЧЕНИЕ РАЗДЕЛОВ МЕНЮ
+    // ============================
+    const sectionTitles = {
+        profile:   'Профиль',
+        stats:     'Статистика',
+        bookings:  'Записи',
+        estimates: 'Сметы',
+        calendar:  'Календарь',
+        hours:     'Учёт рабочих часов'
+    };
+
+    function switchSection(clickedItem) {
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        clickedItem.classList.add('active');
+
+        const target = clickedItem.dataset.section;
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById('section-' + target).classList.add('active');
+
+        document.getElementById('section-title').textContent = sectionTitles[target] || '';
+
+        if (target === 'calendar') renderCalendar();
+        if (target === 'hours')    renderHours();
+    }
+
+    // Быстрый переход в календарь из карточки заявки
+    function switchToCalendar() {
+        const calNav = document.querySelector('.nav-item[data-section="calendar"]');
+        switchSection(calNav);
+    }
+
+    // ============================
+    // ФИЛЬТРАЦИЯ И РЕНДЕР ЗАЯВОК
+    // ============================
+    function filterBookings(filter, btn) {
+        currentFilter = filter;
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderBookings();
+    }
+
+    function renderBookings() {
+        const list = document.getElementById('bookings-list');
+        const visible = bookings.filter(b => {
+            const s = statuses[b.id];
+            if (currentFilter === 'new')       return s === 'new';
+            if (currentFilter === 'confirmed') return s === 'confirmed';
+            return true;
+        });
+
+        if (visible.length === 0) {
+            list.innerHTML = '<p style="color:#aaa;padding:20px 0;">Нет заявок в этой категории</p>';
+            return;
+        }
+        list.innerHTML = visible.map(b => buildCard(b)).join('');
+    }
+
+    function buildCard(b) {
+        const s = statuses[b.id];
+        const stripeClass = s === 'new' ? 'stripe-new' : s === 'confirmed' ? 'stripe-confirm' : 'stripe-decline';
+        const badgeClass  = s === 'new' ? 'badge-new'  : s === 'confirmed' ? 'badge-confirm'  : 'badge-decline';
+        const badgeText   = s === 'new' ? 'Новая'      : s === 'confirmed' ? 'Подтверждена'   : 'Отклонена';
+
+        const actions = s === 'new' ? `
+            <div class="booking-actions">
+                <button class="action-btn btn-confirm" onclick="confirmBooking(${b.id})">✓ Подтвердить</button>
+                <button class="action-btn btn-decline" onclick="declineBooking(${b.id})">✕ Отклонить</button>
+            </div>` : '';
+
+        return `
+            <div class="booking-card" id="card-${b.id}">
+                <div class="booking-stripe ${stripeClass}"></div>
+                <div class="booking-body">
+                    <div class="booking-top-row">
+                        <span class="booking-datetime">${b.datetime}</span>
+                        <span class="status-badge ${badgeClass}">${badgeText}</span>
+                    </div>
+                    <div class="booking-client">${b.client}</div>
+                    <div class="booking-info">
+                        <span>📞 ${b.phone}</span>
+                        <span>🚗 ${b.car}</span>
+                    </div>
+                    <div class="booking-purpose">🔧 ${b.purpose}</div>
+                    ${actions}
+                    <button class="cal-link-btn" onclick="switchToCalendar()">📅 Показать в календаре</button>
+                </div>
+            </div>`;
+    }
+
+    function confirmBooking(id) {
+        statuses[id] = 'confirmed';
+        renderBookings();
+        updateTabCounts();
+    }
+
+    function declineBooking(id) {
+        statuses[id] = 'declined';
+        renderBookings();
+        updateTabCounts();
+    }
+
+    function updateTabCounts() {
+        const newCount       = bookings.filter(b => statuses[b.id] === 'new').length;
+        const confirmedCount = bookings.filter(b => statuses[b.id] === 'confirmed').length;
+        const tabs = document.querySelectorAll('#section-bookings .tab-btn');
+        tabs[0].textContent = `Новые (${newCount})`;
+        tabs[1].textContent = `Подтверждённые (${confirmedCount})`;
+        tabs[2].textContent = `Все (${bookings.length})`;
+    }
+
+    // ============================
+    // МЕХАНИКИ СЕРВИСА
+    // ============================
+    const mechanics = [
+        { name: 'Алексей К.', role: 'ст. механик' },
+        { name: 'Дмитрий В.', role: '' },
+        { name: 'Марис Л.',   role: '' },
+        { name: 'Игорь С.',   role: '' },
+    ];
+
+    // ============================
+    // ДАННЫЕ КАЛЕНДАРЯ — ИЗМЕНЕНИЕ 2
+    // Ключ: "ГГГГ-ММ-ДД ЧЧ:00"
+    // Значение: массив из 4 элементов (по механику)
+    //   null = свободен, { car, work } = занят
+    // Загрузка ~45%: утром больше, к вечеру меньше
+    // ============================
+    const calendarData = {
+
+        // ===== ТЕКУЩАЯ НЕДЕЛЯ: 21-26 апреля 2026 =====
+
+        // Понедельник 21.04
+        '2026-04-21 10:00': [
+            { car: 'VW Golf VII 1.6 TDI',        work: 'замена масла' },
+            { car: 'Škoda Octavia 2.0 TDI',      work: 'диагностика' },
+            null, null
+        ],
+        '2026-04-21 11:00': [
+            { car: 'VW Golf VII 1.6 TDI',        work: 'замена масла' },
+            { car: 'BMW 320d xDrive',             work: 'ТО плановое' },
+            { car: 'Toyota Corolla E210 1.8',     work: 'замена колодок' },
+            null
+        ],
+        '2026-04-21 12:00': [
+            null,
+            { car: 'BMW 320d xDrive',             work: 'ТО плановое' },
+            { car: 'Toyota Corolla E210 1.8',     work: 'замена колодок' },
+            { car: 'Audi A4 2.0 TDI',            work: 'диагностика' }
+        ],
+        '2026-04-21 13:00': [
+            { car: 'Peugeot 308 1.6 THP',        work: 'замена фильтров' },
+            null, null,
+            { car: 'Audi A4 2.0 TDI',            work: 'диагностика' }
+        ],
+        '2026-04-21 14:00': [
+            { car: 'Peugeot 308 1.6 THP',        work: 'замена фильтров' },
+            { car: 'Opel Astra K 1.4 Turbo',     work: 'ходовая часть' },
+            null, null
+        ],
+        '2026-04-21 15:00': [
+            null,
+            { car: 'Opel Astra K 1.4 Turbo',     work: 'ходовая часть' },
+            { car: 'Mercedes C220d',              work: 'замена масла' },
+            null
+        ],
+        '2026-04-21 16:00': [
+            { car: 'Ford Focus III 1.5 EcoBoost', work: 'диагностика' },
+            null, null, null
+        ],
+        '2026-04-21 17:00': [null, null, null, null],
+
+        // Вторник 22.04
+        '2026-04-22 10:00': [
+            { car: 'BMW 530d xDrive',             work: 'ТО плановое' },
+            { car: 'VW Passat B8 2.0 TDI',       work: 'замена колодок' },
+            { car: 'Hyundai Tucson 1.6 T-GDI',   work: 'диагностика' },
+            null
+        ],
+        '2026-04-22 11:00': [
+            { car: 'BMW 530d xDrive',             work: 'ТО плановое' },
+            null,
+            { car: 'Hyundai Tucson 1.6 T-GDI',   work: 'диагностика' },
+            { car: 'Kia Sportage 2.0 GDI',       work: 'замена масла' }
+        ],
+        '2026-04-22 12:00': [
+            { car: 'BMW 530d xDrive',             work: 'ТО плановое' },
+            { car: 'Seat Leon 1.4 TSI',           work: 'диагностика' },
+            null,
+            { car: 'Kia Sportage 2.0 GDI',       work: 'замена масла' }
+        ],
+        '2026-04-22 13:00': [
+            null,
+            { car: 'Seat Leon 1.4 TSI',           work: 'диагностика' },
+            null, null
+        ],
+        '2026-04-22 14:00': [
+            { car: 'Audi Q3 2.0 TDI',            work: 'ремень ГРМ' },
+            null,
+            { car: 'Renault Mégane IV 1.5 dCi',  work: 'ходовая часть' },
+            null
+        ],
+        '2026-04-22 15:00': [
+            { car: 'Audi Q3 2.0 TDI',            work: 'ремень ГРМ' },
+            null,
+            { car: 'Renault Mégane IV 1.5 dCi',  work: 'ходовая часть' },
+            null
+        ],
+        '2026-04-22 16:00': [
+            { car: 'Audi Q3 2.0 TDI',            work: 'ремень ГРМ' },
+            null, null, null
+        ],
+        '2026-04-22 17:00': [null, null, null, null],
+
+        // Среда 23.04
+        '2026-04-23 10:00': [
+            { car: 'Mazda CX-5 2.0 Skyactiv',    work: 'замена масла' },
+            { car: 'Škoda Fabia 1.0 TSI',        work: 'диагностика' },
+            { car: 'Ford Kuga 2.0 TDCi',         work: 'замена колодок' },
+            { car: 'Toyota RAV4 2.5 Hybrid',     work: 'ТО плановое' }
+        ],
+        '2026-04-23 11:00': [
+            { car: 'Mazda CX-5 2.0 Skyactiv',    work: 'замена масла' },
+            null,
+            { car: 'Ford Kuga 2.0 TDCi',         work: 'замена колодок' },
+            { car: 'Toyota RAV4 2.5 Hybrid',     work: 'ТО плановое' }
+        ],
+        '2026-04-23 12:00': [
+            null, null,
+            { car: 'Honda Civic 1.5 Turbo',      work: 'диагностика' },
+            { car: 'Toyota RAV4 2.5 Hybrid',     work: 'ТО плановое' }
+        ],
+        '2026-04-23 13:00': [
+            { car: 'VW Tiguan 2.0 TDI 4Motion',  work: 'ходовая часть' },
+            null,
+            { car: 'Honda Civic 1.5 Turbo',      work: 'диагностика' },
+            null
+        ],
+        '2026-04-23 14:00': [
+            { car: 'VW Tiguan 2.0 TDI 4Motion',  work: 'ходовая часть' },
+            { car: 'Nissan Qashqai 1.5 dCi',     work: 'замена масла' },
+            null, null
+        ],
+        '2026-04-23 15:00': [
+            null,
+            { car: 'Nissan Qashqai 1.5 dCi',     work: 'замена масла' },
+            null, null
+        ],
+        '2026-04-23 16:00': [null, null, null, null],
+        '2026-04-23 17:00': [null, null, null, null],
+
+        // Четверг 24.04
+        '2026-04-24 10:00': [
+            { car: 'Audi A6 3.0 TDI',            work: 'ремень ГРМ' },
+            { car: 'BMW 116i',                    work: 'замена масла' },
+            { car: 'Škoda Superb 2.0 TDI',       work: 'диагностика' },
+            null
+        ],
+        '2026-04-24 11:00': [
+            { car: 'Audi A6 3.0 TDI',            work: 'ремень ГРМ' },
+            { car: 'BMW 116i',                    work: 'замена масла' },
+            { car: 'Škoda Superb 2.0 TDI',       work: 'диагностика' },
+            { car: 'Opel Insignia 2.0 CDTI',     work: 'ходовая часть' }
+        ],
+        '2026-04-24 12:00': [
+            { car: 'Audi A6 3.0 TDI',            work: 'ремень ГРМ' },
+            null, null,
+            { car: 'Opel Insignia 2.0 CDTI',     work: 'ходовая часть' }
+        ],
+        '2026-04-24 13:00': [
+            { car: 'Audi A6 3.0 TDI',            work: 'ремень ГРМ' },
+            { car: 'Ford Mondeo 2.0 EcoBoost',   work: 'диагностика' },
+            null, null
+        ],
+        '2026-04-24 14:00': [
+            null,
+            { car: 'Ford Mondeo 2.0 EcoBoost',   work: 'диагностика' },
+            { car: 'Peugeot 3008 1.6 BlueHDi',  work: 'замена колодок' },
+            null
+        ],
+        '2026-04-24 15:00': [
+            null, null,
+            { car: 'Peugeot 3008 1.6 BlueHDi',  work: 'замена колодок' },
+            null
+        ],
+        '2026-04-24 16:00': [null, null, null, null],
+        '2026-04-24 17:00': [null, null, null, null],
+
+        // Пятница 25.04 (сегодня)
+        '2026-04-25 10:00': [
+            { car: 'VW Passat B8 2.0 TDI',       work: 'замена масла' },
+            { car: 'BMW 320d xDrive',             work: 'диагностика' },
+            { car: 'Toyota Corolla E210 1.8',     work: 'ТО плановое' },
+            null
+        ],
+        '2026-04-25 11:00': [
+            { car: 'VW Passat B8 2.0 TDI',       work: 'замена масла' },
+            { car: 'BMW 320d xDrive',             work: 'диагностика' },
+            { car: 'Toyota Corolla E210 1.8',     work: 'ТО плановое' },
+            { car: 'Audi A4 2.0 TDI',            work: 'замена фильтров' }
+        ],
+        '2026-04-25 12:00': [
+            { car: 'Mercedes C220d AMG Line',     work: 'ходовая часть' },
+            null,
+            { car: 'Toyota RAV4 2.5 Hybrid',     work: 'диагностика' },
+            { car: 'Audi A4 2.0 TDI',            work: 'замена фильтров' }
+        ],
+        '2026-04-25 13:00': [
+            { car: 'Mercedes C220d AMG Line',     work: 'ходовая часть' },
+            { car: 'Kia Ceed 1.4 T-GDI',        work: 'замена масла' },
+            { car: 'Toyota RAV4 2.5 Hybrid',     work: 'диагностика' },
+            null
+        ],
+        '2026-04-25 14:00': [
+            null,
+            { car: 'Kia Ceed 1.4 T-GDI',        work: 'замена масла' },
+            null, null
+        ],
+        '2026-04-25 15:00': [
+            { car: 'Audi Q5 2.0 TDI quattro',    work: 'ТО плановое' },
+            null, null, null
+        ],
+        '2026-04-25 16:00': [null, null, null, null],
+        '2026-04-25 17:00': [null, null, null, null],
+
+        // Суббота 26.04 (только до 14:00)
+        '2026-04-26 10:00': [
+            { car: 'Ford Fiesta 1.0 EcoBoost',   work: 'замена масла' },
+            { car: 'VW Golf VII 2.0 TDI',        work: 'диагностика' },
+            null, null
+        ],
+        '2026-04-26 11:00': [
+            { car: 'Ford Fiesta 1.0 EcoBoost',   work: 'замена масла' },
+            null,
+            { car: 'Mazda 6 2.2 SkyActiv-D',     work: 'замена колодок' },
+            null
+        ],
+        '2026-04-26 12:00': [
+            null,
+            { car: 'BMW 116i',                    work: 'замена масла' },
+            { car: 'Mazda 6 2.2 SkyActiv-D',     work: 'замена колодок' },
+            null
+        ],
+        '2026-04-26 13:00': [null, null, null, null],
+        '2026-04-26 14:00': [null, null, null, null],
+
+        // ===== ПРЕДЫДУЩАЯ НЕДЕЛЯ: 14-19 апреля =====
+        '2026-04-14 10:00': [
+            { car: 'VW Polo VI 1.0 TSI',         work: 'замена масла' },
+            { car: 'Hyundai i30 1.6 CRDi',       work: 'диагностика' },
+            null, null
+        ],
+        '2026-04-14 13:00': [
+            null, null,
+            { car: 'Škoda Fabia 1.0 TSI',        work: 'ТО плановое' },
+            null
+        ],
+        '2026-04-14 15:00': [
+            { car: 'Nissan Qashqai 1.5 dCi',     work: 'ходовая часть' },
+            null, null,
+            { car: 'Peugeot 308 SW 1.6 THP',     work: 'замена масла' }
+        ],
+        '2026-04-15 10:00': [
+            { car: 'Audi A3 Sportback 2.0 TDI',  work: 'ТО плановое' },
+            { car: 'Kia Ceed SW 1.6 CRDi',       work: 'диагностика' },
+            null, null
+        ],
+        '2026-04-15 14:00': [
+            null, null,
+            { car: 'Seat Ibiza 1.0 TSI',         work: 'замена масла' },
+            null
+        ],
+        '2026-04-16 10:00': [
+            { car: 'Volvo XC60 D4 AWD',          work: 'ТО плановое' },
+            { car: 'BMW 318d',                    work: 'диагностика' },
+            { car: 'Seat Leon 1.4 TSI',          work: 'замена колодок' },
+            null
+        ],
+        '2026-04-17 10:00': [
+            { car: 'Kia Ceed 1.4 T-GDI',        work: 'замена масла' },
+            null,
+            { car: 'Škoda Superb 2.0 TDI',       work: 'ТО плановое' },
+            null
+        ],
+        '2026-04-17 14:00': [
+            null,
+            { car: 'VW Tiguan 1.4 TSI',          work: 'диагностика' },
+            null, null
+        ],
+        '2026-04-18 11:00': [
+            { car: 'Peugeot 3008 1.6 BlueHDi',  work: 'замена колодок' },
+            { car: 'Honda HR-V 1.5 CVT',         work: 'замена масла' },
+            null, null
+        ],
+        '2026-04-19 10:00': [
+            null,
+            { car: 'Toyota RAV4 2.5 Hybrid',     work: 'диагностика' },
+            null, null
+        ],
+
+        // ===== СЛЕДУЮЩАЯ НЕДЕЛЯ: 28 апреля — 2 мая =====
+        '2026-04-28 10:00': [
+            { car: 'Toyota Corolla E210 1.8',     work: 'замена масла' },
+            { car: 'VW Golf VIII 1.5 eTSI',      work: 'диагностика' },
+            null, null
+        ],
+        '2026-04-28 13:00': [
+            { car: 'Audi A4 2.0 TDI',            work: 'ТО плановое' },
+            null,
+            { car: 'BMW 218d Active Tourer',      work: 'замена колодок' },
+            null
+        ],
+        '2026-04-29 10:00': [
+            { car: 'Škoda Octavia IV 1.5 TSI',   work: 'ТО плановое' },
+            null,
+            { car: 'BMW 320d xDrive',             work: 'замена масла' },
+            null
+        ],
+        '2026-04-29 14:00': [
+            null,
+            { car: 'Mercedes A200d',              work: 'диагностика' },
+            null, null
+        ],
+        '2026-04-30 11:00': [
+            { car: 'Toyota RAV4 2.5 Hybrid',     work: 'ТО плановое' },
+            { car: 'Audi Q3 35 TFSI',            work: 'замена масла' },
+            null, null
+        ],
+        '2026-04-30 14:00': [
+            null, null,
+            { car: 'Honda Civic 1.5 Turbo',      work: 'диагностика' },
+            null
+        ],
+        '2026-05-01 10:00': [
+            { car: 'Mazda CX-5 2.5 Skyactiv-G',  work: 'замена масла' },
+            null, null, null
+        ],
+        '2026-05-02 12:00': [
+            { car: 'VW Golf VII 1.6 TDI',        work: 'диагностика' },
+            null,
+            { car: 'Ford Focus IV 1.5 EcoBoost', work: 'замена колодок' },
+            null
+        ],
+    };
+
+    // Смещение недели: 0 = текущая
+    let weekOffset = 0;
+
+    function getMondayOfWeek(offset) {
+        const today = new Date();
+        const dow = today.getDay();
+        const diffToMonday = (dow === 0) ? -6 : 1 - dow;
+        const monday = new Date(today);
+        monday.setDate(today.getDate() + diffToMonday + offset * 7);
+        monday.setHours(0, 0, 0, 0);
+        return monday;
+    }
+
+    function formatDate(d) {
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        return `${d.getFullYear()}-${mm}-${dd}`;
+    }
+
+    function formatDayLabel(d) {
+        const names = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        return `${names[d.getDay()]} ${dd}.${mm}`;
+    }
+
+    function calPrevWeek() { weekOffset--; renderCalendar(); }
+    function calNextWeek() { weekOffset++; renderCalendar(); }
+
+    // ============================
+    // РЕНДЕР КАЛЕНДАРЯ — ИЗМЕНЕНИЕ 2
+    // Каждый слот кликабелен и раскрывается,
+    // показывая статус каждого из 4 механиков
+    // ============================
+    function renderCalendar() {
+        const monday = getMondayOfWeek(weekOffset);
+        const saturday = new Date(monday);
+        saturday.setDate(monday.getDate() + 5);
+
+        const months = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+        const fmtShort = d => `${d.getDate()} ${months[d.getMonth()]}`;
+        document.getElementById('cal-week-label').textContent =
+            `${fmtShort(monday)} — ${fmtShort(saturday)} ${monday.getFullYear()}`;
+
+        const WEEKDAY_SLOTS  = ['10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
+        const SATURDAY_SLOTS = ['10:00','11:00','12:00','13:00','14:00'];
+        const todayStr = formatDate(new Date());
+
+        let html = '<div class="cal-days">';
+
+        for (let i = 0; i < 7; i++) {
+            const day = new Date(monday);
+            day.setDate(monday.getDate() + i);
+            const dateStr    = formatDate(day);
+            const isSunday   = i === 6;
+            const isSaturday = i === 5;
+            const isToday    = dateStr === todayStr;
+
+            let dayClass = 'cal-day';
+            if (isSunday) dayClass += ' cal-day-sunday';
+            if (isToday)  dayClass += ' cal-day-today';
+
+            const slots = isSunday ? [] : (isSaturday ? SATURDAY_SLOTS : WEEKDAY_SLOTS);
+
+            html += `<div class="${dayClass}">`;
+            html += `<div class="cal-day-header">${formatDayLabel(day)}</div>`;
+
+            if (isSunday) {
+                html += `<div class="cal-closed">Выходной</div>`;
+            } else {
+                slots.forEach(time => {
+                    const key      = `${dateStr} ${time}`;
+                    // Если слота нет в данных — все четверо свободны
+                    const slotData = calendarData[key] || [null, null, null, null];
+                    const busyCount = slotData.filter(m => m !== null).length;
+
+                    // Цвет фона и класс текста по загрузке
+                    let colorClass, summaryClass, summaryText;
+                    if (busyCount === 0) {
+                        colorClass = 'slot-free';
+                        summaryClass = 'summary-free';
+                        summaryText = 'все свободны';
+                    } else if (busyCount === 4) {
+                        colorClass = 'slot-full';
+                        summaryClass = 'summary-full';
+                        summaryText = '4/4 занято';
+                    } else {
+                        colorClass = 'slot-partial';
+                        summaryClass = 'summary-partial';
+                        summaryText = `${busyCount}/4 занято`;
+                    }
+
+                    // Строки механиков в раскрытой части
+                    const mechRows = mechanics.map((m, idx) => {
+                        const mData = slotData[idx];
+                        if (mData) {
+                            return `<div class="mech-row mech-row-busy">
+                                <span class="mech-name">${m.name}</span>
+                                <span class="mech-busy-info">${mData.car} — ${mData.work}</span>
+                            </div>`;
+                        } else {
+                            return `<div class="mech-row mech-row-free">
+                                <span class="mech-name">${m.name}</span>
+                                <span class="mech-free-label">Свободен</span>
+                            </div>`;
+                        }
+                    }).join('');
+
+                    html += `<div class="cal-slot ${colorClass}" onclick="toggleSlot(this)">
+                        <div class="cal-slot-header">
+                            <span class="cal-slot-time">${time}</span>
+                            <span class="cal-slot-summary ${summaryClass}">${summaryText}</span>
+                            <span class="cal-slot-arrow">▾</span>
+                        </div>
+                        <div class="cal-slot-body">${mechRows}</div>
+                    </div>`;
+                });
+            }
+
+            html += '</div>';
+        }
+
+        html += '</div>';
+        document.getElementById('cal-grid').innerHTML = html;
+    }
+
+    // Открыть/закрыть слот — повторный клик закрывает обратно
+    function toggleSlot(el) {
+        el.classList.toggle('open');
+    }
+
+    // ============================
+    // УЧЁТ РАБОЧИХ ЧАСОВ — ИЗМЕНЕНИЕ 3
+    // ============================
+
+    // Данные за текущую неделю (Пн-Сб, 21-26 апреля)
+    const hoursWeek = [
+        { name: 'Алексей К.', role: 'ст. механик', days: [8, 8, 7, 8, 6, 5] },
+        { name: 'Дмитрий В.', role: '',             days: [7, 7, 6, 6, 5, 0] },
+        { name: 'Марис Л.',   role: '',             days: [7, 8, 7, 7, 7, 4] },
+        { name: 'Игорь С.',   role: '',             days: [5, 6, 7, 5, 4, 0] },
+    ];
+
+    // Данные за сегодня (25.04)
+    const hoursToday = [
+        { name: 'Алексей К.', role: 'ст. механик', hours: 6 },
+        { name: 'Дмитрий В.', role: '',             hours: 5 },
+        { name: 'Марис Л.',   role: '',             hours: 7 },
+        { name: 'Игорь С.',   role: '',             hours: 4 },
+    ];
+
+    // Данные за месяц (апрель 2026)
+    const hoursMonth = [
+        { name: 'Алексей К.', role: 'ст. механик', total: 168, pct: 95 },
+        { name: 'Дмитрий В.', role: '',             total: 148, pct: 84 },
+        { name: 'Марис Л.',   role: '',             total: 155, pct: 88 },
+        { name: 'Игорь С.',   role: '',             total: 128, pct: 73 },
+    ];
+
+    let currentHoursPeriod = 'week';
+
+    // Переключение вкладки периода
+    function switchHours(period, btn) {
+        currentHoursPeriod = period;
+        document.querySelectorAll('#section-hours .tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderHours();
+    }
+
+    // Цветовой класс по количеству часов
+    function hClass(h) {
+        if (h >= 7) return 'h-good';
+        if (h >= 4) return 'h-medium';
+        return 'h-low';
+    }
+
+    // Имя механика + необязательная строчка с ролью
+    function mechCell(m) {
+        return m.name + (m.role ? `<span class="hours-role">${m.role}</span>` : '');
+    }
+
+    function renderHours() {
+        const container = document.getElementById('hours-content');
+        let html = '';
+
+        if (currentHoursPeriod === 'week') {
+            // Таблица: механик | Пн | Вт | Ср | Чт | Пт | Сб | Итого
+            const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+            html += `<div class="hours-table-wrap"><table class="hours-table">
+                <thead><tr>
+                    <th>Механик</th>
+                    ${dayNames.map(d => `<th>${d}</th>`).join('')}
+                    <th>Итого</th>
+                </tr></thead><tbody>`;
+
+            let grandTotal = 0;
+            hoursWeek.forEach(m => {
+                const total = m.days.reduce((a, b) => a + b, 0);
+                grandTotal += total;
+                html += `<tr>
+                    <td>${mechCell(m)}</td>
+                    ${m.days.map(h => `<td class="${hClass(h)}">${h > 0 ? h + ' ч' : '—'}</td>`).join('')}
+                    <td class="${hClass(total / 5)}">${total} ч</td>
+                </tr>`;
+            });
+
+            html += `</tbody></table></div>`;
+
+            // Норма: 4 механика × (5 дней × 8ч + суббота 5ч) = 180ч
+            const pct = Math.round(grandTotal / 180 * 100);
+            html += `<div class="hours-summary">
+                <div><strong>Итого за неделю:</strong> ${grandTotal} ч</div>
+                <div><strong>Средняя загрузка:</strong> ${pct}%</div>
+                <div style="color:#888;font-size:0.8rem;">Норма: 45 ч/нед на механика</div>
+            </div>`;
+
+        } else if (currentHoursPeriod === 'today') {
+            // Одна колонка — часы за сегодня
+            html += `<div class="hours-table-wrap"><table class="hours-table">
+                <thead><tr><th>Механик</th><th>Сегодня (25 апр)</th></tr></thead>
+                <tbody>`;
+
+            let total = 0;
+            hoursToday.forEach(m => {
+                total += m.hours;
+                html += `<tr>
+                    <td>${mechCell(m)}</td>
+                    <td class="${hClass(m.hours)}">${m.hours} ч</td>
+                </tr>`;
+            });
+
+            html += `</tbody></table></div>`;
+            const pct = Math.round(total / (hoursToday.length * 8) * 100);
+            html += `<div class="hours-summary">
+                <div><strong>Итого сегодня:</strong> ${total} ч</div>
+                <div><strong>Средняя загрузка:</strong> ${pct}%</div>
+            </div>`;
+
+        } else {
+            // Месяц: механик | часов за месяц | процент загрузки (с баром)
+            html += `<div class="hours-table-wrap"><table class="hours-table">
+                <thead><tr><th>Механик</th><th>Апрель 2026</th><th>Загрузка</th></tr></thead>
+                <tbody>`;
+
+            let totalMonth = 0;
+            let totalPct = 0;
+            hoursMonth.forEach(m => {
+                totalMonth += m.total;
+                totalPct += m.pct;
+                html += `<tr>
+                    <td>${mechCell(m)}</td>
+                    <td class="${hClass(m.total / 22)}">${m.total} ч</td>
+                    <td>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <div style="flex:1;height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;">
+                                <div style="height:100%;width:${m.pct}%;background:#e30613;border-radius:3px;"></div>
+                            </div>
+                            <span style="font-size:0.8rem;color:#555;min-width:32px;">${m.pct}%</span>
+                        </div>
+                    </td>
+                </tr>`;
+            });
+
+            html += `</tbody></table></div>`;
+            const avgPct = Math.round(totalPct / hoursMonth.length);
+            html += `<div class="hours-summary">
+                <div><strong>Итого за апрель:</strong> ${totalMonth} ч</div>
+                <div><strong>Средняя загрузка:</strong> ${avgPct}%</div>
+                <div style="color:#888;font-size:0.8rem;">Норма: 176 ч/мес (22 раб. дня)</div>
+            </div>`;
+        }
+
+        container.innerHTML = html;
+    }
+</script>
+</body>
+</html>
