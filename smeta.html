@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23e30613'/><text x='50' y='72' font-family='sans-serif' font-size='65' font-weight='bold' fill='white' text-anchor='middle'>R</text></svg>">
+    <title>RepairTech — Смета ремонта</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: sans-serif;
+            color: #1a1a1a;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: #fff;
+            border-bottom: 3px solid #e30613;
+            padding: 14px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .logo {
+            font-size: 1.45rem;
+            font-weight: bold;
+            color: #e30613;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .back-btn {
+            font-size: 0.88rem;
+            color: #555;
+            text-decoration: none;
+            padding: 7px 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .back-btn:hover { background: #f0f0f0; border-color: #bbb; }
+
+        /* ===== PAGE ===== */
+        .page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px 56px;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            color: #1a1a1a;
+            margin-bottom: 26px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e30613;
+        }
+
+        /* ===== BLOCK ===== */
+        .block {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 24px;
+            margin-bottom: 22px;
+        }
+
+        .block-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #e30613;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .block-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #f0f0f0;
+        }
+
+        /* ===== TWO-COLUMN FORM ===== */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 30px;
+        }
+
+        .form-group {
+            margin-bottom: 13px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px 11px;
+            border: 1px solid #d5d5d5;
+            border-radius: 6px;
+            font-size: 0.93rem;
+            font-family: sans-serif;
+            color: #1a1a1a;
+            background: #fafafa;
+            outline: none;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .form-group input:focus {
+            border-color: #e30613;
+            background: #fff;
+        }
+
+        /* ===== CAR DIAGRAM ===== */
+        .car-views {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .car-view-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .car-view-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 7px;
+        }
+
+        svg.car-svg { display: block; }
+
+        .zone {
+            fill: transparent;
+            stroke: #666;
+            stroke-width: 1.2;
+            cursor: pointer;
+            transition: fill 0.12s;
+        }
+        .zone:hover { fill: rgba(255, 210, 0, 0.42); stroke: #999; }
+        .zone.active {
+            fill: rgba(227, 6, 19, 0.32);
+            stroke: #e30613;
+            stroke-width: 2;
+        }
+
+        .zone-lbl {
+            font-size: 7.5px;
+            fill: #555;
+            pointer-events: none;
+            font-family: sans-serif;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+        .zone.active + text.zone-lbl,
+        .zone.active ~ text.zone-lbl { fill: #a00; }
+
+        .car-outline {
+            fill: none;
+            stroke: #222;
+            stroke-width: 2;
+            pointer-events: none;
+        }
+
+        .car-detail {
+            fill: none;
+            stroke: #aaa;
+            stroke-width: 1;
+            pointer-events: none;
+        }
+
+        .car-decor {
+            fill: #efefef;
+            stroke: #aaa;
+            stroke-width: 1;
+            pointer-events: none;
+        }
+
+        /* Damage list */
+        .damage-hint {
+            font-size: 0.78rem;
+            color: #999;
+            margin-bottom: 6px;
+        }
+
+        #damage-list {
+            min-height: 36px;
+            padding: 8px 12px;
+            background: #f9f9f9;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            font-size: 0.83rem;
+            color: #aaa;
+            line-height: 2;
+        }
+
+        .damage-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(227,6,19,0.08);
+            border: 1px solid rgba(227,6,19,0.25);
+            color: #c00;
+            padding: 2px 9px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin: 2px 4px 2px 0;
+            cursor: pointer;
+        }
+        .damage-tag:hover { background: rgba(227,6,19,0.15); }
+
+        /* ===== WORK TABLE ===== */
+        .table-wrap { overflow-x: auto; }
+
+        table.work-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        .work-table th {
+            background: #f4f4f4;
+            padding: 9px 10px;
+            text-align: left;
+            font-size: 0.73rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #666;
+            border-bottom: 2px solid #e0e0e0;
+            white-space: nowrap;
+        }
+
+        .work-table td {
+            padding: 5px 7px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+
+        .work-table tr:last-child td { border-bottom: none; }
+        .work-table tr:hover td { background: #fafafa; }
+
+        .col-num {
+            color: #bbb;
+            font-size: 0.8rem;
+            text-align: center;
+            width: 32px;
+        }
+
+        .work-table input,
+        .work-table select {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 6px 8px;
+            font-size: 0.88rem;
+            font-family: sans-serif;
+            color: #1a1a1a;
+            background: #fff;
+            outline: none;
+            transition: border-color 0.12s;
+        }
+        .work-table input:focus,
+        .work-table select:focus { border-color: #e30613; }
+
+        .work-table input[type="number"] { text-align: right; }
+
+        .col-total {
+            font-weight: 600;
+            text-align: right;
+            color: #1a1a1a;
+            white-space: nowrap;
+            min-width: 80px;
+            padding-right: 4px;
+        }
+
+        .btn-add {
+            margin-top: 13px;
+            padding: 7px 16px;
+            background: #f2f2f2;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            font-family: sans-serif;
+            color: #333;
+            transition: background 0.15s;
+        }
+        .btn-add:hover { background: #e8e8e8; }
+
+        /* ===== TOTALS ===== */
+        .totals-wrap {
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 2px solid #efefef;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .totals-inner { min-width: 270px; }
+
+        .t-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 0.92rem;
+        }
+        .t-row:last-child {
+            border-bottom: none;
+            border-top: 2px solid #1a1a1a;
+            padding-top: 10px;
+            margin-top: 6px;
+        }
+
+        .t-row .t-label { color: #777; }
+        .t-row .t-value { font-weight: 600; color: #1a1a1a; }
+
+        .t-row.grand .t-label,
+        .t-row.grand .t-value {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1a1a1a;
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 11px 24px;
+            border: none;
+            border-radius: 7px;
+            font-size: 0.95rem;
+            font-family: sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.15s, transform 0.1s;
+        }
+        .btn:hover { opacity: 0.88; }
+        .btn:active { transform: scale(0.98); }
+
+        .btn-red { background: #e30613; color: #fff; }
+        .btn-gray { background: #ddd; color: #333; }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(8px);
+            background: #1a1a1a;
+            color: #fff;
+            padding: 11px 22px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s, transform 0.25s;
+            z-index: 999;
+            white-space: nowrap;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 640px) {
+            .two-col { grid-template-columns: 1fr; }
+            .car-views { flex-direction: column; align-items: center; }
+            h1 { font-size: 1.4rem; }
+        }
+
+        @media print {
+            header { position: static; }
+            .actions { display: none; }
+            .btn-add { display: none; }
+            body { background: #fff; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo">RepairTech</a>
+    <a href="service-panel.html" class="back-btn">← Назад в панель</a>
+</header>
+
+<div class="page">
+    <h1>Смета ремонта</h1>
+
+    <!-- ══════════════════════════════════════
+         БЛОК 1 — ДАННЫЕ КЛИЕНТА
+    ══════════════════════════════════════ -->
+    <section class="block">
+        <div class="block-title">1. Данные клиента и автомобиля</div>
+        <div class="two-col">
+            <div>
+                <div class="form-group">
+                    <label>Дата</label>
+                    <input type="date" id="smeta-date">
+                </div>
+                <div class="form-group">
+                    <label>Имя клиента</label>
+                    <input type="text" placeholder="Иван Иванов">
+                </div>
+                <div class="form-group">
+                    <label>Телефон</label>
+                    <input type="tel" placeholder="+371 2X XXX XXX">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="client@mail.com">
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label>Марка и модель</label>
+                    <input type="text" placeholder="BMW 320d">
+                </div>
+                <div class="form-group">
+                    <label>Гос. номер</label>
+                    <input type="text" placeholder="AB-1234">
+                </div>
+                <div class="form-group">
+                    <label>VIN</label>
+                    <input type="text" placeholder="WBA3A5C51CF256651" style="font-family:monospace;letter-spacing:0.04em">
+                </div>
+                <div class="form-group">
+                    <label>Пробег, км</label>
+                    <input type="number" placeholder="125000" min="0">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         БЛОК 2 — СХЕМА ПОВРЕЖДЕНИЙ
+    ══════════════════════════════════════ -->
+    <section class="block">
+        <div class="block-title">2. Схема повреждений — нажмите на зону для отметки</div>
+
+        <div class="car-views">
+
+            <!-- ▶ ВИД СПЕРЕДИ ─────────────────────────── -->
+            <div class="car-view-wrap">
+                <svg class="car-svg" width="196" height="158" viewBox="0 0 260 190">
+
+                    <!-- A-pillar corners (decorative) -->
+                    <polygon class="car-decor" points="10,62 60,62 70,18"/>
+                    <polygon class="car-decor" points="250,62 200,62 190,18"/>
+
+                    <!-- Clickable zones -->
+                    <polygon class="zone"
+                        data-zone="front-windshield" data-label="Лобовое стекло"
+                        points="70,18 190,18 200,62 60,62"/>
+                    <polygon class="zone"
+                        data-zone="front-left-headlight" data-label="Левая фара"
+                        points="10,62 60,62 60,115 10,115"/>
+                    <polygon class="zone"
+                        data-zone="front-hood" data-label="Капот"
+                        points="60,62 200,62 200,115 60,115"/>
+                    <polygon class="zone"
+                        data-zone="front-right-headlight" data-label="Правая фара"
+                        points="200,62 250,62 250,115 200,115"/>
+                    <polygon class="zone"
+                        data-zone="front-bumper-left" data-label="Передний бампер левый"
+                        points="10,115 85,115 85,164 10,164"/>
+                    <polygon class="zone"
+                        data-zone="front-bumper-center" data-label="Передний бампер центр"
+                        points="85,115 175,115 175,164 85,164"/>
+                    <polygon class="zone"
+                        data-zone="front-bumper-right" data-label="Передний бампер правый"
+                        points="175,115 250,115 250,164 175,164"/>
+
+                    <!-- Zone labels -->
+                    <text class="zone-lbl" x="130" y="43">Лобовое</text>
+                    <text class="zone-lbl" x="35" y="88">Фара Л</text>
+                    <text class="zone-lbl" x="130" y="88">Капот</text>
+                    <text class="zone-lbl" x="225" y="88">Фара П</text>
+                    <text class="zone-lbl" x="47" y="141">Бмп Л</text>
+                    <text class="zone-lbl" x="130" y="141">Бмп Ц</text>
+                    <text class="zone-lbl" x="213" y="141">Бмп П</text>
+
+                    <!-- Car outline (on top, non-interactive) -->
+                    <path class="car-outline"
+                        d="M 70,18 L 190,18 L 250,62 L 250,164 L 10,164 L 10,62 Z"/>
+
+                    <!-- Decorative details -->
+                    <!-- Grille -->
+                    <rect class="car-detail" x="88" y="70" width="84" height="32" rx="4"/>
+                    <line class="car-detail" x1="88" y1="82" x2="172" y2="82"/>
+                    <line class="car-detail" x1="88" y1="90" x2="172" y2="90"/>
+                    <line class="car-detail" x1="115" y1="70" x2="115" y2="102"/>
+                    <line class="car-detail" x1="145" y1="70" x2="145" y2="102"/>
+                    <!-- Headlight ellipses -->
+                    <ellipse class="car-detail" cx="35" cy="88" rx="17" ry="15"/>
+                    <ellipse class="car-detail" cx="225" cy="88" rx="17" ry="15"/>
+                    <!-- License plate -->
+                    <rect class="car-detail" x="97" y="126" width="66" height="22" rx="3"/>
+                    <!-- Hood line -->
+                    <line class="car-detail" x1="60" y1="78" x2="200" y2="78" style="stroke-width:0.8"/>
+                </svg>
+                <span class="car-view-label">Спереди</span>
+            </div>
+
+            <!-- ▶ ВИД СБОКУ ─────────────────────────── -->
+            <div class="car-view-wrap">
+                <svg class="car-svg" width="294" height="148" viewBox="0 0 420 200">
+
+                    <!-- Clickable zones -->
+                    <polygon class="zone"
+                        data-zone="side-front-fender" data-label="Переднее крыло"
+                        points="18,92 100,92 100,158 18,158"/>
+                    <polygon class="zone"
+                        data-zone="side-front-door" data-label="Передняя дверь"
+                        points="100,92 198,92 198,158 100,158"/>
+                    <polygon class="zone"
+                        data-zone="side-rear-door" data-label="Задняя дверь"
+                        points="198,92 298,92 298,158 198,158"/>
+                    <polygon class="zone"
+                        data-zone="side-rear-fender" data-label="Заднее крыло"
+                        points="298,92 402,92 402,158 298,158"/>
+                    <polygon class="zone"
+                        data-zone="side-roof" data-label="Крыша"
+                        points="94,92 114,30 308,30 332,92"/>
+                    <polygon class="zone"
+                        data-zone="side-sill" data-label="Порог"
+                        points="18,158 402,158 402,176 18,176"/>
+
+                    <!-- Zone labels -->
+                    <text class="zone-lbl" x="59" y="127">Кр. пер.</text>
+                    <text class="zone-lbl" x="149" y="127">Дв. пер.</text>
+                    <text class="zone-lbl" x="248" y="127">Дв. зад.</text>
+                    <text class="zone-lbl" x="350" y="127">Кр. зад.</text>
+                    <text class="zone-lbl" x="213" y="64">Крыша</text>
+                    <text class="zone-lbl" x="210" y="168">Порог</text>
+
+                    <!-- Car outline -->
+                    <path class="car-outline"
+                        d="M 18,92 L 94,92 L 114,30 L 308,30 L 332,92 L 402,92 L 402,176 L 18,176 Z"/>
+
+                    <!-- Wheel arches (decorative) -->
+                    <circle class="car-detail" cx="78" cy="158" r="31"/>
+                    <circle cx="78" cy="158" r="14" fill="#e8e8e8" stroke="#aaa" stroke-width="1" pointer-events="none"/>
+                    <circle class="car-detail" cx="308" cy="158" r="31"/>
+                    <circle cx="308" cy="158" r="14" fill="#e8e8e8" stroke="#aaa" stroke-width="1" pointer-events="none"/>
+
+                    <!-- Window pane (A/B/C pillars) -->
+                    <polygon class="car-detail" style="fill:rgba(200,220,240,0.3)"
+                        points="114,30 186,30 186,92 94,92 114,30"/>
+                    <polygon class="car-detail" style="fill:rgba(200,220,240,0.3)"
+                        points="204,30 308,30 332,92 204,92"/>
+                    <!-- B-pillar -->
+                    <line class="car-detail" x1="194" y1="30" x2="196" y2="92" style="stroke-width:5;stroke:#bbb"/>
+                    <!-- Door line -->
+                    <line class="car-detail" x1="100" y1="92" x2="100" y2="158"/>
+                    <line class="car-detail" x1="198" y1="92" x2="198" y2="158"/>
+                    <line class="car-detail" x1="298" y1="92" x2="298" y2="158"/>
+                    <!-- Door handles -->
+                    <rect class="car-detail" x="132" y="118" width="34" height="7" rx="3"/>
+                    <rect class="car-detail" x="232" y="118" width="34" height="7" rx="3"/>
+                    <!-- Beltline -->
+                    <line class="car-detail" x1="94" y1="92" x2="332" y2="92" style="stroke-width:0.8"/>
+                </svg>
+                <span class="car-view-label">Сбоку</span>
+            </div>
+
+            <!-- ▶ ВИД СЗАДИ ─────────────────────────── -->
+            <div class="car-view-wrap">
+                <svg class="car-svg" width="196" height="158" viewBox="0 0 260 190">
+
+                    <!-- A-pillar corners (decorative) -->
+                    <polygon class="car-decor" points="10,62 60,62 70,18"/>
+                    <polygon class="car-decor" points="250,62 200,62 190,18"/>
+
+                    <!-- Clickable zones -->
+                    <polygon class="zone"
+                        data-zone="rear-window" data-label="Заднее стекло"
+                        points="70,18 190,18 200,62 60,62"/>
+                    <polygon class="zone"
+                        data-zone="rear-left-light" data-label="Левый задний фонарь"
+                        points="10,62 60,62 60,115 10,115"/>
+                    <polygon class="zone"
+                        data-zone="rear-trunk" data-label="Крышка багажника"
+                        points="60,62 200,62 200,115 60,115"/>
+                    <polygon class="zone"
+                        data-zone="rear-right-light" data-label="Правый задний фонарь"
+                        points="200,62 250,62 250,115 200,115"/>
+                    <polygon class="zone"
+                        data-zone="rear-bumper-left" data-label="Задний бампер левый"
+                        points="10,115 85,115 85,164 10,164"/>
+                    <polygon class="zone"
+                        data-zone="rear-bumper-center" data-label="Задний бампер центр"
+                        points="85,115 175,115 175,164 85,164"/>
+                    <polygon class="zone"
+                        data-zone="rear-bumper-right" data-label="Задний бампер правый"
+                        points="175,115 250,115 250,164 175,164"/>
+
+                    <!-- Zone labels -->
+                    <text class="zone-lbl" x="130" y="43">Зад. стекло</text>
+                    <text class="zone-lbl" x="35" y="88">Фон Л</text>
+                    <text class="zone-lbl" x="130" y="88">Багажник</text>
+                    <text class="zone-lbl" x="225" y="88">Фон П</text>
+                    <text class="zone-lbl" x="47" y="141">Бмп Л</text>
+                    <text class="zone-lbl" x="130" y="141">Бмп Ц</text>
+                    <text class="zone-lbl" x="213" y="141">Бмп П</text>
+
+                    <!-- Car outline -->
+                    <path class="car-outline"
+                        d="M 70,18 L 190,18 L 250,62 L 250,164 L 10,164 L 10,62 Z"/>
+
+                    <!-- Decorative details -->
+                    <!-- Taillight inner shapes -->
+                    <polygon class="car-detail" style="fill:rgba(255,60,60,0.06)"
+                        points="12,65 56,65 56,112 12,112"/>
+                    <polygon class="car-detail" style="fill:rgba(255,60,60,0.06)"
+                        points="248,65 204,65 204,112 248,112"/>
+                    <!-- Horizontal light strip -->
+                    <line class="car-detail" x1="12" y1="78" x2="56" y2="78"/>
+                    <line class="car-detail" x1="204" y1="78" x2="248" y2="78"/>
+                    <!-- Trunk emblem area -->
+                    <circle class="car-detail" cx="130" cy="88" r="10"/>
+                    <!-- License plate -->
+                    <rect class="car-detail" x="88" y="122" width="84" height="22" rx="3"/>
+                    <!-- Trunk line -->
+                    <line class="car-detail" x1="62" y1="75" x2="198" y2="75" style="stroke-width:0.8"/>
+                </svg>
+                <span class="car-view-label">Сзади</span>
+            </div>
+
+        </div>
+
+        <div class="damage-hint">Отмеченные повреждения (нажмите на тег для снятия отметки):</div>
+        <div id="damage-list">Нет отмеченных зон</div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         БЛОК 3 — ТАБЛИЦА РАБОТ
+    ══════════════════════════════════════ -->
+    <section class="block">
+        <div class="block-title">3. Таблица работ и запчастей</div>
+        <div class="table-wrap">
+            <table class="work-table">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th style="min-width:170px">Описание работы</th>
+                        <th style="min-width:130px">Тип работы</th>
+                        <th style="width:62px;text-align:right">Часы</th>
+                        <th style="width:72px;text-align:right">€ / час</th>
+                        <th style="width:88px;text-align:right">Запчасти €</th>
+                        <th style="width:82px;text-align:right">Итого €</th>
+                    </tr>
+                </thead>
+                <tbody id="work-rows"></tbody>
+            </table>
+        </div>
+        <button class="btn-add" onclick="addRow()">+ Добавить строку</button>
+
+        <div class="totals-wrap">
+            <div class="totals-inner">
+                <div class="t-row">
+                    <span class="t-label">Работа</span>
+                    <span class="t-value" id="tot-labor">0,00 €</span>
+                </div>
+                <div class="t-row">
+                    <span class="t-label">Запчасти</span>
+                    <span class="t-value" id="tot-parts">0,00 €</span>
+                </div>
+                <div class="t-row">
+                    <span class="t-label">Подитог</span>
+                    <span class="t-value" id="tot-sub">0,00 €</span>
+                </div>
+                <div class="t-row">
+                    <span class="t-label">НДС 21%</span>
+                    <span class="t-value" id="tot-vat">0,00 €</span>
+                </div>
+                <div class="t-row grand">
+                    <span class="t-label">ИТОГО</span>
+                    <span class="t-value" id="tot-grand">0,00 €</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         БЛОК 4 — КНОПКИ
+    ══════════════════════════════════════ -->
+    <div class="actions">
+        <button class="btn btn-red"
+            onclick="toast('Сохранение сметы — функция в разработке')">
+            Сохранить смету
+        </button>
+        <button class="btn btn-gray"
+            onclick="toast('Печать — функция в разработке')">
+            Печать
+        </button>
+        <button class="btn btn-gray"
+            onclick="toast('Отправка клиенту — функция в разработке')">
+            Отправить клиенту
+        </button>
+    </div>
+</div>
+
+<div class="toast" id="toast-el"></div>
+
+<script>
+// ── Дата по умолчанию ──────────────────────────────────────
+document.getElementById('smeta-date').value =
+    new Date().toISOString().split('T')[0];
+
+// ── Схема повреждений ──────────────────────────────────────
+const marked = new Set();
+
+document.querySelectorAll('.zone').forEach(el => {
+    el.addEventListener('click', () => {
+        const id = el.dataset.zone;
+        if (marked.has(id)) {
+            marked.delete(id);
+            el.classList.remove('active');
+        } else {
+            marked.add(id);
+            el.classList.add('active');
+        }
+        renderDamageList();
+    });
+});
+
+function renderDamageList() {
+    const box = document.getElementById('damage-list');
+    if (!marked.size) {
+        box.innerHTML = 'Нет отмеченных зон';
+        box.style.color = '#aaa';
+        return;
+    }
+    box.style.color = '';
+    box.innerHTML = [...marked].map(id => {
+        const zone = document.querySelector(`.zone[data-zone="${id}"]`);
+        const lbl  = zone ? zone.dataset.label : id;
+        return `<span class="damage-tag" onclick="removeZone('${id}')">✕ ${lbl}</span>`;
+    }).join('');
+}
+
+function removeZone(id) {
+    marked.delete(id);
+    const el = document.querySelector(`.zone[data-zone="${id}"]`);
+    if (el) el.classList.remove('active');
+    renderDamageList();
+}
+
+// ── Таблица работ ──────────────────────────────────────────
+let rowIdx = 0;
+const TYPES = ['Ремонт', 'Замена', 'Покраска', 'Диагностика'];
+
+function addRow() {
+    rowIdx++;
+    const tbody = document.getElementById('work-rows');
+    const tr = document.createElement('tr');
+    const opts = TYPES.map(t => `<option>${t}</option>`).join('');
+
+    tr.innerHTML = `
+        <td class="col-num">${rowIdx}</td>
+        <td><input type="text" placeholder="Описание работы"></td>
+        <td><select>${opts}</select></td>
+        <td><input type="number" class="h" min="0" step="0.5"  value="0" oninput="recalc(this)"></td>
+        <td><input type="number" class="r" min="0" step="0.01" value="25" oninput="recalc(this)"></td>
+        <td><input type="number" class="p" min="0" step="0.01" value="0" oninput="recalc(this)"></td>
+        <td class="col-total row-sum">0,00 €</td>
+    `;
+    tbody.appendChild(tr);
+    recalc(tr.querySelector('.h'));
+}
+
+function recalc(inp) {
+    const tr = inp.closest('tr');
+    const h = parseFloat(tr.querySelector('.h').value) || 0;
+    const r = parseFloat(tr.querySelector('.r').value) || 0;
+    const p = parseFloat(tr.querySelector('.p').value) || 0;
+    tr.querySelector('.row-sum').textContent = eur(h * r + p);
+    recalcTotals();
+}
+
+function recalcTotals() {
+    let labor = 0, parts = 0;
+    document.querySelectorAll('#work-rows tr').forEach(tr => {
+        const h = parseFloat(tr.querySelector('.h')?.value) || 0;
+        const r = parseFloat(tr.querySelector('.r')?.value) || 0;
+        const p = parseFloat(tr.querySelector('.p')?.value) || 0;
+        labor += h * r;
+        parts += p;
+    });
+    const sub   = labor + parts;
+    const vat   = sub * 0.21;
+    const grand = sub + vat;
+
+    document.getElementById('tot-labor').textContent = eur(labor);
+    document.getElementById('tot-parts').textContent = eur(parts);
+    document.getElementById('tot-sub').textContent   = eur(sub);
+    document.getElementById('tot-vat').textContent   = eur(vat);
+    document.getElementById('tot-grand').textContent = eur(grand);
+}
+
+function eur(n) {
+    try {
+        return n.toLocaleString('lv-LV', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }) + ' €';
+    } catch {
+        return n.toFixed(2).replace('.', ',') + ' €';
+    }
+}
+
+// ── Toast ──────────────────────────────────────────────────
+let toastT;
+function toast(msg) {
+    const el = document.getElementById('toast-el');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastT);
+    toastT = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+// ── Инициализация: 3 строки по умолчанию ──────────────────
+addRow(); addRow(); addRow();
+</script>
+</body>
+</html>
