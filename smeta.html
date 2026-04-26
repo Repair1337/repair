@@ -128,77 +128,75 @@
         }
 
         /* ===== CAR DIAGRAM ===== */
-        .car-views {
+        .diagram-grid {
             display: flex;
-            gap: 16px;
-            justify-content: center;
-            align-items: flex-start;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
             margin-bottom: 14px;
         }
-
+        .diagram-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
         .car-view-wrap {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-
         .car-view-label {
-            font-size: 0.72rem;
+            font-size: 0.68rem;
             font-weight: 700;
-            color: #888;
+            color: #666;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            margin-top: 7px;
+            margin-top: 5px;
+            padding-top: 4px;
+            border-top: 1px solid #e8e8e8;
+            width: 100%;
+            text-align: center;
         }
-
-        svg.car-svg { display: block; }
-
+        svg.car-svg {
+            display: block;
+            border: 1px solid #e8e8e8;
+            border-radius: 4px;
+            background: #fff;
+        }
         .zone {
             fill: transparent;
-            stroke: #666;
-            stroke-width: 1.2;
+            stroke: transparent;
             cursor: pointer;
-            transition: fill 0.12s;
+            transition: fill 0.1s;
         }
-        .zone:hover { fill: rgba(255, 210, 0, 0.42); stroke: #999; }
-        .zone.active {
-            fill: rgba(227, 6, 19, 0.32);
-            stroke: #e30613;
-            stroke-width: 2;
-        }
+        .zone:hover { fill: rgba(255, 210, 0, 0.45); }
+        .zone.active { fill: rgba(227, 6, 19, 0.32); }
 
         .zone-lbl {
-            font-size: 7.5px;
-            fill: #555;
+            font-size: 7px;
+            fill: #666;
             pointer-events: none;
             font-family: sans-serif;
             text-anchor: middle;
             dominant-baseline: middle;
         }
-        .zone.active + text.zone-lbl,
-        .zone.active ~ text.zone-lbl { fill: #a00; }
 
-        .car-outline {
-            fill: none;
-            stroke: #222;
-            stroke-width: 2;
-            pointer-events: none;
+        /* Damage legend */
+        .damage-legend {
+            display: flex;
+            gap: 6px 14px;
+            flex-wrap: wrap;
+            padding: 8px 14px;
+            background: #f8f8f8;
+            border: 1px solid #ececec;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            color: #555;
+            margin-bottom: 12px;
         }
-
-        .car-detail {
-            fill: none;
-            stroke: #aaa;
-            stroke-width: 1;
-            pointer-events: none;
-        }
-
-        .car-decor {
-            fill: #efefef;
-            stroke: #aaa;
-            stroke-width: 1;
-            pointer-events: none;
-        }
+        .damage-legend strong { color: #e30613; margin-right: 2px; }
 
         /* Damage list */
         .damage-hint {
@@ -206,7 +204,6 @@
             color: #999;
             margin-bottom: 6px;
         }
-
         #damage-list {
             min-height: 36px;
             padding: 8px 12px;
@@ -217,7 +214,6 @@
             color: #aaa;
             line-height: 2;
         }
-
         .damage-tag {
             display: inline-flex;
             align-items: center;
@@ -468,195 +464,275 @@
     <section class="block">
         <div class="block-title">2. Схема повреждений — нажмите на зону для отметки</div>
 
-        <div class="car-views">
+        <div class="diagram-grid">
 
-            <!-- ▶ ВИД СПЕРЕДИ ─────────────────────────── -->
-            <div class="car-view-wrap">
-                <svg class="car-svg" width="196" height="158" viewBox="0 0 260 190">
+            <!-- ── РЯД 1: Спереди · Сверху · Сзади ── -->
+            <div class="diagram-row">
 
-                    <!-- A-pillar corners (decorative) -->
-                    <polygon class="car-decor" points="10,62 60,62 70,18"/>
-                    <polygon class="car-decor" points="250,62 200,62 190,18"/>
+                <!-- ▶ СПЕРЕДИ -->
+                <div class="car-view-wrap">
+                    <svg class="car-svg" width="216" height="154" viewBox="0 0 280 200">
+                        <!-- zones (bottom layer) -->
+                        <polygon class="zone" data-zone="front-windshield"    data-label="Лобовое стекло"          points="82,18 198,18 216,70 64,70"/>
+                        <polygon class="zone" data-zone="front-left-headlight" data-label="Левая фара"              points="12,70 64,70 64,132 12,130"/>
+                        <polygon class="zone" data-zone="front-hood"           data-label="Капот"                   points="64,70 216,70 216,105 64,105"/>
+                        <polygon class="zone" data-zone="front-right-headlight" data-label="Правая фара"            points="216,70 268,70 268,130 216,132"/>
+                        <polygon class="zone" data-zone="front-grille"         data-label="Решётка радиатора"       points="64,105 216,105 216,134 64,134"/>
+                        <polygon class="zone" data-zone="front-bumper-left"    data-label="Передний бампер левый"   points="12,134 90,134 90,172 14,172"/>
+                        <polygon class="zone" data-zone="front-bumper-center"  data-label="Передний бампер центр"   points="90,134 190,134 190,172 90,172"/>
+                        <polygon class="zone" data-zone="front-bumper-right"   data-label="Передний бампер правый"  points="190,134 268,134 266,172 190,172"/>
+                        <!-- A-pillar fills (декоративные) -->
+                        <polygon fill="#e8e8e8" stroke="#bbb" stroke-width="0.8" pointer-events="none" points="12,74 64,70 82,18"/>
+                        <polygon fill="#e8e8e8" stroke="#bbb" stroke-width="0.8" pointer-events="none" points="268,74 216,70 198,18"/>
+                        <!-- контур кузова -->
+                        <path fill="none" stroke="#333" stroke-width="2" pointer-events="none"
+                            d="M 82,18 L 198,18 C 226,20 266,47 268,76 L 268,136 C 266,154 255,171 240,173 L 40,173 C 25,171 14,154 12,136 L 12,76 C 14,47 54,20 82,18 Z"/>
+                        <!-- левая фара -->
+                        <rect fill="none" stroke="#666" stroke-width="1" pointer-events="none" rx="5" x="14" y="72" width="48" height="56"/>
+                        <line stroke="#999" stroke-width="0.8" pointer-events="none" x1="14" y1="96" x2="62" y2="96"/>
+                        <!-- правая фара -->
+                        <rect fill="none" stroke="#666" stroke-width="1" pointer-events="none" rx="5" x="218" y="72" width="48" height="56"/>
+                        <line stroke="#999" stroke-width="0.8" pointer-events="none" x1="218" y1="96" x2="266" y2="96"/>
+                        <!-- решётка -->
+                        <rect fill="none" stroke="#777" stroke-width="1" pointer-events="none" rx="3" x="66" y="107" width="148" height="25"/>
+                        <line stroke="#bbb" stroke-width="0.7" pointer-events="none" x1="66" y1="117" x2="214" y2="117"/>
+                        <line stroke="#bbb" stroke-width="0.7" pointer-events="none" x1="104" y1="107" x2="104" y2="132"/>
+                        <line stroke="#bbb" stroke-width="0.7" pointer-events="none" x1="140" y1="107" x2="140" y2="132"/>
+                        <line stroke="#bbb" stroke-width="0.7" pointer-events="none" x1="176" y1="107" x2="176" y2="132"/>
+                        <!-- линия капота -->
+                        <line stroke="#ccc" stroke-width="0.8" pointer-events="none" x1="66" y1="88" x2="214" y2="88"/>
+                        <!-- зеркала -->
+                        <rect fill="#ddd" stroke="#888" stroke-width="1" pointer-events="none" rx="2" x="4" y="74" width="16" height="10"/>
+                        <rect fill="#ddd" stroke="#888" stroke-width="1" pointer-events="none" rx="2" x="260" y="74" width="16" height="10"/>
+                        <!-- номерной знак -->
+                        <rect fill="none" stroke="#999" stroke-width="1" pointer-events="none" rx="2" x="104" y="140" width="72" height="18"/>
+                        <!-- метки зон -->
+                        <text class="zone-lbl" x="140" y="47">Лобовое</text>
+                        <text class="zone-lbl" x="38"  y="102">Фара Л</text>
+                        <text class="zone-lbl" x="140" y="87">Капот</text>
+                        <text class="zone-lbl" x="242" y="102">Фара П</text>
+                        <text class="zone-lbl" x="140" y="120">Решётка</text>
+                        <text class="zone-lbl" x="51"  y="154">Бмп Л</text>
+                        <text class="zone-lbl" x="140" y="154">Бмп Ц</text>
+                        <text class="zone-lbl" x="229" y="154">Бмп П</text>
+                    </svg>
+                    <span class="car-view-label">Спереди</span>
+                </div>
 
-                    <!-- Clickable zones -->
-                    <polygon class="zone"
-                        data-zone="front-windshield" data-label="Лобовое стекло"
-                        points="70,18 190,18 200,62 60,62"/>
-                    <polygon class="zone"
-                        data-zone="front-left-headlight" data-label="Левая фара"
-                        points="10,62 60,62 60,115 10,115"/>
-                    <polygon class="zone"
-                        data-zone="front-hood" data-label="Капот"
-                        points="60,62 200,62 200,115 60,115"/>
-                    <polygon class="zone"
-                        data-zone="front-right-headlight" data-label="Правая фара"
-                        points="200,62 250,62 250,115 200,115"/>
-                    <polygon class="zone"
-                        data-zone="front-bumper-left" data-label="Передний бампер левый"
-                        points="10,115 85,115 85,164 10,164"/>
-                    <polygon class="zone"
-                        data-zone="front-bumper-center" data-label="Передний бампер центр"
-                        points="85,115 175,115 175,164 85,164"/>
-                    <polygon class="zone"
-                        data-zone="front-bumper-right" data-label="Передний бампер правый"
-                        points="175,115 250,115 250,164 175,164"/>
+                <!-- ▶ СВЕРХУ -->
+                <div class="car-view-wrap">
+                    <svg class="car-svg" width="216" height="154" viewBox="0 0 280 200">
+                        <!-- zones -->
+                        <polygon class="zone" data-zone="top-hood"         data-label="Капот (вид сверху)"              points="82,8 198,8 264,62 16,62"/>
+                        <polygon class="zone" data-zone="top-windshield"   data-label="Лобовое стекло (вид сверху)"     points="16,62 264,62 258,88 22,88"/>
+                        <polygon class="zone" data-zone="top-left-side"    data-label="Левый борт"                      points="8,88 36,88 34,148 8,148"/>
+                        <polygon class="zone" data-zone="top-roof"         data-label="Крыша"                           points="36,88 244,88 244,148 36,148"/>
+                        <polygon class="zone" data-zone="top-right-side"   data-label="Правый борт"                     points="244,88 272,88 272,148 244,148"/>
+                        <polygon class="zone" data-zone="top-rear-window"  data-label="Заднее стекло (вид сверху)"      points="22,148 258,148 264,168 16,168"/>
+                        <polygon class="zone" data-zone="top-trunk"        data-label="Крышка багажника (вид сверху)"   points="16,168 264,168 198,196 82,196"/>
+                        <!-- контур кузова -->
+                        <path fill="none" stroke="#333" stroke-width="2" pointer-events="none"
+                            d="M 100,8 L 180,8 C 224,8 272,32 274,64 L 275,92 C 275,110 274,122 272,140 L 265,156 C 255,176 234,196 206,197 L 74,197 C 46,196 25,176 15,156 L 8,140 C 6,122 5,110 5,92 L 6,64 C 8,32 56,8 100,8 Z"/>
+                        <!-- лобовое стекло (синеватый тон) -->
+                        <polygon fill="rgba(200,225,245,0.3)" stroke="#aaa" stroke-width="0.8" pointer-events="none" points="18,64 262,64 256,88 24,88"/>
+                        <!-- заднее стекло -->
+                        <polygon fill="rgba(200,225,245,0.3)" stroke="#aaa" stroke-width="0.8" pointer-events="none" points="24,148 256,148 262,168 18,168"/>
+                        <!-- линии дверей/панелей сверху -->
+                        <line stroke="#ddd" stroke-width="1" pointer-events="none" x1="36" y1="88" x2="34" y2="148"/>
+                        <line stroke="#ddd" stroke-width="1" pointer-events="none" x1="244" y1="88" x2="244" y2="148"/>
+                        <!-- боковые зеркала (вид сверху) -->
+                        <ellipse fill="#ddd" stroke="#999" stroke-width="0.8" pointer-events="none" cx="6"   cy="76" rx="7" ry="4"/>
+                        <ellipse fill="#ddd" stroke="#999" stroke-width="0.8" pointer-events="none" cx="274" cy="76" rx="7" ry="4"/>
+                        <!-- арки колёс сверху (дуги) -->
+                        <path fill="none" stroke="#ccc" stroke-width="1.2" pointer-events="none" d="M 6,80 Q 20,74 34,80"/>
+                        <path fill="none" stroke="#ccc" stroke-width="1.2" pointer-events="none" d="M 246,80 Q 260,74 274,80"/>
+                        <path fill="none" stroke="#ccc" stroke-width="1.2" pointer-events="none" d="M 6,130 Q 20,136 34,130"/>
+                        <path fill="none" stroke="#ccc" stroke-width="1.2" pointer-events="none" d="M 246,130 Q 260,136 274,130"/>
+                        <!-- метки -->
+                        <text class="zone-lbl" x="140" y="38">Капот</text>
+                        <text class="zone-lbl" x="140" y="76">Лобовое</text>
+                        <text class="zone-lbl" x="22"  y="118">Л</text>
+                        <text class="zone-lbl" x="140" y="118">Крыша</text>
+                        <text class="zone-lbl" x="258" y="118">П</text>
+                        <text class="zone-lbl" x="140" y="159">Зад. ст.</text>
+                        <text class="zone-lbl" x="140" y="183">Багажник</text>
+                    </svg>
+                    <span class="car-view-label">Сверху</span>
+                </div>
 
-                    <!-- Zone labels -->
-                    <text class="zone-lbl" x="130" y="43">Лобовое</text>
-                    <text class="zone-lbl" x="35" y="88">Фара Л</text>
-                    <text class="zone-lbl" x="130" y="88">Капот</text>
-                    <text class="zone-lbl" x="225" y="88">Фара П</text>
-                    <text class="zone-lbl" x="47" y="141">Бмп Л</text>
-                    <text class="zone-lbl" x="130" y="141">Бмп Ц</text>
-                    <text class="zone-lbl" x="213" y="141">Бмп П</text>
+                <!-- ▶ СЗАДИ -->
+                <div class="car-view-wrap">
+                    <svg class="car-svg" width="216" height="154" viewBox="0 0 280 200">
+                        <!-- zones -->
+                        <polygon class="zone" data-zone="rear-window"        data-label="Заднее стекло"            points="85,18 195,18 214,58 66,58"/>
+                        <polygon class="zone" data-zone="rear-left-light"    data-label="Левый задний фонарь"      points="12,58 66,58 66,132 12,130"/>
+                        <polygon class="zone" data-zone="rear-trunk"         data-label="Крышка багажника"         points="66,58 214,58 214,130 66,130"/>
+                        <polygon class="zone" data-zone="rear-right-light"   data-label="Правый задний фонарь"     points="214,58 268,58 268,130 214,132"/>
+                        <polygon class="zone" data-zone="rear-bumper-left"   data-label="Задний бампер левый"      points="12,132 90,132 90,171 14,171"/>
+                        <polygon class="zone" data-zone="rear-bumper-center" data-label="Задний бампер центр"      points="90,132 190,132 190,171 90,171"/>
+                        <polygon class="zone" data-zone="rear-bumper-right"  data-label="Задний бампер правый"     points="190,132 268,132 266,171 190,171"/>
+                        <!-- C-pillar fills -->
+                        <polygon fill="#e8e8e8" stroke="#bbb" stroke-width="0.8" pointer-events="none" points="12,62 66,58 85,18"/>
+                        <polygon fill="#e8e8e8" stroke="#bbb" stroke-width="0.8" pointer-events="none" points="268,62 214,58 195,18"/>
+                        <!-- контур кузова -->
+                        <path fill="none" stroke="#333" stroke-width="2" pointer-events="none"
+                            d="M 85,18 L 195,18 C 220,20 266,46 268,72 L 268,133 C 266,153 255,170 240,172 L 40,172 C 25,170 14,153 12,133 L 12,72 C 14,46 60,20 85,18 Z"/>
+                        <!-- левый фонарь (внутренние линии) -->
+                        <rect fill="rgba(255,60,40,0.06)" stroke="#777" stroke-width="1" pointer-events="none" rx="4" x="14" y="60" width="50" height="67"/>
+                        <line stroke="#bbb" stroke-width="0.7" pointer-events="none" x1="14" y1="78"  x2="64" y2="78"/>
+                        <line stroke="#bbb" stroke-width="0.7" pointer-events="none" x1="14" y1="92"  x2="64" y2="92"/>
+                        <line stroke="#bbb" stroke-width="0.7" pointer-events="none" x1="14" y1="108" x2="64" y2="108"/>
+                        <!-- правый фонарь -->
+                        <rect fill="rgba(255,60,40,0.06)" stroke="#777" stroke-width="1" pointer-events="none" rx="4" x="216" y="60" width="50" height="67"/>
+                        <line stroke="#bbb" stroke-width="0.7" pointer-events="none" x1="216" y1="78"  x2="266" y2="78"/>
+                        <line stroke="#bbb" stroke-width="0.7" pointer-events="none" x1="216" y1="92"  x2="266" y2="92"/>
+                        <line stroke="#bbb" stroke-width="0.7" pointer-events="none" x1="216" y1="108" x2="266" y2="108"/>
+                        <!-- эмблема -->
+                        <circle fill="none" stroke="#bbb" stroke-width="1" pointer-events="none" cx="140" cy="92" r="11"/>
+                        <!-- линия крышки багажника -->
+                        <line stroke="#ccc" stroke-width="0.8" pointer-events="none" x1="67" y1="74" x2="213" y2="74"/>
+                        <!-- задний спойлер -->
+                        <path fill="none" stroke="#aaa" stroke-width="1" pointer-events="none" d="M 80,58 Q 140,52 200,58"/>
+                        <!-- номерной знак -->
+                        <rect fill="none" stroke="#999" stroke-width="1" pointer-events="none" rx="2" x="100" y="138" width="80" height="18"/>
+                        <!-- метки -->
+                        <text class="zone-lbl" x="140" y="40">Зад. стекло</text>
+                        <text class="zone-lbl" x="39"  y="97">Фон Л</text>
+                        <text class="zone-lbl" x="140" y="97">Багажник</text>
+                        <text class="zone-lbl" x="241" y="97">Фон П</text>
+                        <text class="zone-lbl" x="51"  y="153">Бмп Л</text>
+                        <text class="zone-lbl" x="140" y="153">Бмп Ц</text>
+                        <text class="zone-lbl" x="229" y="153">Бмп П</text>
+                    </svg>
+                    <span class="car-view-label">Сзади</span>
+                </div>
 
-                    <!-- Car outline (on top, non-interactive) -->
-                    <path class="car-outline"
-                        d="M 70,18 L 190,18 L 250,62 L 250,164 L 10,164 L 10,62 Z"/>
+            </div><!-- /row1 -->
 
-                    <!-- Decorative details -->
-                    <!-- Grille -->
-                    <rect class="car-detail" x="88" y="70" width="84" height="32" rx="4"/>
-                    <line class="car-detail" x1="88" y1="82" x2="172" y2="82"/>
-                    <line class="car-detail" x1="88" y1="90" x2="172" y2="90"/>
-                    <line class="car-detail" x1="115" y1="70" x2="115" y2="102"/>
-                    <line class="car-detail" x1="145" y1="70" x2="145" y2="102"/>
-                    <!-- Headlight ellipses -->
-                    <ellipse class="car-detail" cx="35" cy="88" rx="17" ry="15"/>
-                    <ellipse class="car-detail" cx="225" cy="88" rx="17" ry="15"/>
-                    <!-- License plate -->
-                    <rect class="car-detail" x="97" y="126" width="66" height="22" rx="3"/>
-                    <!-- Hood line -->
-                    <line class="car-detail" x1="60" y1="78" x2="200" y2="78" style="stroke-width:0.8"/>
-                </svg>
-                <span class="car-view-label">Спереди</span>
-            </div>
+            <!-- ── РЯД 2: Левый бок · Правый бок ── -->
+            <div class="diagram-row">
 
-            <!-- ▶ ВИД СБОКУ ─────────────────────────── -->
-            <div class="car-view-wrap">
-                <svg class="car-svg" width="294" height="148" viewBox="0 0 420 200">
+                <!-- ▶ ЛЕВЫЙ БОК -->
+                <div class="car-view-wrap">
+                    <svg class="car-svg" width="340" height="154" viewBox="0 0 420 190">
+                        <!-- zones -->
+                        <polygon class="zone" data-zone="left-front-fender" data-label="Переднее левое крыло"   points="16,65 112,55 115,158 18,158"/>
+                        <polygon class="zone" data-zone="left-front-door"   data-label="Передняя левая дверь"   points="115,50 205,50 205,158 115,158"/>
+                        <polygon class="zone" data-zone="left-rear-door"    data-label="Задняя левая дверь"     points="205,50 305,50 305,158 205,158"/>
+                        <polygon class="zone" data-zone="left-rear-fender"  data-label="Заднее левое крыло"     points="305,60 408,82 408,158 305,158"/>
+                        <polygon class="zone" data-zone="left-roof"         data-label="Крыша (левая сторона)"  points="112,55 138,28 300,28 325,55 310,68 112,68"/>
+                        <polygon class="zone" data-zone="left-sill"         data-label="Левый порог"            points="18,158 408,158 408,170 18,170"/>
+                        <!-- контур кузова (Bezier) -->
+                        <path fill="none" stroke="#333" stroke-width="2" pointer-events="none"
+                            d="M 14,110
+                               C 14,90 24,74 42,67
+                               C 62,60 84,56 112,54
+                               C 124,49 134,37 138,27
+                               L 300,27
+                               C 312,27 323,36 327,46
+                               C 331,57 338,65 350,70
+                               C 370,76 390,80 403,88
+                               C 411,93 412,102 410,114
+                               L 408,158 L 14,158 Z"/>
+                        <!-- передние колёса -->
+                        <circle fill="#e4e4e4" stroke="#444" stroke-width="1.5" pointer-events="none" cx="100" cy="158" r="32"/>
+                        <circle fill="#ccc"    stroke="#555" stroke-width="1"   pointer-events="none" cx="100" cy="158" r="15"/>
+                        <circle fill="#bbb"    stroke="#555" stroke-width="0.8" pointer-events="none" cx="100" cy="158" r="6"/>
+                        <!-- задние колёса -->
+                        <circle fill="#e4e4e4" stroke="#444" stroke-width="1.5" pointer-events="none" cx="312" cy="158" r="32"/>
+                        <circle fill="#ccc"    stroke="#555" stroke-width="1"   pointer-events="none" cx="312" cy="158" r="15"/>
+                        <circle fill="#bbb"    stroke="#555" stroke-width="0.8" pointer-events="none" cx="312" cy="158" r="6"/>
+                        <!-- стёкла -->
+                        <polygon fill="rgba(200,225,245,0.35)" stroke="#999" stroke-width="0.8" pointer-events="none" points="114,56 138,30 188,30 188,68 114,68"/>
+                        <polygon fill="rgba(200,225,245,0.35)" stroke="#999" stroke-width="0.8" pointer-events="none" points="202,30 298,30 302,68 202,68"/>
+                        <!-- B-стойка -->
+                        <rect fill="#ccc" stroke="#aaa" stroke-width="0.5" pointer-events="none" x="190" y="27" width="10" height="41"/>
+                        <!-- линия пояса -->
+                        <line stroke="#aaa" stroke-width="1" pointer-events="none" x1="112" y1="68" x2="330" y2="68"/>
+                        <!-- швы дверей -->
+                        <line stroke="#ccc" stroke-width="0.8" pointer-events="none" x1="115" y1="68"  x2="115" y2="158"/>
+                        <line stroke="#ccc" stroke-width="0.8" pointer-events="none" x1="205" y1="50"  x2="205" y2="158"/>
+                        <line stroke="#ccc" stroke-width="0.8" pointer-events="none" x1="305" y1="57"  x2="305" y2="158"/>
+                        <!-- ручки дверей -->
+                        <rect fill="#ddd" stroke="#aaa" stroke-width="0.8" pointer-events="none" rx="3" x="148" y="108" width="28" height="7"/>
+                        <rect fill="#ddd" stroke="#aaa" stroke-width="0.8" pointer-events="none" rx="3" x="250" y="108" width="28" height="7"/>
+                        <!-- зеркало -->
+                        <polygon fill="#ddd" stroke="#999" stroke-width="1" pointer-events="none" points="112,58 97,54 99,68 112,68"/>
+                        <!-- передний бампер (низ) -->
+                        <path fill="none" stroke="#888" stroke-width="1" pointer-events="none" d="M 14,110 C 14,118 16,125 20,128"/>
+                        <!-- метки -->
+                        <text class="zone-lbl" x="62"  y="115">Кр.пер.Л</text>
+                        <text class="zone-lbl" x="160" y="120">Дв.пер.Л</text>
+                        <text class="zone-lbl" x="255" y="120">Дв.зад.Л</text>
+                        <text class="zone-lbl" x="358" y="120">Кр.зад.Л</text>
+                        <text class="zone-lbl" x="218" y="48">Крыша Л</text>
+                        <text class="zone-lbl" x="213" y="164">Порог Л</text>
+                    </svg>
+                    <span class="car-view-label">Левый бок</span>
+                </div>
 
-                    <!-- Clickable zones -->
-                    <polygon class="zone"
-                        data-zone="side-front-fender" data-label="Переднее крыло"
-                        points="18,92 100,92 100,158 18,158"/>
-                    <polygon class="zone"
-                        data-zone="side-front-door" data-label="Передняя дверь"
-                        points="100,92 198,92 198,158 100,158"/>
-                    <polygon class="zone"
-                        data-zone="side-rear-door" data-label="Задняя дверь"
-                        points="198,92 298,92 298,158 198,158"/>
-                    <polygon class="zone"
-                        data-zone="side-rear-fender" data-label="Заднее крыло"
-                        points="298,92 402,92 402,158 298,158"/>
-                    <polygon class="zone"
-                        data-zone="side-roof" data-label="Крыша"
-                        points="94,92 114,30 308,30 332,92"/>
-                    <polygon class="zone"
-                        data-zone="side-sill" data-label="Порог"
-                        points="18,158 402,158 402,176 18,176"/>
+                <!-- ▶ ПРАВЫЙ БОК (та же геометрия, другие data-zone) -->
+                <div class="car-view-wrap">
+                    <svg class="car-svg" width="340" height="154" viewBox="0 0 420 190">
+                        <!-- zones -->
+                        <polygon class="zone" data-zone="right-front-fender" data-label="Переднее правое крыло"  points="16,65 112,55 115,158 18,158"/>
+                        <polygon class="zone" data-zone="right-front-door"   data-label="Передняя правая дверь"  points="115,50 205,50 205,158 115,158"/>
+                        <polygon class="zone" data-zone="right-rear-door"    data-label="Задняя правая дверь"    points="205,50 305,50 305,158 205,158"/>
+                        <polygon class="zone" data-zone="right-rear-fender"  data-label="Заднее правое крыло"    points="305,60 408,82 408,158 305,158"/>
+                        <polygon class="zone" data-zone="right-roof"         data-label="Крыша (правая сторона)" points="112,55 138,28 300,28 325,55 310,68 112,68"/>
+                        <polygon class="zone" data-zone="right-sill"         data-label="Правый порог"           points="18,158 408,158 408,170 18,170"/>
+                        <!-- те же декоративные элементы -->
+                        <path fill="none" stroke="#333" stroke-width="2" pointer-events="none"
+                            d="M 14,110
+                               C 14,90 24,74 42,67
+                               C 62,60 84,56 112,54
+                               C 124,49 134,37 138,27
+                               L 300,27
+                               C 312,27 323,36 327,46
+                               C 331,57 338,65 350,70
+                               C 370,76 390,80 403,88
+                               C 411,93 412,102 410,114
+                               L 408,158 L 14,158 Z"/>
+                        <circle fill="#e4e4e4" stroke="#444" stroke-width="1.5" pointer-events="none" cx="100" cy="158" r="32"/>
+                        <circle fill="#ccc"    stroke="#555" stroke-width="1"   pointer-events="none" cx="100" cy="158" r="15"/>
+                        <circle fill="#bbb"    stroke="#555" stroke-width="0.8" pointer-events="none" cx="100" cy="158" r="6"/>
+                        <circle fill="#e4e4e4" stroke="#444" stroke-width="1.5" pointer-events="none" cx="312" cy="158" r="32"/>
+                        <circle fill="#ccc"    stroke="#555" stroke-width="1"   pointer-events="none" cx="312" cy="158" r="15"/>
+                        <circle fill="#bbb"    stroke="#555" stroke-width="0.8" pointer-events="none" cx="312" cy="158" r="6"/>
+                        <polygon fill="rgba(200,225,245,0.35)" stroke="#999" stroke-width="0.8" pointer-events="none" points="114,56 138,30 188,30 188,68 114,68"/>
+                        <polygon fill="rgba(200,225,245,0.35)" stroke="#999" stroke-width="0.8" pointer-events="none" points="202,30 298,30 302,68 202,68"/>
+                        <rect fill="#ccc" stroke="#aaa" stroke-width="0.5" pointer-events="none" x="190" y="27" width="10" height="41"/>
+                        <line stroke="#aaa" stroke-width="1"   pointer-events="none" x1="112" y1="68" x2="330" y2="68"/>
+                        <line stroke="#ccc" stroke-width="0.8" pointer-events="none" x1="115" y1="68"  x2="115" y2="158"/>
+                        <line stroke="#ccc" stroke-width="0.8" pointer-events="none" x1="205" y1="50"  x2="205" y2="158"/>
+                        <line stroke="#ccc" stroke-width="0.8" pointer-events="none" x1="305" y1="57"  x2="305" y2="158"/>
+                        <rect fill="#ddd" stroke="#aaa" stroke-width="0.8" pointer-events="none" rx="3" x="148" y="108" width="28" height="7"/>
+                        <rect fill="#ddd" stroke="#aaa" stroke-width="0.8" pointer-events="none" rx="3" x="250" y="108" width="28" height="7"/>
+                        <polygon fill="#ddd" stroke="#999" stroke-width="1" pointer-events="none" points="112,58 97,54 99,68 112,68"/>
+                        <path fill="none" stroke="#888" stroke-width="1" pointer-events="none" d="M 14,110 C 14,118 16,125 20,128"/>
+                        <!-- метки -->
+                        <text class="zone-lbl" x="62"  y="115">Кр.пер.П</text>
+                        <text class="zone-lbl" x="160" y="120">Дв.пер.П</text>
+                        <text class="zone-lbl" x="255" y="120">Дв.зад.П</text>
+                        <text class="zone-lbl" x="358" y="120">Кр.зад.П</text>
+                        <text class="zone-lbl" x="218" y="48">Крыша П</text>
+                        <text class="zone-lbl" x="213" y="164">Порог П</text>
+                    </svg>
+                    <span class="car-view-label">Правый бок</span>
+                </div>
 
-                    <!-- Zone labels -->
-                    <text class="zone-lbl" x="59" y="127">Кр. пер.</text>
-                    <text class="zone-lbl" x="149" y="127">Дв. пер.</text>
-                    <text class="zone-lbl" x="248" y="127">Дв. зад.</text>
-                    <text class="zone-lbl" x="350" y="127">Кр. зад.</text>
-                    <text class="zone-lbl" x="213" y="64">Крыша</text>
-                    <text class="zone-lbl" x="210" y="168">Порог</text>
+            </div><!-- /row2 -->
 
-                    <!-- Car outline -->
-                    <path class="car-outline"
-                        d="M 18,92 L 94,92 L 114,30 L 308,30 L 332,92 L 402,92 L 402,176 L 18,176 Z"/>
+        </div><!-- /diagram-grid -->
 
-                    <!-- Wheel arches (decorative) -->
-                    <circle class="car-detail" cx="78" cy="158" r="31"/>
-                    <circle cx="78" cy="158" r="14" fill="#e8e8e8" stroke="#aaa" stroke-width="1" pointer-events="none"/>
-                    <circle class="car-detail" cx="308" cy="158" r="31"/>
-                    <circle cx="308" cy="158" r="14" fill="#e8e8e8" stroke="#aaa" stroke-width="1" pointer-events="none"/>
-
-                    <!-- Window pane (A/B/C pillars) -->
-                    <polygon class="car-detail" style="fill:rgba(200,220,240,0.3)"
-                        points="114,30 186,30 186,92 94,92 114,30"/>
-                    <polygon class="car-detail" style="fill:rgba(200,220,240,0.3)"
-                        points="204,30 308,30 332,92 204,92"/>
-                    <!-- B-pillar -->
-                    <line class="car-detail" x1="194" y1="30" x2="196" y2="92" style="stroke-width:5;stroke:#bbb"/>
-                    <!-- Door line -->
-                    <line class="car-detail" x1="100" y1="92" x2="100" y2="158"/>
-                    <line class="car-detail" x1="198" y1="92" x2="198" y2="158"/>
-                    <line class="car-detail" x1="298" y1="92" x2="298" y2="158"/>
-                    <!-- Door handles -->
-                    <rect class="car-detail" x="132" y="118" width="34" height="7" rx="3"/>
-                    <rect class="car-detail" x="232" y="118" width="34" height="7" rx="3"/>
-                    <!-- Beltline -->
-                    <line class="car-detail" x1="94" y1="92" x2="332" y2="92" style="stroke-width:0.8"/>
-                </svg>
-                <span class="car-view-label">Сбоку</span>
-            </div>
-
-            <!-- ▶ ВИД СЗАДИ ─────────────────────────── -->
-            <div class="car-view-wrap">
-                <svg class="car-svg" width="196" height="158" viewBox="0 0 260 190">
-
-                    <!-- A-pillar corners (decorative) -->
-                    <polygon class="car-decor" points="10,62 60,62 70,18"/>
-                    <polygon class="car-decor" points="250,62 200,62 190,18"/>
-
-                    <!-- Clickable zones -->
-                    <polygon class="zone"
-                        data-zone="rear-window" data-label="Заднее стекло"
-                        points="70,18 190,18 200,62 60,62"/>
-                    <polygon class="zone"
-                        data-zone="rear-left-light" data-label="Левый задний фонарь"
-                        points="10,62 60,62 60,115 10,115"/>
-                    <polygon class="zone"
-                        data-zone="rear-trunk" data-label="Крышка багажника"
-                        points="60,62 200,62 200,115 60,115"/>
-                    <polygon class="zone"
-                        data-zone="rear-right-light" data-label="Правый задний фонарь"
-                        points="200,62 250,62 250,115 200,115"/>
-                    <polygon class="zone"
-                        data-zone="rear-bumper-left" data-label="Задний бампер левый"
-                        points="10,115 85,115 85,164 10,164"/>
-                    <polygon class="zone"
-                        data-zone="rear-bumper-center" data-label="Задний бампер центр"
-                        points="85,115 175,115 175,164 85,164"/>
-                    <polygon class="zone"
-                        data-zone="rear-bumper-right" data-label="Задний бампер правый"
-                        points="175,115 250,115 250,164 175,164"/>
-
-                    <!-- Zone labels -->
-                    <text class="zone-lbl" x="130" y="43">Зад. стекло</text>
-                    <text class="zone-lbl" x="35" y="88">Фон Л</text>
-                    <text class="zone-lbl" x="130" y="88">Багажник</text>
-                    <text class="zone-lbl" x="225" y="88">Фон П</text>
-                    <text class="zone-lbl" x="47" y="141">Бмп Л</text>
-                    <text class="zone-lbl" x="130" y="141">Бмп Ц</text>
-                    <text class="zone-lbl" x="213" y="141">Бмп П</text>
-
-                    <!-- Car outline -->
-                    <path class="car-outline"
-                        d="M 70,18 L 190,18 L 250,62 L 250,164 L 10,164 L 10,62 Z"/>
-
-                    <!-- Decorative details -->
-                    <!-- Taillight inner shapes -->
-                    <polygon class="car-detail" style="fill:rgba(255,60,60,0.06)"
-                        points="12,65 56,65 56,112 12,112"/>
-                    <polygon class="car-detail" style="fill:rgba(255,60,60,0.06)"
-                        points="248,65 204,65 204,112 248,112"/>
-                    <!-- Horizontal light strip -->
-                    <line class="car-detail" x1="12" y1="78" x2="56" y2="78"/>
-                    <line class="car-detail" x1="204" y1="78" x2="248" y2="78"/>
-                    <!-- Trunk emblem area -->
-                    <circle class="car-detail" cx="130" cy="88" r="10"/>
-                    <!-- License plate -->
-                    <rect class="car-detail" x="88" y="122" width="84" height="22" rx="3"/>
-                    <!-- Trunk line -->
-                    <line class="car-detail" x1="62" y1="75" x2="198" y2="75" style="stroke-width:0.8"/>
-                </svg>
-                <span class="car-view-label">Сзади</span>
-            </div>
-
+        <!-- Легенда -->
+        <div class="damage-legend">
+            <span><strong>В</strong> — Вмятина</span>
+            <span><strong>Ц</strong> — Царапина</span>
+            <span><strong>Т</strong> — Трещина</span>
+            <span><strong>С</strong> — Скол</span>
+            <span><strong>П</strong> — Повреждение</span>
+            <span><strong>Р</strong> — Разбито</span>
         </div>
 
         <div class="damage-hint">Отмеченные повреждения (нажмите на тег для снятия отметки):</div>
