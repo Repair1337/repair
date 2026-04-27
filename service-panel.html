@@ -1198,6 +1198,181 @@
         .dash-all-reviews             { display: inline-block; margin-top: 12px; font-size: 0.85rem; color: #e30613; cursor: pointer; }
         .dash-all-reviews:hover       { text-decoration: underline; }
 
+        /* ===== РАЗДЕЛ: ИСТОРИЯ РАБОТ ===== */
+
+        /* Панель поиска + фильтр периода */
+        .hist-toolbar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .hist-search-wrap {
+            flex: 1;
+            position: relative;
+        }
+
+        /* Иконка лупы внутри поля */
+        .hist-search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #bbb;
+            font-size: 0.95rem;
+            pointer-events: none;
+        }
+
+        .hist-search {
+            width: 100%;
+            padding: 10px 14px 10px 38px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: sans-serif;
+            color: #1a1a1a;
+            background: #fff;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .hist-search:focus { border-color: #e30613; }
+
+        /* Выпадающий список периода */
+        .hist-period {
+            padding: 10px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-family: sans-serif;
+            color: #444;
+            background: #fff;
+            outline: none;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: border-color 0.2s;
+        }
+        .hist-period:focus { border-color: #e30613; }
+
+        /* Таблица в белой карточке с горизонтальным скроллом */
+        .hist-table-wrap {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow-x: auto;
+            margin-bottom: 16px;
+        }
+
+        .hist-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        .hist-table thead th {
+            background: #f5f5f5;
+            font-size: 0.72rem;
+            color: #888;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 12px 14px;
+            text-align: left;
+            white-space: nowrap;
+            border-bottom: 1px solid #ebebeb;
+        }
+
+        /* Кликабельная строка данных */
+        .hist-row {
+            cursor: pointer;
+            transition: background 0.1s;
+            border-bottom: 1px solid #f2f2f2;
+        }
+        .hist-row:hover  { background: #fafafa; }
+        .hist-row.open   { background: #fff9f9; }
+
+        .hist-row td {
+            padding: 12px 14px;
+            font-size: 0.875rem;
+            color: #333;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        /* Стрелочка вращается при раскрытии строки */
+        .hist-arrow {
+            display: inline-block;
+            font-size: 0.7rem;
+            color: #bbb;
+            transition: transform 0.25s ease;
+            margin-left: 6px;
+        }
+        .hist-row.open .hist-arrow { transform: rotate(180deg); }
+
+        /* Скрытая строка с деталями */
+        .hist-detail-row     { display: none; }
+        .hist-detail-row.open { display: table-row; }
+
+        .hist-detail-cell {
+            padding: 0 14px 18px;
+            background: #fafafa;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        /* Три колонки внутри детальной строки */
+        .hist-detail-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            padding: 16px 0 4px;
+        }
+
+        .hist-detail-block-title {
+            font-size: 0.72rem;
+            font-weight: bold;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 8px;
+        }
+
+        /* Строка работы — название + цена */
+        .hist-detail-work-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 0.82rem;
+            color: #444;
+            margin-bottom: 5px;
+        }
+        .hist-detail-work-price { font-weight: bold; color: #1a1a1a; flex-shrink: 0; margin-left: 8px; }
+
+        .hist-detail-part    { font-size: 0.82rem; color: #555; margin-bottom: 4px; }
+        .hist-detail-comment { font-size: 0.82rem; color: #555; line-height: 1.55; font-style: italic; }
+        .hist-detail-meta    { font-size: 0.82rem; color: #888; margin-top: 6px; }
+
+        /* Нижняя строка: счётчик + кнопка "показать ещё" */
+        .hist-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .hist-count           { font-size: 0.875rem; color: #888; }
+        .hist-count-highlight { color: #1a1a1a; font-weight: bold; }
+
+        .hist-more-btn {
+            padding: 9px 22px;
+            background: #fff;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 7px;
+            font-size: 0.875rem;
+            font-family: sans-serif;
+            color: #555;
+            cursor: pointer;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .hist-more-btn:hover { border-color: #e30613; color: #e30613; }
+
         /* Кнопки быстрых действий */
         .dash-action-btn {
             display: block;
@@ -1749,15 +1924,57 @@
             </div>
 
             <!-- ==================
-                 РАЗДЕЛ: ИСТОРИЯ (заглушка)
+                 РАЗДЕЛ: ИСТОРИЯ ВЫПОЛНЕННЫХ РАБОТ
                  ================== -->
             <div class="section" id="section-history">
-                <div class="stub">
-                    <span class="stub-icon">📁</span>
-                    <h2>История</h2>
-                    <p>Раздел находится в разработке</p>
-                    <small>Здесь будет история всех выполненных работ</small>
+
+                <!-- Строка поиска + фильтр периода -->
+                <div class="hist-toolbar">
+                    <div class="hist-search-wrap">
+                        <span class="hist-search-icon">🔍</span>
+                        <input
+                            class="hist-search"
+                            id="hist-search"
+                            type="text"
+                            placeholder="Поиск по имени клиента, гос. номеру или марке авто..."
+                            oninput="filterHistory()"
+                        >
+                    </div>
+                    <select class="hist-period" id="hist-period" onchange="filterHistory()">
+                        <option value="week">За последнюю неделю</option>
+                        <option value="month" selected>За месяц</option>
+                        <option value="quarter">За 3 месяца</option>
+                        <option value="all">За всё время</option>
+                    </select>
                 </div>
+
+                <!-- Таблица выполненных работ -->
+                <div class="hist-table-wrap">
+                    <table class="hist-table">
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Клиент</th>
+                                <th>Телефон</th>
+                                <th>Автомобиль</th>
+                                <th>Гос. номер</th>
+                                <th>Работы</th>
+                                <th>Сумма €</th>
+                                <th>Механик</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hist-tbody">
+                            <!-- Строки рендерятся JavaScript-ом -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Счётчик + кнопка "показать ещё" -->
+                <div class="hist-footer">
+                    <span class="hist-count" id="hist-count"></span>
+                    <button class="hist-more-btn">Показать ещё</button>
+                </div>
+
             </div>
 
         </div><!-- /content-body -->
@@ -1868,6 +2085,7 @@
         document.getElementById('section-title').textContent = sectionTitles[target] || '';
 
         if (target === 'calendar') renderCalendar();
+        if (target === 'history')  renderHistory();
     }
 
     // Быстрый переход в любой раздел по имени секции (используется в дашборде и карточках)
@@ -2831,6 +3049,301 @@
                 </tr></tfoot>
             </table>
         </div>`;
+    }
+
+    // ============================
+    // ИСТОРИЯ ВЫПОЛНЕННЫХ РАБОТ
+    // ============================
+
+    const historyData = [
+        {
+            id: 1, date: '25.04.2026', sortDate: '2026-04-25',
+            client: 'Андрей Петров', phone: '+371 29 123 456',
+            car: 'BMW 320d xDrive', plate: 'AB-1234',
+            worksSummary: 'Замена ремня ГРМ + помпа', total: 280, mechanic: 'Алексей К.',
+            details: {
+                works:    [{ n:'Замена ремня ГРМ', p:120 }, { n:'Замена водяной помпы', p:80 }, { n:'Замена ролика натяжителя', p:40 }, { n:'Замена антифриза', p:40 }],
+                parts:    ['Ремень ГРМ Gates (OEM)', 'Помпа Bosch', 'Ролик натяжителя SKF', 'Антифриз G12+ 5л'],
+                comment:  'Ремень на 140 000 км — заменили комплектом с помпой. Рекомендую следующее ТО через 60 000 км.',
+                duration: '3 ч 30 мин'
+            }
+        },
+        {
+            id: 2, date: '24.04.2026', sortDate: '2026-04-24',
+            client: 'Янис Берзиньш', phone: '+371 26 789 012',
+            car: 'VW Golf 7 1.6 TDI', plate: 'BC-5678',
+            worksSummary: 'Замена масла + фильтры', total: 65, mechanic: 'Дмитрий В.',
+            details: {
+                works:    [{ n:'Замена моторного масла', p:35 }, { n:'Замена масляного фильтра', p:12 }, { n:'Замена воздушного фильтра', p:18 }],
+                parts:    ['Масло Castrol EDGE 5W-30 5л', 'Фильтр масляный Mann', 'Фильтр воздушный Mann'],
+                comment:  'Плановое ТО, всё в норме. Следующая замена через 15 000 км.',
+                duration: '40 мин'
+            }
+        },
+        {
+            id: 3, date: '24.04.2026', sortDate: '2026-04-24',
+            client: 'Илзе Калниня', phone: '+371 28 345 678',
+            car: 'Audi A4 2.0 TDI', plate: 'CD-9012',
+            worksSummary: 'Диагностика + тормозные колодки', total: 145, mechanic: 'Алексей К.',
+            details: {
+                works:    [{ n:'Компьютерная диагностика', p:20 }, { n:'Замена колодок (передняя ось)', p:80 }, { n:'Прокачка тормозной системы', p:45 }],
+                parts:    ['Колодки Brembo P85 083', 'Тормозная жидкость DOT 4 1л'],
+                comment:  'Износ колодок до 2 мм — критический. Заменили немедленно. Диски в норме.',
+                duration: '1 ч 45 мин'
+            }
+        },
+        {
+            id: 4, date: '23.04.2026', sortDate: '2026-04-23',
+            client: 'Мартиньш Озолс', phone: '+371 27 456 789',
+            car: 'Toyota Corolla E210', plate: 'DE-3456',
+            worksSummary: 'Техосмотр + замена фильтров', total: 85, mechanic: 'Марис Л.',
+            details: {
+                works:    [{ n:'Подготовка к техосмотру', p:30 }, { n:'Замена воздушного фильтра', p:20 }, { n:'Замена фильтра салона', p:18 }, { n:'Замена масла', p:17 }],
+                parts:    ['Фильтр воздушный Toyota OEM', 'Фильтр салона с угольным слоем', 'Масло 0W-20 Toyota 4л'],
+                comment:  'Автомобиль прошёл техосмотр без замечаний. Все жидкости в норме.',
+                duration: '1 ч 15 мин'
+            }
+        },
+        {
+            id: 5, date: '22.04.2026', sortDate: '2026-04-22',
+            client: 'Лига Страутиня', phone: '+371 25 901 234',
+            car: 'Mercedes C220d', plate: 'EF-7890',
+            worksSummary: 'Ремонт подвески + диагностика', total: 210, mechanic: 'Алексей К.',
+            details: {
+                works:    [{ n:'Компьютерная диагностика', p:20 }, { n:'Замена рычага подвески (лев.)', p:95 }, { n:'Замена сайлентблоков', p:60 }, { n:'Развал-схождение', p:35 }],
+                parts:    ['Рычаг подвески Lemförder', 'Сайлентблоки (комплект 4 шт)'],
+                comment:  'Стук при повороте влево. Трещина рычага + износ сайлентблоков. После замены стук исчез.',
+                duration: '2 ч 45 мин'
+            }
+        },
+        {
+            id: 6, date: '21.04.2026', sortDate: '2026-04-21',
+            client: 'Эдгарс Витолс', phone: '+371 29 567 890',
+            car: 'Škoda Octavia 1.6 TDI', plate: 'FG-1234',
+            worksSummary: 'Замена колодок + дисков (перед)', total: 175, mechanic: 'Дмитрий В.',
+            details: {
+                works:    [{ n:'Замена тормозных дисков (перед)', p:90 }, { n:'Замена колодок (передняя ось)', p:65 }, { n:'Прокачка тормозов', p:20 }],
+                parts:    ['Диски Bosch BD766 (2 шт)', 'Колодки Textar 2430601'],
+                comment:  'Диски выработаны до 7 мм. Вибрация при торможении устранена.',
+                duration: '1 ч 30 мин'
+            }
+        },
+        {
+            id: 7, date: '19.04.2026', sortDate: '2026-04-19',
+            client: 'Карис Лиепиньш', phone: '+371 26 111 222',
+            car: 'Opel Astra 1.4 Turbo', plate: 'GH-5678',
+            worksSummary: 'Замена масла + воздушный фильтр', total: 55, mechanic: 'Марис Л.',
+            details: {
+                works:    [{ n:'Замена моторного масла', p:35 }, { n:'Замена воздушного фильтра', p:20 }],
+                parts:    ['Масло Mobil 1 5W-40 4л', 'Фильтр воздушный Bosch'],
+                comment:  'Плановое обслуживание. Замечаний нет.',
+                duration: '35 мин'
+            }
+        },
+        {
+            id: 8, date: '18.04.2026', sortDate: '2026-04-18',
+            client: 'Анна Лациня', phone: '+371 28 333 444',
+            car: 'Ford Focus 2.0 TDCi', plate: 'HI-9012',
+            worksSummary: 'Диагностика + замена свечей', total: 120, mechanic: 'Дмитрий В.',
+            details: {
+                works:    [{ n:'Компьютерная диагностика', p:20 }, { n:'Замена свечей зажигания (4 шт)', p:60 }, { n:'Чистка дроссельной заслонки', p:40 }],
+                parts:    ['Свечи NGK Iridium BKR6EIX-11 (4 шт)', 'Очиститель карбюратора'],
+                comment:  'Нестабильная работа на холостых. После замены свечей и чистки дросселя — ровная работа.',
+                duration: '1 ч 20 мин'
+            }
+        },
+        {
+            id: 9, date: '17.04.2026', sortDate: '2026-04-17',
+            client: 'Раймонд Калис', phone: '+371 27 555 666',
+            car: 'Hyundai Tucson 2.0 CRDi', plate: 'IJ-3456',
+            worksSummary: 'Плановое ТО + масло', total: 95, mechanic: 'Марис Л.',
+            details: {
+                works:    [{ n:'Замена масла двигателя', p:40 }, { n:'Замена масляного фильтра', p:12 }, { n:'Замена фильтра салона', p:18 }, { n:'Проверка тормозной системы', p:25 }],
+                parts:    ['Масло Hyundai Genuine 5W-30 5л', 'Фильтр масляный OEM', 'Фильтр салона'],
+                comment:  'ТО на 90 000 км. Рекомендую замену задних колодок через 10 000 км.',
+                duration: '1 ч 05 мин'
+            }
+        },
+        {
+            id: 10, date: '15.04.2026', sortDate: '2026-04-15',
+            client: 'Санита Звиедрис', phone: '+371 25 777 888',
+            car: 'Mazda 6 2.5', plate: 'JK-7890',
+            worksSummary: 'Тормозные колодки (все оси)', total: 160, mechanic: 'Алексей К.',
+            details: {
+                works:    [{ n:'Замена колодок (передняя ось)', p:80 }, { n:'Замена колодок (задняя ось)', p:70 }, { n:'Прокачка тормозов', p:10 }],
+                parts:    ['Колодки Brembo (передние)', 'Колодки Brembo (задние)', 'Тормозная жидкость DOT 4 0.5л'],
+                comment:  'Равномерный износ всех четырёх колодок. Диски в норме, следующая замена через 30 000 км.',
+                duration: '1 ч 15 мин'
+            }
+        },
+        {
+            id: 11, date: '14.04.2026', sortDate: '2026-04-14',
+            client: 'Гунарс Ронис', phone: '+371 29 999 000',
+            car: 'BMW 320d xDrive', plate: 'KL-1234',
+            worksSummary: 'Замена масла + диагностика', total: 90, mechanic: 'Дмитрий В.',
+            details: {
+                works:    [{ n:'Замена масла двигателя', p:50 }, { n:'Замена масляного фильтра', p:15 }, { n:'Компьютерная диагностика', p:25 }],
+                parts:    ['Масло BMW Longlife 5W-30 5л', 'Фильтр масляный BMW OEM'],
+                comment:  'Диагностика: код P0400 (клапан EGR). Рекомендовал очистку клапана, клиент ознакомлен.',
+                duration: '55 мин'
+            }
+        },
+        {
+            id: 12, date: '12.04.2026', sortDate: '2026-04-12',
+            client: 'Виталий Козлов', phone: '+371 26 222 333',
+            car: 'VW Golf 7 2.0 GTI', plate: 'LM-5678',
+            worksSummary: 'Ремонт ходовой части', total: 230, mechanic: 'Алексей К.',
+            details: {
+                works:    [{ n:'Замена амортизаторов (передние)', p:130 }, { n:'Замена пружин (передние)', p:70 }, { n:'Развал-схождение', p:30 }],
+                parts:    ['Амортизаторы Sachs (2 шт)', 'Пружины Eibach (2 шт)'],
+                comment:  'Просадка кузова и стук при проезде неровностей. После замены подвески — машина как новая.',
+                duration: '2 ч 20 мин'
+            }
+        },
+        {
+            id: 13, date: '10.04.2026', sortDate: '2026-04-10',
+            client: 'Дайна Балоде', phone: '+371 28 444 555',
+            car: 'Audi A4 2.0 TDI', plate: 'MN-9012',
+            worksSummary: 'Воздушный + топливный фильтры', total: 45, mechanic: 'Марис Л.',
+            details: {
+                works:    [{ n:'Замена воздушного фильтра', p:20 }, { n:'Замена топливного фильтра', p:25 }],
+                parts:    ['Фильтр воздушный Mann C28050', 'Фильтр топливный Mann WK 939/3'],
+                comment:  'Замена по регламенту. Всё выполнено без замечаний.',
+                duration: '30 мин'
+            }
+        },
+        {
+            id: 14, date: '08.04.2026', sortDate: '2026-04-08',
+            client: 'Петерис Жилдибе', phone: '+371 27 666 777',
+            car: 'Toyota Corolla 1.8 HSD', plate: 'NO-3456',
+            worksSummary: 'Диагностика гибрида + ТО', total: 175, mechanic: 'Дмитрий В.',
+            details: {
+                works:    [{ n:'Диагностика гибридной системы', p:45 }, { n:'ТО (масло + фильтры)', p:65 }, { n:'Проверка высоковольтной батареи', p:65 }],
+                parts:    ['Масло Toyota Genuine 0W-20 4л', 'Фильтр масляный OEM', 'Фильтр воздушный OEM'],
+                comment:  'Высоковольтная батарея в норме — ёмкость 94%. ТО выполнено по регламенту Toyota.',
+                duration: '2 ч 00 мин'
+            }
+        },
+        {
+            id: 15, date: '05.04.2026', sortDate: '2026-04-05',
+            client: 'Инта Смилтниекс', phone: '+371 25 888 999',
+            car: 'Mercedes C220d W205', plate: 'OP-7890',
+            worksSummary: 'Замена ремня ГРМ + натяжитель', total: 350, mechanic: 'Алексей К.',
+            details: {
+                works:    [{ n:'Замена ремня ГРМ', p:150 }, { n:'Замена натяжного ролика', p:60 }, { n:'Замена помпы охлаждения', p:90 }, { n:'Замена антифриза', p:50 }],
+                parts:    ['Комплект ГРМ Contitech (OEM)', 'Помпа Bosch', 'Антифриз Mercedes-Benz 5л'],
+                comment:  'Плановая замена на 120 000 км. Попутно устранено подтекание антифриза из помпы.',
+                duration: '4 ч 00 мин'
+            }
+        },
+    ];
+
+    let histSearchQuery = '';
+    let histPeriodVal   = 'month';
+
+    /* Фильтрует данные по периоду и поисковому запросу */
+    function getFilteredHistory() {
+        const today = new Date('2026-04-27');
+        return historyData.filter(r => {
+            // Фильтр по периоду
+            const diffDays = (today - new Date(r.sortDate)) / 86400000;
+            if (histPeriodVal === 'week'    && diffDays > 7)  return false;
+            if (histPeriodVal === 'month'   && diffDays > 30) return false;
+            if (histPeriodVal === 'quarter' && diffDays > 90) return false;
+            // Полнотекстовый поиск по всем значимым полям
+            if (histSearchQuery) {
+                const hay = [r.client, r.car, r.plate, r.worksSummary, r.mechanic, r.phone]
+                    .join(' ').toLowerCase();
+                if (!hay.includes(histSearchQuery)) return false;
+            }
+            return true;
+        });
+    }
+
+    /* Вызывается при вводе в поиск или смене периода */
+    function filterHistory() {
+        histSearchQuery = document.getElementById('hist-search').value.trim().toLowerCase();
+        histPeriodVal   = document.getElementById('hist-period').value;
+        renderHistory();
+    }
+
+    /* Рендерит строки таблицы истории */
+    function renderHistory() {
+        const filtered = getFilteredHistory();
+        const tbody    = document.getElementById('hist-tbody');
+        const countEl  = document.getElementById('hist-count');
+        if (!tbody) return;
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:#aaa;font-size:0.9rem;">Ничего не найдено</td></tr>`;
+            if (countEl) countEl.innerHTML = '';
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(r => buildHistRow(r)).join('');
+        if (countEl) {
+            countEl.innerHTML = `Показано <span class="hist-count-highlight">${filtered.length}</span> из <span class="hist-count-highlight">47</span> записей`;
+        }
+    }
+
+    /* Строит HTML для одной строки + скрытой строки с деталями */
+    function buildHistRow(r) {
+        const worksHtml = r.details.works.map(w =>
+            `<div class="hist-detail-work-row"><span>${w.n}</span><span class="hist-detail-work-price">${w.p}€</span></div>`
+        ).join('');
+        const partsHtml = r.details.parts.map(p =>
+            `<div class="hist-detail-part">• ${p}</div>`
+        ).join('');
+
+        return `
+        <tr class="hist-row" id="hist-row-${r.id}" onclick="toggleHistRow(${r.id})">
+            <td>${r.date}</td>
+            <td>${r.client}</td>
+            <td style="color:#888">${r.phone}</td>
+            <td>${r.car}</td>
+            <td><span style="font-family:monospace;background:#f0f0f0;padding:2px 7px;border-radius:4px;font-size:0.8rem;">${r.plate}</span></td>
+            <td style="max-width:200px;white-space:normal">${r.worksSummary}</td>
+            <td><strong>${r.total}€</strong></td>
+            <td>${r.mechanic}<span class="hist-arrow">▾</span></td>
+        </tr>
+        <tr class="hist-detail-row" id="hist-detail-${r.id}">
+            <td colspan="8" class="hist-detail-cell">
+                <div class="hist-detail-inner">
+                    <div>
+                        <div class="hist-detail-block-title">Выполненные работы</div>
+                        ${worksHtml}
+                    </div>
+                    <div>
+                        <div class="hist-detail-block-title">Использованные запчасти</div>
+                        ${partsHtml}
+                        <div style="margin-top:12px">
+                            <div class="hist-detail-block-title">Длительность</div>
+                            <div class="hist-detail-meta">🕐 ${r.details.duration}</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="hist-detail-block-title">Комментарий механика</div>
+                        <div class="hist-detail-comment">"${r.details.comment}"</div>
+                        <div class="hist-detail-meta" style="margin-top:10px">👤 ${r.mechanic}</div>
+                    </div>
+                </div>
+            </td>
+        </tr>`;
+    }
+
+    /* Открывает / закрывает детальную строку; повторный клик закрывает */
+    function toggleHistRow(id) {
+        const row    = document.getElementById('hist-row-'    + id);
+        const detail = document.getElementById('hist-detail-' + id);
+        const isOpen = row.classList.contains('open');
+        // Закрываем все открытые
+        document.querySelectorAll('.hist-row.open').forEach(r => r.classList.remove('open'));
+        document.querySelectorAll('.hist-detail-row.open').forEach(r => r.classList.remove('open'));
+        // Открываем текущую, если была закрыта
+        if (!isOpen) {
+            row.classList.add('open');
+            detail.classList.add('open');
+        }
     }
 
     // ============================
