@@ -250,7 +250,7 @@
         .stub small { font-size: 0.8rem; color: #bbb; margin-top: 8px; display: block; }
 
         /* ===== ОБЩИЕ ВКЛАДКИ (tab-btn) ===== */
-        .booking-tabs, .hours-tabs {
+        .booking-tabs {
             display: flex;
             gap: 8px;
             margin-bottom: 24px;
@@ -654,61 +654,158 @@
         /* Статус свободного механика */
         .mech-free-label { color: #16a34a; font-size: 0.65rem; }
 
-        /* ===== РАЗДЕЛ: УЧЁТ РАБОЧИХ ЧАСОВ ===== */
-        .hours-table-wrap {
+        /* ===== РАЗДЕЛ: УЧЁТ РАБОЧИХ ЧАСОВ (новый дизайн) ===== */
+        .mech-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 800px) {
+            .mech-cards-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .mech-card {
             background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            overflow: hidden;
-            margin-bottom: 16px;
-        }
-
-        .hours-table { width: 100%; border-collapse: collapse; }
-
-        .hours-table th {
-            background: #2a2a2a;
-            color: #fff;
-            font-size: 0.78rem;
-            padding: 11px 14px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 20px 16px;
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+            border: 2px solid transparent;
             text-align: center;
-            font-weight: bold;
-            letter-spacing: 0.3px;
+            user-select: none;
         }
 
-        .hours-table th:first-child { text-align: left; }
+        .mech-card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+        .mech-card.active { border-color: #e30613; }
 
-        .hours-table td {
-            padding: 11px 14px;
-            font-size: 0.875rem;
-            text-align: center;
-            border-bottom: 1px solid #f0f0f0;
-            color: #333;
-        }
-
-        .hours-table td:first-child { text-align: left; font-weight: bold; color: #1a1a1a; }
-        .hours-table tr:last-child td { border-bottom: none; }
-        .hours-table tr:hover td { background: #fafafa; }
-
-        .hours-role { font-size: 0.72rem; color: #888; font-weight: normal; display: block; }
-
-        /* Цветовая кодировка: зелёный ≥7ч, оранжевый 4-6ч, красный <4ч */
-        .h-good   { color: #16a34a; font-weight: bold; }
-        .h-medium { color: #d97706; font-weight: bold; }
-        .h-low    { color: #dc2626; font-weight: bold; }
-
-        .hours-summary {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            padding: 16px 24px;
+        .mech-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
             display: flex;
-            gap: 40px;
-            font-size: 0.9rem;
-            color: #333;
-            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            margin: 0 auto 12px;
         }
 
-        .hours-summary strong { color: #1a1a1a; }
+        .mech-card-name    { font-weight: bold; font-size: 0.95rem; color: #1a1a1a; margin-bottom: 3px; }
+        .mech-card-role    { font-size: 0.78rem; color: #888; margin-bottom: 10px; }
+
+        .mech-card-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.75rem;
+            margin-bottom: 10px;
+        }
+
+        .status-dot     { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+        .status-dot.on  { background: #22c55e; }
+        .status-dot.off { background: #9ca3af; }
+
+        .mech-card-summary { font-size: 0.78rem; color: #555; background: #f5f5f5; border-radius: 6px; padding: 5px 8px; }
+
+        .mech-detail-wrap {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            margin-bottom: 8px;
+        }
+
+        .mech-detail-wrap.open { max-height: 440px; }
+
+        .mech-detail {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 24px 28px;
+        }
+
+        .mech-detail-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .mech-detail-name { font-size: 1.2rem; font-weight: bold; color: #1a1a1a; }
+        .mech-detail-role { font-size: 0.82rem; color: #888; margin-top: 2px; }
+
+        .period-tabs { display: flex; gap: 6px; }
+
+        .period-btn {
+            padding: 6px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 16px;
+            background: #fff;
+            font-size: 0.8rem;
+            font-family: sans-serif;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .period-btn:hover  { border-color: #e30613; color: #e30613; }
+        .period-btn.active { background: #e30613; border-color: #e30613; color: #fff; font-weight: bold; }
+
+        .hours-chart-wrap { display: flex; gap: 28px; align-items: flex-start; }
+        .hours-chart      { flex: 1; min-width: 0; }
+
+        .chart-bars {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            height: 128px;
+        }
+
+        .chart-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            justify-content: flex-end;
+        }
+
+        .chart-val { font-size: 0.7rem; font-weight: bold; color: #555; line-height: 1; }
+
+        .chart-bar { width: 100%; border-radius: 4px 4px 0 0; min-height: 4px; }
+
+        .bar-green  { background: #22c55e; }
+        .bar-orange { background: #f59e0b; }
+        .bar-red    { background: #e30613; }
+        .bar-grey   { background: #e5e7eb; }
+
+        .chart-day-labels { display: flex; gap: 8px; margin-top: 6px; }
+        .chart-day-label  { flex: 1; text-align: center; font-size: 0.72rem; color: #888; }
+
+        .hours-stat-block {
+            min-width: 160px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 16px 18px;
+            flex-shrink: 0;
+        }
+
+        .hours-stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 0.85rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .hours-stat-row:last-child { margin-bottom: 0; }
+        .hours-stat-val { font-weight: bold; color: #1a1a1a; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -987,16 +1084,12 @@
 
             <!-- ==================
                  РАЗДЕЛ: УЧЁТ РАБОЧИХ ЧАСОВ
-                 ИЗМЕНЕНИЕ 3: новый раздел вместо "История"
                  ================== -->
             <div class="section" id="section-hours">
-                <div class="hours-tabs">
-                    <button class="tab-btn" onclick="switchHours('today', this)">Сегодня</button>
-                    <button class="tab-btn active" onclick="switchHours('week', this)">Эта неделя</button>
-                    <button class="tab-btn" onclick="switchHours('month', this)">Этот месяц</button>
+                <div class="mech-cards-grid" id="mech-cards"></div>
+                <div class="mech-detail-wrap" id="mech-detail-wrap">
+                    <div class="mech-detail" id="mech-detail"></div>
                 </div>
-                <!-- Контент рендерится JavaScript-ом -->
-                <div id="hours-content"></div>
             </div>
 
         </div><!-- /content-body -->
@@ -1102,7 +1195,7 @@
         document.getElementById('section-title').textContent = sectionTitles[target] || '';
 
         if (target === 'calendar') renderCalendar();
-        if (target === 'hours')    renderHours();
+        if (target === 'hours')    renderMechCards();
     }
 
     // Быстрый переход в календарь из карточки заявки
@@ -1656,147 +1749,140 @@
     }
 
     // ============================
-    // УЧЁТ РАБОЧИХ ЧАСОВ — ИЗМЕНЕНИЕ 3
+    // УЧЁТ РАБОЧИХ ЧАСОВ — новый дизайн с карточками механиков
     // ============================
-
-    // Данные за текущую неделю (Пн-Сб, 21-26 апреля)
-    const hoursWeek = [
-        { name: 'Алексей К.', role: 'ст. механик', days: [8, 8, 7, 8, 6, 5] },
-        { name: 'Дмитрий В.', role: '',             days: [7, 7, 6, 6, 5, 0] },
-        { name: 'Марис Л.',   role: '',             days: [7, 8, 7, 7, 7, 4] },
-        { name: 'Игорь С.',   role: '',             days: [5, 6, 7, 5, 4, 0] },
-    ];
-
-    // Данные за сегодня (25.04)
-    const hoursToday = [
-        { name: 'Алексей К.', role: 'ст. механик', hours: 6 },
-        { name: 'Дмитрий В.', role: '',             hours: 5 },
-        { name: 'Марис Л.',   role: '',             hours: 7 },
-        { name: 'Игорь С.',   role: '',             hours: 4 },
-    ];
-
-    // Данные за месяц (апрель 2026)
-    const hoursMonth = [
-        { name: 'Алексей К.', role: 'ст. механик', total: 168, pct: 95 },
-        { name: 'Дмитрий В.', role: '',             total: 148, pct: 84 },
-        { name: 'Марис Л.',   role: '',             total: 155, pct: 88 },
-        { name: 'Игорь С.',   role: '',             total: 128, pct: 73 },
-    ];
-
-    let currentHoursPeriod = 'week';
-
-    // Переключение вкладки периода
-    function switchHours(period, btn) {
-        currentHoursPeriod = period;
-        document.querySelectorAll('#section-hours .tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderHours();
-    }
-
-    // Цветовой класс по количеству часов
-    function hClass(h) {
-        if (h >= 7) return 'h-good';
-        if (h >= 4) return 'h-medium';
-        return 'h-low';
-    }
-
-    // Имя механика + необязательная строчка с ролью
-    function mechCell(m) {
-        return m.name + (m.role ? `<span class="hours-role">${m.role}</span>` : '');
-    }
-
-    function renderHours() {
-        const container = document.getElementById('hours-content');
-        let html = '';
-
-        if (currentHoursPeriod === 'week') {
-            // Таблица: механик | Пн | Вт | Ср | Чт | Пт | Сб | Итого
-            const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
-            html += `<div class="hours-table-wrap"><table class="hours-table">
-                <thead><tr>
-                    <th>Механик</th>
-                    ${dayNames.map(d => `<th>${d}</th>`).join('')}
-                    <th>Итого</th>
-                </tr></thead><tbody>`;
-
-            let grandTotal = 0;
-            hoursWeek.forEach(m => {
-                const total = m.days.reduce((a, b) => a + b, 0);
-                grandTotal += total;
-                html += `<tr>
-                    <td>${mechCell(m)}</td>
-                    ${m.days.map(h => `<td class="${hClass(h)}">${h > 0 ? h + ' ч' : '—'}</td>`).join('')}
-                    <td class="${hClass(total / 5)}">${total} ч</td>
-                </tr>`;
-            });
-
-            html += `</tbody></table></div>`;
-
-            // Норма: 4 механика × (5 дней × 8ч + суббота 5ч) = 180ч
-            const pct = Math.round(grandTotal / 180 * 100);
-            html += `<div class="hours-summary">
-                <div><strong>Итого за неделю:</strong> ${grandTotal} ч</div>
-                <div><strong>Средняя загрузка:</strong> ${pct}%</div>
-                <div style="color:#888;font-size:0.8rem;">Норма: 45 ч/нед на механика</div>
-            </div>`;
-
-        } else if (currentHoursPeriod === 'today') {
-            // Одна колонка — часы за сегодня
-            html += `<div class="hours-table-wrap"><table class="hours-table">
-                <thead><tr><th>Механик</th><th>Сегодня (25 апр)</th></tr></thead>
-                <tbody>`;
-
-            let total = 0;
-            hoursToday.forEach(m => {
-                total += m.hours;
-                html += `<tr>
-                    <td>${mechCell(m)}</td>
-                    <td class="${hClass(m.hours)}">${m.hours} ч</td>
-                </tr>`;
-            });
-
-            html += `</tbody></table></div>`;
-            const pct = Math.round(total / (hoursToday.length * 8) * 100);
-            html += `<div class="hours-summary">
-                <div><strong>Итого сегодня:</strong> ${total} ч</div>
-                <div><strong>Средняя загрузка:</strong> ${pct}%</div>
-            </div>`;
-
-        } else {
-            // Месяц: механик | часов за месяц | процент загрузки (с баром)
-            html += `<div class="hours-table-wrap"><table class="hours-table">
-                <thead><tr><th>Механик</th><th>Апрель 2026</th><th>Загрузка</th></tr></thead>
-                <tbody>`;
-
-            let totalMonth = 0;
-            let totalPct = 0;
-            hoursMonth.forEach(m => {
-                totalMonth += m.total;
-                totalPct += m.pct;
-                html += `<tr>
-                    <td>${mechCell(m)}</td>
-                    <td class="${hClass(m.total / 22)}">${m.total} ч</td>
-                    <td>
-                        <div style="display:flex;align-items:center;gap:8px;">
-                            <div style="flex:1;height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;">
-                                <div style="height:100%;width:${m.pct}%;background:#e30613;border-radius:3px;"></div>
-                            </div>
-                            <span style="font-size:0.8rem;color:#555;min-width:32px;">${m.pct}%</span>
-                        </div>
-                    </td>
-                </tr>`;
-            });
-
-            html += `</tbody></table></div>`;
-            const avgPct = Math.round(totalPct / hoursMonth.length);
-            html += `<div class="hours-summary">
-                <div><strong>Итого за апрель:</strong> ${totalMonth} ч</div>
-                <div><strong>Средняя загрузка:</strong> ${avgPct}%</div>
-                <div style="color:#888;font-size:0.8rem;">Норма: 176 ч/мес (22 раб. дня)</div>
-            </div>`;
+    const mechanicsData = [
+        {
+            id: 0, name: 'Алексей К.', initials: 'АК', role: 'Старший механик',
+            color: '#3b82f6', onShift: true,
+            week:      { days: [8, 8, 7, 8, 6, 5], norm: 45, orders: 16, avgCheck: 94 },
+            thisMonth: { weeks: [42, 44, 40, 42],  norm: 176, orders: 62, avgCheck: 91 },
+            lastMonth: { weeks: [44, 42, 44, 40],  norm: 176, orders: 60, avgCheck: 88 }
+        },
+        {
+            id: 1, name: 'Дмитрий В.', initials: 'ДВ', role: 'Механик',
+            color: '#22c55e', onShift: true,
+            week:      { days: [7, 7, 6, 6, 5, 0], norm: 40, orders: 11, avgCheck: 76 },
+            thisMonth: { weeks: [38, 36, 40, 34],  norm: 176, orders: 48, avgCheck: 74 },
+            lastMonth: { weeks: [40, 38, 36, 38],  norm: 176, orders: 50, avgCheck: 72 }
+        },
+        {
+            id: 2, name: 'Марис Л.', initials: 'МЛ', role: 'Механик',
+            color: '#f59e0b', onShift: true,
+            week:      { days: [7, 8, 7, 7, 7, 4], norm: 40, orders: 13, avgCheck: 82 },
+            thisMonth: { weeks: [40, 38, 42, 35],  norm: 176, orders: 52, avgCheck: 80 },
+            lastMonth: { weeks: [38, 40, 40, 36],  norm: 176, orders: 51, avgCheck: 79 }
+        },
+        {
+            id: 3, name: 'Игорь С.', initials: 'ИС', role: 'Младший механик',
+            color: '#a855f7', onShift: false,
+            week:      { days: [5, 6, 7, 5, 4, 0], norm: 40, orders: 8,  avgCheck: 58 },
+            thisMonth: { weeks: [30, 32, 28, 38],  norm: 176, orders: 34, avgCheck: 55 },
+            lastMonth: { weeks: [28, 30, 32, 26],  norm: 176, orders: 30, avgCheck: 52 }
         }
+    ];
 
-        container.innerHTML = html;
+    let activeMechId     = null;
+    let activeMechPeriod = 'week';
+
+    function renderMechCards() {
+        const grid = document.getElementById('mech-cards');
+        if (!grid) return;
+        grid.innerHTML = mechanicsData.map(m => {
+            const weekTotal = m.week.days.reduce((a, b) => a + b, 0);
+            const isActive  = activeMechId === m.id;
+            return `<div class="mech-card${isActive ? ' active' : ''}" onclick="toggleMechDetail(${m.id})">
+                <div class="mech-avatar" style="background:${m.color}">${m.initials}</div>
+                <div class="mech-card-name">${m.name}</div>
+                <div class="mech-card-role">${m.role}</div>
+                <div class="mech-card-status">
+                    <span class="status-dot ${m.onShift ? 'on' : 'off'}"></span>
+                    <span style="color:${m.onShift ? '#16a34a' : '#9ca3af'}">${m.onShift ? 'На смене' : 'Выходной'}</span>
+                </div>
+                <div class="mech-card-summary">Эта неделя: ${weekTotal}ч / ${m.week.norm}ч</div>
+            </div>`;
+        }).join('');
+    }
+
+    function toggleMechDetail(id) {
+        const wrap = document.getElementById('mech-detail-wrap');
+        if (activeMechId === id) {
+            activeMechId = null;
+            wrap.classList.remove('open');
+        } else {
+            activeMechId     = id;
+            activeMechPeriod = 'week';
+            renderMechDetail();
+            wrap.classList.add('open');
+        }
+        renderMechCards();
+    }
+
+    function switchMechPeriod(period, btn) {
+        activeMechPeriod = period;
+        document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderMechDetailContent();
+    }
+
+    function buildBarChart(values, labels, maxVal) {
+        const maxPx = 100;
+        const cols = values.map(v => {
+            const h   = v > 0 ? Math.max(Math.round(v / maxVal * maxPx), 8) : 6;
+            const cls = v === 0 ? 'bar-grey' : (v >= 7 ? 'bar-green' : v >= 4 ? 'bar-orange' : 'bar-red');
+            return `<div class="chart-col">
+                <span class="chart-val">${v > 0 ? v : '—'}</span>
+                <div class="chart-bar ${cls}" style="height:${h}px"></div>
+            </div>`;
+        }).join('');
+        const dayLabels = labels.map(l => `<div class="chart-day-label">${l}</div>`).join('');
+        return `<div class="chart-bars">${cols}</div><div class="chart-day-labels">${dayLabels}</div>`;
+    }
+
+    function renderMechDetail() {
+        document.getElementById('mech-detail').innerHTML = `
+        <div class="mech-detail-top">
+            <div>
+                <div class="mech-detail-name">${mechanicsData[activeMechId].name}</div>
+                <div class="mech-detail-role">${mechanicsData[activeMechId].role}</div>
+            </div>
+            <div class="period-tabs">
+                <button class="period-btn active"  onclick="switchMechPeriod('week', this)">Эта неделя</button>
+                <button class="period-btn"         onclick="switchMechPeriod('month', this)">Этот месяц</button>
+                <button class="period-btn"         onclick="switchMechPeriod('lastmonth', this)">Прошлый месяц</button>
+            </div>
+        </div>
+        <div id="mech-detail-content"></div>`;
+        renderMechDetailContent();
+    }
+
+    function renderMechDetailContent() {
+        const m = mechanicsData[activeMechId];
+        let chart, total, norm, orders, avgCheck;
+        if (activeMechPeriod === 'week') {
+            total = m.week.days.reduce((a, b) => a + b, 0);
+            norm = m.week.norm; orders = m.week.orders; avgCheck = m.week.avgCheck;
+            chart = buildBarChart(m.week.days, ['Пн','Вт','Ср','Чт','Пт','Сб'], 8);
+        } else if (activeMechPeriod === 'month') {
+            total = m.thisMonth.weeks.reduce((a, b) => a + b, 0);
+            norm = m.thisMonth.norm; orders = m.thisMonth.orders; avgCheck = m.thisMonth.avgCheck;
+            chart = buildBarChart(m.thisMonth.weeks, ['Нед.1','Нед.2','Нед.3','Нед.4'], 45);
+        } else {
+            total = m.lastMonth.weeks.reduce((a, b) => a + b, 0);
+            norm = m.lastMonth.norm; orders = m.lastMonth.orders; avgCheck = m.lastMonth.avgCheck;
+            chart = buildBarChart(m.lastMonth.weeks, ['Нед.1','Нед.2','Нед.3','Нед.4'], 45);
+        }
+        const pct = Math.round(total / norm * 100);
+        document.getElementById('mech-detail-content').innerHTML = `
+        <div class="hours-chart-wrap">
+            <div class="hours-chart">${chart}</div>
+            <div class="hours-stat-block">
+                <div class="hours-stat-row"><span>Отработано:</span><span class="hours-stat-val">${total}ч / ${norm}ч</span></div>
+                <div class="hours-stat-row"><span>Загрузка:</span><span class="hours-stat-val">${pct}%</span></div>
+                <div class="hours-stat-row"><span>Заказов:</span><span class="hours-stat-val">${orders}</span></div>
+                <div class="hours-stat-row"><span>Средний чек:</span><span class="hours-stat-val">${avgCheck}€</span></div>
+            </div>
+        </div>`;
     }
 </script>
 </body>
