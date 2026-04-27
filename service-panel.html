@@ -806,6 +806,141 @@
 
         .hours-stat-row:last-child { margin-bottom: 0; }
         .hours-stat-val { font-weight: bold; color: #1a1a1a; font-size: 0.9rem; }
+
+        /* ===== ВКЛАДКИ ПРОФИЛЯ (подчёркивание активной) ===== */
+        .profile-tabs {
+            display: flex;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 24px;
+        }
+
+        .profile-tab {
+            padding: 10px 22px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 0.95rem;
+            font-family: sans-serif;
+            color: #888;
+            cursor: pointer;
+            margin-bottom: -2px;
+            transition: color 0.15s, border-color 0.15s;
+        }
+
+        .profile-tab:hover { color: #555; }
+
+        .profile-tab.active {
+            color: #e30613;
+            border-bottom-color: #e30613;
+            font-weight: bold;
+        }
+
+        .profile-tab-content        { display: none; }
+        .profile-tab-content.active { display: block; animation: fadeIn 0.2s ease; }
+
+        /* ===== ФИНАНСОВЫЙ РАЗДЕЛ ===== */
+        .fin-period-wrap {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .fin-period-btn {
+            padding: 7px 16px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 20px;
+            background: #fff;
+            font-size: 0.875rem;
+            font-family: sans-serif;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .fin-period-btn:hover  { border-color: #e30613; color: #e30613; }
+        .fin-period-btn.active { background: #e30613; border-color: #e30613; color: #fff; font-weight: bold; }
+
+        .fin-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .fin-kpi-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 18px 20px;
+        }
+
+        .fin-kpi-label         { font-size: 0.78rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+        .fin-kpi-value         { font-size: 1.8rem; font-weight: bold; color: #1a1a1a; line-height: 1; margin-bottom: 6px; }
+        .fin-kpi-delta         { font-size: 0.8rem; }
+        .fin-kpi-delta.up      { color: #22c55e; }
+        .fin-kpi-delta.down    { color: #e30613; }
+        .fin-kpi-delta.neutral { color: #888; }
+
+        .fin-block {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 20px 24px;
+            margin-bottom: 16px;
+        }
+
+        .fin-block h3 {
+            font-size: 0.78rem;
+            font-weight: bold;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .fin-bar-row                { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .fin-bar-row:last-child     { margin-bottom: 0; }
+        .fin-bar-label              { font-size: 0.875rem; color: #444; min-width: 220px; flex-shrink: 0; }
+        .fin-bar-track              { flex: 1; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+        .fin-bar-fill-expense       { height: 100%; background: #64748b; border-radius: 4px; }
+        .fin-bar-fill-revenue       { height: 100%; background: #e30613; border-radius: 4px; }
+        .fin-bar-info               { font-size: 0.8rem; color: #555; min-width: 120px; text-align: right; white-space: nowrap; }
+
+        .fin-table                  { width: 100%; border-collapse: collapse; }
+
+        .fin-table th {
+            background: #f5f5f5;
+            font-size: 0.78rem;
+            color: #888;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        .fin-table th:not(:first-child) { text-align: right; }
+
+        .fin-table td {
+            padding: 11px 12px;
+            font-size: 0.875rem;
+            color: #333;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .fin-table td:not(:first-child) { text-align: right; }
+        .fin-table tr:last-child td     { border-bottom: none; }
+
+        .fin-table tfoot td {
+            font-weight: bold;
+            color: #1a1a1a;
+            border-top: 2px solid #e8e8e8;
+            border-bottom: none;
+            background: #fafafa;
+        }
     </style>
 </head>
 <body>
@@ -848,21 +983,20 @@
             <div class="nav-item" data-section="profile" onclick="switchSection(this)">
                 <span class="nav-icon">👤</span> Профиль
             </div>
-            <div class="nav-item" data-section="stats" onclick="switchSection(this)">
-                <span class="nav-icon">📊</span> Статистика
-            </div>
             <div class="nav-item active" data-section="bookings" onclick="switchSection(this)">
                 <span class="nav-icon">📋</span> Записи
-            </div>
-            <div class="nav-item" data-section="estimates" onclick="switchSection(this)">
-                <span class="nav-icon">🧾</span> Сметы
             </div>
             <div class="nav-item" data-section="calendar" onclick="switchSection(this)">
                 <span class="nav-icon">📅</span> Календарь
             </div>
-            <!-- ИЗМЕНЕНИЕ 3: переименован пункт меню -->
-            <div class="nav-item" data-section="hours" onclick="switchSection(this)">
-                <span class="nav-icon">⏱</span> Учёт часов
+            <div class="nav-item" data-section="estimates" onclick="switchSection(this)">
+                <span class="nav-icon">🧾</span> Сметы
+            </div>
+            <div class="nav-item" data-section="stats" onclick="switchSection(this)">
+                <span class="nav-icon">📊</span> Статистика
+            </div>
+            <div class="nav-item" data-section="history" onclick="switchSection(this)">
+                <span class="nav-icon">📁</span> История
             </div>
         </nav>
 
@@ -885,77 +1019,110 @@
         <div class="content-body">
 
             <!-- ==================
-                 РАЗДЕЛ: ПРОФИЛЬ
+                 РАЗДЕЛ: ПРОФИЛЬ (три вкладки: Информация / Финансы / Учёт часов)
                  ================== -->
             <div class="section" id="section-profile">
-                <div class="profile-top">
-                    <div class="profile-name">AutoPro Riga</div>
-                    <button class="btn-edit" disabled>Редактировать</button>
+
+                <!-- Горизонтальные табы с красным подчёркиванием активного -->
+                <div class="profile-tabs">
+                    <button class="profile-tab active" onclick="switchProfileTab('info', this)">Информация</button>
+                    <button class="profile-tab" onclick="switchProfileTab('finance', this)">Финансы</button>
+                    <button class="profile-tab" onclick="switchProfileTab('hours', this)">Учёт часов</button>
                 </div>
 
-                <div class="profile-block">
-                    <h3>Основная информация</h3>
-                    <div class="profile-info-row">
-                        <span class="profile-info-label">Адрес</span>
-                        <span>ул. Бривибас 145, Рига</span>
+                <!-- ===== Вкладка: Информация ===== -->
+                <div class="profile-tab-content active" id="ptab-info">
+                    <div class="profile-top">
+                        <div class="profile-name">AutoPro Riga</div>
+                        <button class="btn-edit" disabled>Редактировать</button>
                     </div>
-                    <div class="profile-info-row">
-                        <span class="profile-info-label">Телефон</span>
-                        <span>+371 20 123 456</span>
-                    </div>
-                    <div class="profile-info-row">
-                        <span class="profile-info-label">Email</span>
-                        <span>info@autopro.lv</span>
-                    </div>
-                    <div class="profile-info-row">
-                        <span class="profile-info-label">Режим работы</span>
-                        <span>Пн–Пт: 10:00–18:00 &nbsp;·&nbsp; Сб: 10:00–15:00 &nbsp;·&nbsp; Вс: выходной</span>
-                    </div>
-                </div>
 
-                <div class="profile-block">
-                    <h3>Описание</h3>
-                    <p class="profile-desc">
-                        AutoPro Riga — сертифицированный автосервис в центре Риги с более чем 10 годами опыта.
-                        Специализируемся на диагностике, плановом ТО и ремонте ходовой части автомобилей европейских и японских марок.
-                        Работаем с гарантией на все виды работ, используем только оригинальные запчасти или сертифицированные аналоги.
-                    </p>
-                </div>
-
-                <div class="profile-block">
-                    <h3>Специализация</h3>
-                    <div class="profile-tags">
-                        <span class="tag tag-spec">Двигатели</span>
-                        <span class="tag tag-spec">Ходовая</span>
-                        <span class="tag tag-spec">Электрика</span>
-                        <span class="tag tag-spec">Диагностика</span>
-                        <span class="tag tag-spec">ТО</span>
-                        <span class="tag tag-spec">Тормозная система</span>
+                    <div class="profile-block">
+                        <h3>Основная информация</h3>
+                        <div class="profile-info-row">
+                            <span class="profile-info-label">Адрес</span>
+                            <span>ул. Бривибас 145, Рига</span>
+                        </div>
+                        <div class="profile-info-row">
+                            <span class="profile-info-label">Телефон</span>
+                            <span>+371 20 123 456</span>
+                        </div>
+                        <div class="profile-info-row">
+                            <span class="profile-info-label">Email</span>
+                            <span>info@autopro.lv</span>
+                        </div>
+                        <div class="profile-info-row">
+                            <span class="profile-info-label">Режим работы</span>
+                            <span>Пн–Пт: 10:00–18:00 &nbsp;·&nbsp; Сб: 10:00–15:00 &nbsp;·&nbsp; Вс: выходной</span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="profile-block">
-                    <h3>Обслуживаемые марки</h3>
-                    <div class="profile-tags">
-                        <span class="tag tag-brand">Volkswagen</span>
-                        <span class="tag tag-brand">Audi</span>
-                        <span class="tag tag-brand">BMW</span>
-                        <span class="tag tag-brand">Mercedes</span>
-                        <span class="tag tag-brand">Škoda</span>
-                        <span class="tag tag-brand">Все марки</span>
+                    <div class="profile-block">
+                        <h3>Описание</h3>
+                        <p class="profile-desc">
+                            AutoPro Riga — сертифицированный автосервис в центре Риги с более чем 10 годами опыта.
+                            Специализируемся на диагностике, плановом ТО и ремонте ходовой части автомобилей европейских и японских марок.
+                            Работаем с гарантией на все виды работ, используем только оригинальные запчасти или сертифицированные аналоги.
+                        </p>
                     </div>
-                </div>
 
-                <div class="profile-block">
-                    <h3>Прайс-лист</h3>
-                    <table class="profile-table">
-                        <tr><td>Замена масла и фильтра</td><td>от 35 €</td></tr>
-                        <tr><td>Компьютерная диагностика</td><td>20 €</td></tr>
-                        <tr><td>Замена тормозных колодок (ось)</td><td>от 45 €</td></tr>
-                        <tr><td>Замена ремня ГРМ</td><td>от 120 €</td></tr>
-                        <tr><td>Технический осмотр (подготовка)</td><td>от 30 €</td></tr>
-                    </table>
-                </div>
+                    <div class="profile-block">
+                        <h3>Специализация</h3>
+                        <div class="profile-tags">
+                            <span class="tag tag-spec">Двигатели</span>
+                            <span class="tag tag-spec">Ходовая</span>
+                            <span class="tag tag-spec">Электрика</span>
+                            <span class="tag tag-spec">Диагностика</span>
+                            <span class="tag tag-spec">ТО</span>
+                            <span class="tag tag-spec">Тормозная система</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-block">
+                        <h3>Обслуживаемые марки</h3>
+                        <div class="profile-tags">
+                            <span class="tag tag-brand">Volkswagen</span>
+                            <span class="tag tag-brand">Audi</span>
+                            <span class="tag tag-brand">BMW</span>
+                            <span class="tag tag-brand">Mercedes</span>
+                            <span class="tag tag-brand">Škoda</span>
+                            <span class="tag tag-brand">Все марки</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-block">
+                        <h3>Прайс-лист</h3>
+                        <table class="profile-table">
+                            <tr><td>Замена масла и фильтра</td><td>от 35 €</td></tr>
+                            <tr><td>Компьютерная диагностика</td><td>20 €</td></tr>
+                            <tr><td>Замена тормозных колодок (ось)</td><td>от 45 €</td></tr>
+                            <tr><td>Замена ремня ГРМ</td><td>от 120 €</td></tr>
+                            <tr><td>Технический осмотр (подготовка)</td><td>от 30 €</td></tr>
+                        </table>
+                    </div>
+                </div><!-- /ptab-info -->
+
+                <!-- ===== Вкладка: Финансы ===== -->
+                <div class="profile-tab-content" id="ptab-finance">
+                    <!-- Переключатель периода -->
+                    <div class="fin-period-wrap">
+                        <button class="fin-period-btn active" onclick="switchFinPeriod('thisMonth', this)">Этот месяц</button>
+                        <button class="fin-period-btn" onclick="switchFinPeriod('lastMonth', this)">Прошлый месяц</button>
+                        <button class="fin-period-btn" onclick="switchFinPeriod('thisQuarter', this)">Этот квартал</button>
+                        <button class="fin-period-btn" onclick="switchFinPeriod('thisYear', this)">Этот год</button>
+                    </div>
+                    <!-- Контент рендерится JavaScript-ом -->
+                    <div id="finance-content"></div>
+                </div><!-- /ptab-finance -->
+
+                <!-- ===== Вкладка: Учёт часов ===== -->
+                <div class="profile-tab-content" id="ptab-hours">
+                    <div class="mech-cards-grid" id="mech-cards"></div>
+                    <div class="mech-detail-wrap" id="mech-detail-wrap">
+                        <div class="mech-detail" id="mech-detail"></div>
+                    </div>
+                </div><!-- /ptab-hours -->
+
             </div><!-- /section-profile -->
 
             <!-- ==================
@@ -1083,12 +1250,14 @@
             </div>
 
             <!-- ==================
-                 РАЗДЕЛ: УЧЁТ РАБОЧИХ ЧАСОВ
+                 РАЗДЕЛ: ИСТОРИЯ (заглушка)
                  ================== -->
-            <div class="section" id="section-hours">
-                <div class="mech-cards-grid" id="mech-cards"></div>
-                <div class="mech-detail-wrap" id="mech-detail-wrap">
-                    <div class="mech-detail" id="mech-detail"></div>
+            <div class="section" id="section-history">
+                <div class="stub">
+                    <span class="stub-icon">📁</span>
+                    <h2>История</h2>
+                    <p>Раздел находится в разработке</p>
+                    <small>Здесь будет история всех выполненных работ</small>
                 </div>
             </div>
 
@@ -1181,7 +1350,7 @@
         bookings:  'Записи',
         estimates: 'Сметы',
         calendar:  'Календарь',
-        hours:     'Учёт рабочих часов'
+        history:   'История'
     };
 
     function switchSection(clickedItem) {
@@ -1195,7 +1364,6 @@
         document.getElementById('section-title').textContent = sectionTitles[target] || '';
 
         if (target === 'calendar') renderCalendar();
-        if (target === 'hours')    renderMechCards();
     }
 
     // Быстрый переход в календарь из карточки заявки
@@ -1882,6 +2050,258 @@
                 <div class="hours-stat-row"><span>Заказов:</span><span class="hours-stat-val">${orders}</span></div>
                 <div class="hours-stat-row"><span>Средний чек:</span><span class="hours-stat-val">${avgCheck}€</span></div>
             </div>
+        </div>`;
+    }
+
+    // ============================
+    // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ПРОФИЛЯ
+    // ============================
+    let currentProfileTab = 'info';
+
+    function switchProfileTab(tab, btn) {
+        currentProfileTab = tab;
+        // Переключаем кнопки
+        document.querySelectorAll('.profile-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        // Переключаем контент
+        document.querySelectorAll('.profile-tab-content').forEach(c => c.classList.remove('active'));
+        document.getElementById('ptab-' + tab).classList.add('active');
+        // Инициализируем данные вкладки при первом открытии
+        if (tab === 'finance') renderFinanceContent();
+        if (tab === 'hours')   renderMechCards();
+    }
+
+    // ============================
+    // ФИНАНСЫ — данные по четырём периодам
+    // ============================
+    const financeData = {
+        thisMonth: {
+            kpi: {
+                revenue:  { val: '12 450€', delta: '↑ +8% к прошлому месяцу',    dir: 'up'      },
+                expenses: { val: '8 320€',  delta: '↑ +3% к прошлому месяцу',    dir: 'down'    },
+                profit:   { val: '4 130€',  delta: '↑ +18% к прошлому месяцу',   dir: 'up'      },
+                avgCheck: { val: '85€',     delta: 'Средний чек за период',       dir: 'neutral' }
+            },
+            expenses: [
+                { name: 'Зарплаты механиков',    amount: 4800 },
+                { name: 'Запчасти и материалы',  amount: 2100 },
+                { name: 'Аренда помещения',      amount: 800  },
+                { name: 'Коммунальные услуги',   amount: 320  },
+                { name: 'Комиссия RepairTech',   amount: 250  },
+                { name: 'Прочее',                amount: 50   }
+            ],
+            revenue: [
+                { name: 'Ремонт двигателя',      amount: 3200 },
+                { name: 'Замена масла и ТО',     amount: 2800 },
+                { name: 'Тормозная система',     amount: 2100 },
+                { name: 'Диагностика',           amount: 1950 },
+                { name: 'Ходовая и подвеска',    amount: 1400 },
+                { name: 'Прочие работы',         amount: 1000 }
+            ],
+            payroll: [
+                { name: 'Алексей К.', role: 'Старший механик', hours: 168, rate: 12, bonus: 150 },
+                { name: 'Дмитрий В.', role: 'Механик',         hours: 160, rate: 10, bonus: 80  },
+                { name: 'Марис Л.',   role: 'Механик',         hours: 155, rate: 10, bonus: 60  },
+                { name: 'Игорь С.',   role: 'Младший механик', hours: 140, rate: 8,  bonus: 40  }
+            ]
+        },
+        lastMonth: {
+            kpi: {
+                revenue:  { val: '11 520€', delta: '↑ +5% к позапрошлому месяцу',  dir: 'up'      },
+                expenses: { val: '8 080€',  delta: '↑ +2% к позапрошлому месяцу',  dir: 'down'    },
+                profit:   { val: '3 440€',  delta: '↑ +9% к позапрошлому месяцу',  dir: 'up'      },
+                avgCheck: { val: '81€',     delta: 'Средний чек за период',         dir: 'neutral' }
+            },
+            expenses: [
+                { name: 'Зарплаты механиков',    amount: 4600 },
+                { name: 'Запчасти и материалы',  amount: 1980 },
+                { name: 'Аренда помещения',      amount: 800  },
+                { name: 'Коммунальные услуги',   amount: 350  },
+                { name: 'Комиссия RepairTech',   amount: 230  },
+                { name: 'Прочее',                amount: 120  }
+            ],
+            revenue: [
+                { name: 'Ремонт двигателя',      amount: 2900 },
+                { name: 'Замена масла и ТО',     amount: 2600 },
+                { name: 'Тормозная система',     amount: 1980 },
+                { name: 'Диагностика',           amount: 1800 },
+                { name: 'Ходовая и подвеска',    amount: 1240 },
+                { name: 'Прочие работы',         amount: 1000 }
+            ],
+            payroll: [
+                { name: 'Алексей К.', role: 'Старший механик', hours: 162, rate: 12, bonus: 120 },
+                { name: 'Дмитрий В.', role: 'Механик',         hours: 155, rate: 10, bonus: 60  },
+                { name: 'Марис Л.',   role: 'Механик',         hours: 158, rate: 10, bonus: 50  },
+                { name: 'Игорь С.',   role: 'Младший механик', hours: 130, rate: 8,  bonus: 20  }
+            ]
+        },
+        thisQuarter: {
+            kpi: {
+                revenue:  { val: '35 200€', delta: '↑ +12% к прошлому кварталу', dir: 'up'      },
+                expenses: { val: '24 100€', delta: '↑ +4% к прошлому кварталу',  dir: 'down'    },
+                profit:   { val: '11 100€', delta: '↑ +22% к прошлому кварталу', dir: 'up'      },
+                avgCheck: { val: '84€',     delta: 'Средний чек за период',       dir: 'neutral' }
+            },
+            expenses: [
+                { name: 'Зарплаты механиков',    amount: 13900 },
+                { name: 'Запчасти и материалы',  amount: 6200  },
+                { name: 'Аренда помещения',      amount: 2400  },
+                { name: 'Коммунальные услуги',   amount: 980   },
+                { name: 'Комиссия RepairTech',   amount: 420   },
+                { name: 'Прочее',                amount: 200   }
+            ],
+            revenue: [
+                { name: 'Ремонт двигателя',      amount: 9100  },
+                { name: 'Замена масла и ТО',     amount: 8000  },
+                { name: 'Тормозная система',     amount: 6200  },
+                { name: 'Диагностика',           amount: 5700  },
+                { name: 'Ходовая и подвеска',    amount: 4000  },
+                { name: 'Прочие работы',         amount: 2200  }
+            ],
+            payroll: [
+                { name: 'Алексей К.', role: 'Старший механик', hours: 498, rate: 12, bonus: 400 },
+                { name: 'Дмитрий В.', role: 'Механик',         hours: 472, rate: 10, bonus: 220 },
+                { name: 'Марис Л.',   role: 'Механик',         hours: 465, rate: 10, bonus: 180 },
+                { name: 'Игорь С.',   role: 'Младший механик', hours: 412, rate: 8,  bonus: 100 }
+            ]
+        },
+        thisYear: {
+            kpi: {
+                revenue:  { val: '46 800€', delta: '↑ +15% к прошлому году', dir: 'up'      },
+                expenses: { val: '31 900€', delta: '↑ +6% к прошлому году',  dir: 'down'    },
+                profit:   { val: '14 900€', delta: '↑ +27% к прошлому году', dir: 'up'      },
+                avgCheck: { val: '83€',     delta: 'Средний чек за период',   dir: 'neutral' }
+            },
+            expenses: [
+                { name: 'Зарплаты механиков',    amount: 18400 },
+                { name: 'Запчасти и материалы',  amount: 8300  },
+                { name: 'Аренда помещения',      amount: 3200  },
+                { name: 'Коммунальные услуги',   amount: 1280  },
+                { name: 'Комиссия RepairTech',   amount: 560   },
+                { name: 'Прочее',                amount: 160   }
+            ],
+            revenue: [
+                { name: 'Ремонт двигателя',      amount: 12100 },
+                { name: 'Замена масла и ТО',     amount: 10600 },
+                { name: 'Тормозная система',     amount: 8300  },
+                { name: 'Диагностика',           amount: 7600  },
+                { name: 'Ходовая и подвеска',    amount: 5400  },
+                { name: 'Прочие работы',         amount: 2800  }
+            ],
+            payroll: [
+                { name: 'Алексей К.', role: 'Старший механик', hours: 654, rate: 12, bonus: 540 },
+                { name: 'Дмитрий В.', role: 'Механик',         hours: 616, rate: 10, bonus: 290 },
+                { name: 'Марис Л.',   role: 'Механик',         hours: 608, rate: 10, bonus: 240 },
+                { name: 'Игорь С.',   role: 'Младший механик', hours: 538, rate: 8,  bonus: 130 }
+            ]
+        }
+    };
+
+    let currentFinPeriod = 'thisMonth';
+
+    // Переключение периода финансов
+    function switchFinPeriod(period, btn) {
+        currentFinPeriod = period;
+        document.querySelectorAll('.fin-period-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderFinanceContent();
+    }
+
+    // Рендер финансовой вкладки (вызывается при первом открытии или смене периода)
+    function renderFinanceContent() {
+        const container = document.getElementById('finance-content');
+        if (!container) return;
+        const d = financeData[currentFinPeriod];
+
+        // Карточки KPI
+        const kpiHtml = `
+        <div class="fin-kpi-grid">
+            <div class="fin-kpi-card">
+                <div class="fin-kpi-label">Выручка</div>
+                <div class="fin-kpi-value">${d.kpi.revenue.val}</div>
+                <div class="fin-kpi-delta ${d.kpi.revenue.dir}">${d.kpi.revenue.delta}</div>
+            </div>
+            <div class="fin-kpi-card">
+                <div class="fin-kpi-label">Расходы</div>
+                <div class="fin-kpi-value">${d.kpi.expenses.val}</div>
+                <div class="fin-kpi-delta ${d.kpi.expenses.dir}">${d.kpi.expenses.delta}</div>
+            </div>
+            <div class="fin-kpi-card">
+                <div class="fin-kpi-label">Чистая прибыль</div>
+                <div class="fin-kpi-value">${d.kpi.profit.val}</div>
+                <div class="fin-kpi-delta ${d.kpi.profit.dir}">${d.kpi.profit.delta}</div>
+            </div>
+            <div class="fin-kpi-card">
+                <div class="fin-kpi-label">Средний чек</div>
+                <div class="fin-kpi-value">${d.kpi.avgCheck.val}</div>
+                <div class="fin-kpi-delta ${d.kpi.avgCheck.dir}">${d.kpi.avgCheck.delta}</div>
+            </div>
+        </div>`;
+
+        // Структура расходов — ширина полоски относительно максимальной статьи
+        const totalExp = d.expenses.reduce((a, b) => a + b.amount, 0);
+        const maxExp   = d.expenses[0].amount;
+        const expRows  = d.expenses.map(e => {
+            const pct  = Math.round(e.amount / totalExp * 100);
+            const barW = Math.round(e.amount / maxExp * 100);
+            return `<div class="fin-bar-row">
+                <span class="fin-bar-label">${e.name}</span>
+                <div class="fin-bar-track"><div class="fin-bar-fill-expense" style="width:${barW}%"></div></div>
+                <span class="fin-bar-info">${e.amount.toLocaleString('ru')}€ · ${pct}%</span>
+            </div>`;
+        }).join('');
+
+        // Выручка по услугам — ширина относительно топ-услуги
+        const maxRev  = d.revenue[0].amount;
+        const revRows = d.revenue.map(r => {
+            const barW = Math.round(r.amount / maxRev * 100);
+            return `<div class="fin-bar-row">
+                <span class="fin-bar-label">${r.name}</span>
+                <div class="fin-bar-track"><div class="fin-bar-fill-revenue" style="width:${barW}%"></div></div>
+                <span class="fin-bar-info">${r.amount.toLocaleString('ru')}€</span>
+            </div>`;
+        }).join('');
+
+        // Таблица выплат механикам
+        let totalPay = 0;
+        const payRows = d.payroll.map(p => {
+            const total = p.hours * p.rate + p.bonus;
+            totalPay += total;
+            return `<tr>
+                <td>${p.name} <span style="font-size:0.78rem;color:#888;">${p.role}</span></td>
+                <td>${p.hours}ч</td>
+                <td>${p.rate}€/ч</td>
+                <td>${p.bonus}€</td>
+                <td><strong>${total.toLocaleString('ru')}€</strong></td>
+            </tr>`;
+        }).join('');
+
+        container.innerHTML = `
+        ${kpiHtml}
+        <div class="fin-block">
+            <h3>Структура расходов</h3>
+            ${expRows}
+        </div>
+        <div class="fin-block">
+            <h3>Выручка по услугам</h3>
+            ${revRows}
+        </div>
+        <div class="fin-block">
+            <h3>Выплаты механикам за период</h3>
+            <table class="fin-table">
+                <thead><tr>
+                    <th>Механик</th>
+                    <th>Часы</th>
+                    <th>Ставка</th>
+                    <th>Бонус</th>
+                    <th>Итого</th>
+                </tr></thead>
+                <tbody>${payRows}</tbody>
+                <tfoot><tr>
+                    <td colspan="4">Итого выплат:</td>
+                    <td>${totalPay.toLocaleString('ru')}€</td>
+                </tr></tfoot>
+            </table>
         </div>`;
     }
 </script>
