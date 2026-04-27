@@ -1198,6 +1198,131 @@
         .dash-all-reviews             { display: inline-block; margin-top: 12px; font-size: 0.85rem; color: #e30613; cursor: pointer; }
         .dash-all-reviews:hover       { text-decoration: underline; }
 
+        /* ===== КНОПКА «+ ЗАПИСАТЬ» В СВОБОДНОМ СЛОТЕ МЕХАНИКА ===== */
+
+        /* Растягиваем строку механика на всю ширину для выравнивания кнопки вправо */
+        .mech-row { align-items: center; }
+
+        .mech-book-btn {
+            margin-left: auto;
+            padding: 2px 7px;
+            background: #fff;
+            border: 1px solid #22c55e;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            font-family: sans-serif;
+            color: #16a34a;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            white-space: nowrap;
+            flex-shrink: 0;
+            line-height: 1.4;
+        }
+        .mech-book-btn:hover { background: #22c55e; color: #fff; }
+
+        /* ===== МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ ЗАПИСИ ===== */
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 600;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.open { display: flex; animation: fadeIn 0.15s ease; }
+
+        .modal-window {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .modal-title { font-size: 0.98rem; font-weight: bold; color: #1a1a1a; line-height: 1.4; }
+
+        .modal-body { padding: 20px 24px 4px; }
+
+        /* Двухколоночный ряд полей */
+        .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+        .modal-field { margin-bottom: 14px; }
+
+        .modal-label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 5px;
+        }
+        .modal-req { color: #e30613; }
+
+        .modal-input,
+        .modal-select,
+        .modal-textarea {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 7px;
+            font-size: 0.875rem;
+            font-family: sans-serif;
+            color: #1a1a1a;
+            background: #fafafa;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+            box-sizing: border-box;
+        }
+        .modal-input:focus,
+        .modal-select:focus,
+        .modal-textarea:focus  { border-color: #e30613; background: #fff; }
+        .modal-input.error     { border-color: #e30613; background: #fff5f5; }
+
+        .modal-textarea { resize: vertical; min-height: 70px; }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            padding: 16px 24px 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .modal-btn-submit {
+            flex: 1;
+            padding: 11px;
+            background: #e30613;
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            font-family: sans-serif;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .modal-btn-submit:hover { background: #c0050f; }
+
+        .modal-btn-cancel {
+            padding: 11px 22px;
+            background: #f5f5f5;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 7px;
+            font-size: 0.9rem;
+            font-family: sans-serif;
+            color: #555;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .modal-btn-cancel:hover { background: #ebebeb; }
+
         /* ===== РАЗДЕЛ: ИСТОРИЯ РАБОТ ===== */
 
         /* Панель поиска + фильтр периода */
@@ -2632,9 +2757,10 @@
                                 <span class="mech-busy-info">${mData.car} — ${mData.work}</span>
                             </div>`;
                         } else {
-                            return `<div class="mech-row mech-row-free">
+                            return `<div class="mech-row mech-row-free" id="mr-${dateStr}-${time.replace(':','h')}-${idx}">
                                 <span class="mech-name">${m.name}</span>
                                 <span class="mech-free-label">Свободен</span>
+                                <button class="mech-book-btn" onclick="event.stopPropagation(); openCalModal('${dateStr}','${time}',${idx})">+ Записать</button>
                             </div>`;
                         }
                     }).join('');
@@ -3347,6 +3473,85 @@
     }
 
     // ============================
+    // МОДАЛЬНОЕ ОКНО: ДОБАВЛЕНИЕ ЗАПИСИ В КАЛЕНДАРЬ
+    // ============================
+
+    // Параметры текущего открытого слота (заполняются при открытии)
+    let calModalDate    = '';
+    let calModalTime    = '';
+    let calModalMechIdx = 0;
+
+    const CAL_MONTHS_RU = [
+        'января','февраля','марта','апреля','мая','июня',
+        'июля','августа','сентября','октября','ноября','декабря'
+    ];
+    const CAL_DAYS_RU = ['вс','пн','вт','ср','чт','пт','сб'];
+
+    /* Открывает модалку, заполняет заголовок, сбрасывает форму */
+    function openCalModal(dateStr, time, mechIdx) {
+        calModalDate    = dateStr;
+        calModalTime    = time;
+        calModalMechIdx = mechIdx;
+
+        const d        = new Date(dateStr);
+        const dayLabel = `${CAL_DAYS_RU[d.getDay()]}, ${d.getDate()} ${CAL_MONTHS_RU[d.getMonth()]}`;
+        document.getElementById('modal-title').textContent =
+            `Новая запись — ${dayLabel}, ${time}, ${mechanics[mechIdx].name}`;
+
+        // Сброс полей и ошибок
+        ['m-client','m-phone','m-car','m-plate','m-comment'].forEach(id => {
+            const el = document.getElementById(id);
+            el.value = '';
+            el.classList.remove('error');
+        });
+        document.getElementById('m-work').selectedIndex     = 0;
+        document.getElementById('m-duration').selectedIndex = 0;
+        document.getElementById('m-source').selectedIndex   = 0;
+
+        document.getElementById('cal-booking-modal').classList.add('open');
+        // Фокус на первое поле
+        setTimeout(() => document.getElementById('m-client').focus(), 100);
+    }
+
+    /* Закрывает модалку */
+    function closeCalModal() {
+        document.getElementById('cal-booking-modal').classList.remove('open');
+    }
+
+    /* Клик по оверлею (вне окна) закрывает модалку */
+    function handleModalOverlayClick(e) {
+        if (e.target === document.getElementById('cal-booking-modal')) closeCalModal();
+    }
+
+    /* Валидация и сохранение записи */
+    function submitCalBooking() {
+        const clientEl = document.getElementById('m-client');
+        const client   = clientEl.value.trim();
+        if (!client) {
+            clientEl.classList.add('error');
+            clientEl.focus();
+            return;
+        }
+        clientEl.classList.remove('error');
+
+        const car  = document.getElementById('m-car').value.trim() || '—';
+        const work = document.getElementById('m-work').value;
+        const key  = `${calModalDate} ${calModalTime}`;
+
+        // Добавляем запись в calendarData — при ре-рендере слот покажет занятого механика
+        if (!calendarData[key]) calendarData[key] = [null, null, null, null];
+        calendarData[key][calModalMechIdx] = { car, work: `${work} (${client})` };
+
+        closeCalModal();
+        renderCalendar(); // перерисовываем: слот обновится визуально
+    }
+
+    // Закрытие модалки по клавише Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeCalModal();
+    });
+
+    // ============================
     // УВЕДОМЛЕНИЯ — колокольчик
     // ============================
 
@@ -3377,5 +3582,94 @@
         }
     });
 </script>
+
+<!-- ============================
+     МОДАЛЬНОЕ ОКНО: ДОБАВЛЕНИЕ ЗАПИСИ В КАЛЕНДАРЬ
+     ============================ -->
+<div class="modal-overlay" id="cal-booking-modal" onclick="handleModalOverlayClick(event)">
+    <div class="modal-window">
+
+        <div class="modal-header">
+            <div class="modal-title" id="modal-title">Новая запись</div>
+        </div>
+
+        <div class="modal-body">
+
+            <!-- Имя + телефон -->
+            <div class="modal-row">
+                <div class="modal-field">
+                    <label class="modal-label">Имя клиента <span class="modal-req">*</span></label>
+                    <input class="modal-input" id="m-client" type="text" placeholder="Имя Фамилия">
+                </div>
+                <div class="modal-field">
+                    <label class="modal-label">Телефон</label>
+                    <input class="modal-input" id="m-phone" type="text" placeholder="+371...">
+                </div>
+            </div>
+
+            <!-- Автомобиль + гос. номер -->
+            <div class="modal-row">
+                <div class="modal-field">
+                    <label class="modal-label">Автомобиль</label>
+                    <input class="modal-input" id="m-car" type="text" placeholder="BMW 320d">
+                </div>
+                <div class="modal-field">
+                    <label class="modal-label">Гос. номер</label>
+                    <input class="modal-input" id="m-plate" type="text" placeholder="AB-1234">
+                </div>
+            </div>
+
+            <!-- Вид работы + длительность -->
+            <div class="modal-row">
+                <div class="modal-field">
+                    <label class="modal-label">Вид работы</label>
+                    <select class="modal-select" id="m-work">
+                        <option>Замена масла</option>
+                        <option>Диагностика</option>
+                        <option>Тормозные колодки</option>
+                        <option>Ремень ГРМ</option>
+                        <option>Ходовая / подвеска</option>
+                        <option>Электрика</option>
+                        <option>Другое</option>
+                    </select>
+                </div>
+                <div class="modal-field">
+                    <label class="modal-label">Длительность</label>
+                    <select class="modal-select" id="m-duration">
+                        <option>1 час</option>
+                        <option>2 часа</option>
+                        <option>3 часа</option>
+                        <option>4 часа</option>
+                        <option>Весь день</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Комментарий -->
+            <div class="modal-field">
+                <label class="modal-label">Комментарий</label>
+                <textarea class="modal-textarea" id="m-comment" placeholder="Дополнительная информация..."></textarea>
+            </div>
+
+            <!-- Источник записи -->
+            <div class="modal-field">
+                <label class="modal-label">Источник записи</label>
+                <select class="modal-select" id="m-source">
+                    <option>Через RepairTech</option>
+                    <option>По телефону</option>
+                    <option>Пришёл без записи</option>
+                </select>
+            </div>
+
+        </div><!-- /modal-body -->
+
+        <div class="modal-footer">
+            <button class="modal-btn-submit" onclick="submitCalBooking()">Добавить запись</button>
+            <button class="modal-btn-cancel" onclick="closeCalModal()">Отмена</button>
+        </div>
+
+    </div><!-- /modal-window -->
+</div><!-- /cal-booking-modal -->
+
 </body>
 </html>
