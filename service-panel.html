@@ -1198,6 +1198,95 @@
         .dash-all-reviews             { display: inline-block; margin-top: 12px; font-size: 0.85rem; color: #e30613; cursor: pointer; }
         .dash-all-reviews:hover       { text-decoration: underline; }
 
+        /* ===== ЧАТ С КЛИЕНТОМ ===== */
+
+        /* Кнопка на подтверждённой карточке */
+        .chat-open-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px;
+            background: transparent;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 7px;
+            font-size: 0.82rem;
+            font-family: sans-serif;
+            color: #666;
+            cursor: pointer;
+            transition: border-color 0.15s, color 0.15s;
+            margin-top: 10px;
+        }
+        .chat-open-btn:hover { border-color: #e30613; color: #e30613; }
+
+        /* Оверлей */
+        .chat-overlay      { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 600; align-items: center; justify-content: center; padding: 20px; }
+        .chat-overlay.open { display: flex; animation: fadeIn 0.15s ease; }
+
+        /* Окно */
+        .chat-window {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 440px;
+            display: flex;
+            flex-direction: column;
+            max-height: 85vh;
+        }
+
+        /* Шапка */
+        .chat-header   { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #f0f0f0; flex-shrink: 0; }
+        .chat-title    { font-size: 0.95rem; font-weight: bold; color: #1a1a1a; }
+        .chat-close-btn {
+            width: 28px; height: 28px; border-radius: 50%; border: none; background: #f5f5f5;
+            font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            color: #888; transition: background 0.15s, color 0.15s; flex-shrink: 0;
+        }
+        .chat-close-btn:hover { background: #e8e8e8; color: #333; }
+
+        /* Область сообщений */
+        .chat-messages {
+            flex: 1; overflow-y: auto; padding: 16px;
+            display: flex; flex-direction: column; gap: 10px;
+            min-height: 200px; max-height: 300px; background: #f9f9f9;
+        }
+
+        /* Пузырь сообщения */
+        .chat-msg         { display: flex; flex-direction: column; max-width: 75%; }
+        .chat-msg-service { align-self: flex-end;  align-items: flex-end; }
+        .chat-msg-client  { align-self: flex-start; align-items: flex-start; }
+
+        .chat-bubble { padding: 9px 13px; border-radius: 12px; font-size: 0.85rem; line-height: 1.45; word-break: break-word; }
+        .chat-msg-service .chat-bubble { background: #e30613; color: #fff; border-bottom-right-radius: 3px; }
+        .chat-msg-client  .chat-bubble { background: #efefef; color: #333; border-bottom-left-radius: 3px; }
+
+        .chat-time { font-size: 0.7rem; color: #bbb; margin-top: 3px; padding: 0 3px; }
+
+        /* Быстрые шаблоны */
+        .chat-templates { display: flex; gap: 7px; padding: 10px 16px 6px; border-top: 1px solid #f0f0f0; flex-wrap: wrap; flex-shrink: 0; }
+        .chat-tmpl-btn {
+            padding: 5px 11px; background: #f5f5f5; border: 1.5px solid #e8e8e8;
+            border-radius: 14px; font-size: 0.75rem; font-family: sans-serif;
+            color: #555; cursor: pointer; white-space: nowrap;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .chat-tmpl-btn:hover { border-color: #e30613; color: #e30613; }
+
+        /* Строка ввода */
+        .chat-input-row { display: flex; gap: 8px; padding: 10px 16px 16px; flex-shrink: 0; }
+        .chat-input {
+            flex: 1; padding: 9px 12px; border: 1.5px solid #e0e0e0; border-radius: 8px;
+            font-size: 0.875rem; font-family: sans-serif; color: #1a1a1a;
+            outline: none; transition: border-color 0.2s; background: #fafafa;
+        }
+        .chat-input:focus { border-color: #e30613; background: #fff; }
+        .chat-send-btn {
+            padding: 9px 18px; background: #e30613; color: #fff; border: none; border-radius: 8px;
+            font-size: 0.875rem; font-weight: bold; font-family: sans-serif;
+            cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+        }
+        .chat-send-btn:hover { background: #c0050f; }
+
         /* ===== БЛОК СРАВНЕНИЯ С ПРОШЛЫМ МЕСЯЦЕМ (финансы) ===== */
 
         /* Легенда: серый и красный квадратики */
@@ -2339,6 +2428,11 @@
                 <button class="action-btn btn-decline" onclick="declineBooking(${b.id})">✕ Отклонить</button>
             </div>` : '';
 
+        // Кнопка чата только для подтверждённых заявок
+        const chatBtn = s === 'confirmed'
+            ? `<button class="chat-open-btn" onclick="openChatModal(${b.id})">💬 Написать клиенту</button>`
+            : '';
+
         return `
             <div class="booking-card" id="card-${b.id}">
                 <div class="booking-stripe ${stripeClass}"></div>
@@ -2354,6 +2448,7 @@
                     </div>
                     <div class="booking-purpose">🔧 ${b.purpose}</div>
                     ${actions}
+                    ${chatBtn}
                     <button class="cal-link-btn" onclick="switchToCalendar()">📅 Показать в календаре</button>
                 </div>
             </div>`;
@@ -3645,10 +3740,90 @@
         renderCalendar(); // перерисовываем: слот обновится визуально
     }
 
-    // Закрытие модалки по клавише Escape
+    // Закрытие модалок по клавише Escape
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeCalModal();
+        if (e.key === 'Escape') { closeCalModal(); closeChatModal(); }
     });
+
+    // ============================
+    // ЧАТ С КЛИЕНТОМ
+    // ============================
+
+    // История сообщений по ID заявки (хранится в памяти, не сохраняется)
+    const chatHistory = {};
+
+    // Заполняем начальные два примера сообщений для подтверждённой заявки
+    function initChatHistory(bookingId, datetime) {
+        if (chatHistory[bookingId]) return;
+        const time = datetime ? datetime.split(', ')[1] || '14:00' : '14:00';
+        chatHistory[bookingId] = [
+            { from: 'service', text: `Добрый день! Ваша запись подтверждена на ${time}`, time: '10:21' },
+            { from: 'client',  text: 'Спасибо! Буду вовремя',                            time: '10:34' },
+        ];
+    }
+
+    // Текущее время ЧЧ:ММ
+    function nowTime() {
+        const d = new Date();
+        return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    }
+
+    let activeChatId = null;
+
+    function openChatModal(bookingId) {
+        const b = bookings.find(x => x.id === bookingId);
+        if (!b) return;
+        activeChatId = bookingId;
+        initChatHistory(bookingId, b.datetime);
+        document.getElementById('chat-title').textContent = `Сообщение для ${b.client}`;
+        renderChatMessages();
+        document.getElementById('chat-overlay').classList.add('open');
+        setTimeout(() => document.getElementById('chat-input').focus(), 80);
+    }
+
+    function closeChatModal() {
+        document.getElementById('chat-overlay').classList.remove('open');
+        activeChatId = null;
+    }
+
+    function handleChatOverlayClick(e) {
+        if (e.target === document.getElementById('chat-overlay')) closeChatModal();
+    }
+
+    function renderChatMessages() {
+        const msgs = chatHistory[activeChatId] || [];
+        const area = document.getElementById('chat-messages');
+        area.innerHTML = msgs.map(m => {
+            const cls = m.from === 'service' ? 'chat-msg-service' : 'chat-msg-client';
+            return `<div class="chat-msg ${cls}">
+                <div class="chat-bubble">${escapeHtml(m.text)}</div>
+                <span class="chat-time">${m.time}</span>
+            </div>`;
+        }).join('');
+        area.scrollTop = area.scrollHeight;
+    }
+
+    function sendChatMsg() {
+        const input = document.getElementById('chat-input');
+        const text  = input.value.trim();
+        if (!text || activeChatId === null) return;
+        chatHistory[activeChatId].push({ from: 'service', text, time: nowTime() });
+        renderChatMessages();
+        input.value = '';
+        input.focus();
+    }
+
+    // Вставить шаблон в поле ввода
+    function insertTemplate(text) {
+        const input = document.getElementById('chat-input');
+        input.value = text;
+        input.focus();
+    }
+
+    // Безопасное экранирование текста сообщений
+    function escapeHtml(str) {
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
 
     // ============================
     // УВЕДОМЛЕНИЯ — колокольчик
@@ -3728,6 +3903,37 @@
         }
     });
 </script>
+
+<!-- ============================
+     МОДАЛЬНОЕ ОКНО: ЧАТ С КЛИЕНТОМ
+     ============================ -->
+<div class="chat-overlay" id="chat-overlay" onclick="handleChatOverlayClick(event)">
+    <div class="chat-window">
+
+        <div class="chat-header">
+            <span class="chat-title" id="chat-title">Сообщение</span>
+            <button class="chat-close-btn" onclick="closeChatModal()" title="Закрыть">✕</button>
+        </div>
+
+        <!-- Область сообщений -->
+        <div class="chat-messages" id="chat-messages"></div>
+
+        <!-- Быстрые шаблоны -->
+        <div class="chat-templates">
+            <button class="chat-tmpl-btn" onclick="insertTemplate('Ваш автомобиль готов к выдаче. Ждём вас!')">Машина готова</button>
+            <button class="chat-tmpl-btn" onclick="insertTemplate('Пожалуйста, перезвоните нам по номеру +371 20 123 456')">Перезвоните</button>
+            <button class="chat-tmpl-btn" onclick="insertTemplate('Обнаружены дополнительные работы. Требуется ваше согласие перед выполнением.')">Доп. работы</button>
+        </div>
+
+        <!-- Ввод сообщения -->
+        <div class="chat-input-row">
+            <input class="chat-input" id="chat-input" type="text" placeholder="Введите сообщение..."
+                   onkeydown="if(event.key==='Enter') sendChatMsg()">
+            <button class="chat-send-btn" onclick="sendChatMsg()">Отправить</button>
+        </div>
+
+    </div>
+</div>
 
 <!-- ============================
      МОДАЛЬНОЕ ОКНО: ДОБАВЛЕНИЕ ЗАПИСИ В КАЛЕНДАРЬ
