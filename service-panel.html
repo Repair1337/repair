@@ -212,6 +212,13 @@
 
         .content-header-title { font-size: 1.05rem; font-weight: bold; color: #1a1a1a; }
 
+        /* Правая часть шапки: колокольчик + название сервиса */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
         .header-online {
             display: flex;
             align-items: center;
@@ -231,6 +238,131 @@
             0%, 100% { opacity: 1; }
             50%       { opacity: 0.4; }
         }
+
+        /* ===== КОЛОКОЛЬЧИК И ПАНЕЛЬ УВЕДОМЛЕНИЙ ===== */
+
+        /* Обёртка — позиционирование дропдауна относительно неё */
+        .notif-wrap {
+            position: relative;
+        }
+
+        /* Кнопка колокольчика */
+        .notif-bell {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s;
+            flex-shrink: 0;
+        }
+        .notif-bell:hover { background: #f5f5f5; }
+
+        /* Красный бейдж с числом непрочитанных */
+        .notif-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: #e30613;
+            color: #fff;
+            font-size: 0.6rem;
+            font-weight: bold;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            line-height: 1;
+            pointer-events: none;
+        }
+        .notif-badge.hidden { display: none; }
+
+        /* Выпадающая панель */
+        .notif-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 350px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+            z-index: 200;
+            overflow: hidden;
+            animation: fadeIn 0.15s ease;
+        }
+        .notif-dropdown.open { display: block; }
+
+        /* Заголовок панели */
+        .notif-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .notif-header-title { font-size: 0.85rem; font-weight: bold; color: #1a1a1a; }
+
+        /* Список уведомлений */
+        .notif-list { padding: 4px 0; }
+
+        /* Одно уведомление */
+        .notif-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 11px 16px;
+            cursor: default;
+            transition: background 0.1s;
+        }
+        /* Непрочитанные — слегка выделены */
+        .notif-item.unread { background: #fffbf0; }
+        .notif-item.unread:hover { background: #fff5df; }
+        .notif-item.read:hover   { background: #fafafa; }
+
+        /* Цветная точка слева */
+        .notif-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+        .notif-dot.orange { background: #f59e0b; }
+        .notif-dot.green  { background: #22c55e; }
+        .notif-dot.grey   { background: #d1d5db; }
+
+        /* Текст уведомления */
+        .notif-body { flex: 1; min-width: 0; }
+        .notif-text { font-size: 0.82rem; color: #333; line-height: 1.45; margin-bottom: 2px; }
+        .notif-time { font-size: 0.75rem; color: #bbb; }
+
+        /* Кнопка "отметить все" */
+        .notif-footer {
+            padding: 10px 16px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .notif-mark-btn {
+            width: 100%;
+            padding: 9px;
+            background: #f5f5f5;
+            border: 1.5px solid #e8e8e8;
+            border-radius: 7px;
+            font-size: 0.82rem;
+            font-family: sans-serif;
+            color: #555;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .notif-mark-btn:hover { background: #efefef; border-color: #d5d5d5; }
 
         .content-body { padding: 28px; flex: 1; }
 
@@ -941,6 +1073,150 @@
             border-bottom: none;
             background: #fafafa;
         }
+
+        /* ===== РАЗДЕЛ: ДАШБОРД ===== */
+
+        /* Заголовок с приветствием и датой */
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 24px;
+        }
+        .dash-greeting { font-size: 1.4rem; font-weight: bold; color: #1a1a1a; }
+        .dash-date     { font-size: 0.9rem; color: #888; }
+
+        /* Четыре карточки быстрой сводки */
+        .dash-quick-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .dash-quick-card {
+            border-radius: 12px;
+            padding: 22px 20px;
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+        }
+        .dash-quick-card:hover          { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+        .dash-quick-card.no-click       { cursor: default; }
+        .dash-quick-card.no-click:hover { transform: none; box-shadow: none; }
+
+        .dash-qcard-icon  { font-size: 1.8rem; margin-bottom: 8px; line-height: 1; }
+        .dash-qcard-value { font-size: 2.4rem; font-weight: bold; line-height: 1; margin-bottom: 6px; }
+        .dash-qcard-label { font-size: 0.78rem; opacity: 0.88; letter-spacing: 0.3px; }
+
+        .dash-qcard-orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .dash-qcard-blue   { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .dash-qcard-green  { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .dash-qcard-yellow { background: linear-gradient(135deg, #eab308, #ca8a04); }
+
+        /* Общий блок дашборда (белый с тенью) */
+        .dash-block {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 20px 24px;
+            margin-bottom: 20px;
+        }
+
+        .dash-block-title {
+            font-size: 0.78rem;
+            font-weight: bold;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Дата справа в заголовке блока */
+        .dash-block-date {
+            font-size: 0.875rem;
+            font-weight: bold;
+            color: #333;
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        /* Таблица расписания на сегодня */
+        .dash-schedule-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+
+        .dash-schedule-table th {
+            text-align: left;
+            padding: 8px 10px;
+            font-size: 0.72rem;
+            color: #aaa;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dash-schedule-table td {
+            padding: 10px 10px;
+            color: #333;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .dash-schedule-table tr:last-child td { border-bottom: none; }
+
+        /* Цвет фона строк по статусу */
+        .sched-row-waiting td { background: #fffbeb; }
+        .sched-row-free td    { background: #f0fdf4; }
+
+        .sched-badge { font-size: 0.8rem; font-weight: bold; white-space: nowrap; }
+
+        /* Нижний ряд: два блока рядом */
+        .dash-bottom-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Отзывы в дашборде */
+        .dash-review-item             { border-bottom: 1px solid #f0f0f0; padding: 12px 0; }
+        .dash-review-item:first-child { padding-top: 0; }
+        .dash-review-item:last-child  { border-bottom: none; padding-bottom: 0; }
+        .dash-review-meta             { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+        .dash-review-name             { font-weight: bold; font-size: 0.9rem; color: #1a1a1a; }
+        .dash-review-stars            { color: #f59e0b; font-size: 0.85rem; }
+        .dash-review-date             { font-size: 0.75rem; color: #bbb; }
+        .dash-review-text             { font-size: 0.875rem; color: #555; line-height: 1.5; }
+        .dash-all-reviews             { display: inline-block; margin-top: 12px; font-size: 0.85rem; color: #e30613; cursor: pointer; }
+        .dash-all-reviews:hover       { text-decoration: underline; }
+
+        /* Кнопки быстрых действий */
+        .dash-action-btn {
+            display: block;
+            width: 100%;
+            padding: 12px 18px;
+            background: #f5f5f5;
+            border: 1.5px solid #e8e8e8;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: sans-serif;
+            color: #444;
+            cursor: pointer;
+            text-align: left;
+            margin-bottom: 10px;
+            transition: background 0.15s, border-color 0.15s, transform 0.1s;
+        }
+        .dash-action-btn:last-child { margin-bottom: 0; }
+        .dash-action-btn:hover      { background: #efefef; border-color: #d0d0d0; transform: translateX(3px); }
+        .dash-action-btn:active     { transform: scale(0.97); }
     </style>
 </head>
 <body>
@@ -980,10 +1256,14 @@
         <hr class="sidebar-divider">
 
         <nav>
+            <!-- Главная — первый пункт, активен по умолчанию после логина -->
+            <div class="nav-item active" data-section="home" onclick="switchSection(this)">
+                <span class="nav-icon">🏠</span> Главная
+            </div>
             <div class="nav-item" data-section="profile" onclick="switchSection(this)">
                 <span class="nav-icon">👤</span> Профиль
             </div>
-            <div class="nav-item active" data-section="bookings" onclick="switchSection(this)">
+            <div class="nav-item" data-section="bookings" onclick="switchSection(this)">
                 <span class="nav-icon">📋</span> Записи
             </div>
             <div class="nav-item" data-section="calendar" onclick="switchSection(this)">
@@ -1009,14 +1289,233 @@
     <div class="content-area">
 
         <div class="content-header">
-            <div class="content-header-title" id="section-title">Записи</div>
-            <div class="header-online">
-                <div class="online-dot"></div>
-                AutoPro Riga
-            </div>
+            <div class="content-header-title" id="section-title">Главная</div>
+
+            <!-- Правая часть шапки: колокольчик + название сервиса -->
+            <div class="header-right">
+
+                <!-- Колокольчик с выпадающей панелью уведомлений -->
+                <div class="notif-wrap" id="notif-wrap">
+                    <button class="notif-bell" onclick="toggleNotif(event)" title="Уведомления">
+                        🔔
+                        <span class="notif-badge" id="notif-badge">3</span>
+                    </button>
+
+                    <div class="notif-dropdown" id="notif-dropdown">
+                        <div class="notif-header">
+                            <span class="notif-header-title">Уведомления</span>
+                        </div>
+
+                        <div class="notif-list" id="notif-list">
+                            <!-- Уведомление 1 — новая заявка, непрочитано -->
+                            <div class="notif-item unread" data-id="1">
+                                <span class="notif-dot orange"></span>
+                                <div class="notif-body">
+                                    <div class="notif-text">Новая заявка от Андрей П. — VW Golf 7, замена масла</div>
+                                    <div class="notif-time">5 мин назад</div>
+                                </div>
+                            </div>
+                            <!-- Уведомление 2 — новая заявка, непрочитано -->
+                            <div class="notif-item unread" data-id="2">
+                                <span class="notif-dot orange"></span>
+                                <div class="notif-body">
+                                    <div class="notif-text">Новая заявка от Елена С. — Toyota Corolla, диагностика</div>
+                                    <div class="notif-time">32 мин назад</div>
+                                </div>
+                            </div>
+                            <!-- Уведомление 3 — новая заявка, непрочитано -->
+                            <div class="notif-item unread" data-id="3">
+                                <span class="notif-dot orange"></span>
+                                <div class="notif-body">
+                                    <div class="notif-text">Новая заявка от Виктор К. — Audi A4, ремень ГРМ</div>
+                                    <div class="notif-time">1 час назад</div>
+                                </div>
+                            </div>
+                            <!-- Уведомление 4 — отзыв, прочитано -->
+                            <div class="notif-item read" data-id="4">
+                                <span class="notif-dot green"></span>
+                                <div class="notif-body">
+                                    <div class="notif-text">Клиент Марис Б. оставил отзыв ⭐⭐⭐⭐⭐</div>
+                                    <div class="notif-time">вчера</div>
+                                </div>
+                            </div>
+                            <!-- Уведомление 5 — напоминание, прочитано -->
+                            <div class="notif-item read" data-id="5">
+                                <span class="notif-dot grey"></span>
+                                <div class="notif-body">
+                                    <div class="notif-text">Напоминание: заказ запчастей для BMW 320d</div>
+                                    <div class="notif-time">вчера</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="notif-footer">
+                            <button class="notif-mark-btn" onclick="markAllRead()">Отметить все как прочитанные</button>
+                        </div>
+                    </div>
+                </div><!-- /notif-wrap -->
+
+                <div class="header-online">
+                    <div class="online-dot"></div>
+                    AutoPro Riga
+                </div>
+            </div><!-- /header-right -->
         </div>
 
         <div class="content-body">
+
+            <!-- ==================
+                 РАЗДЕЛ: ДАШБОРД — показывается сразу после логина
+                 ================== -->
+            <div class="section active" id="section-home">
+
+                <!-- Приветствие + дата -->
+                <div class="dash-header">
+                    <div class="dash-greeting">Добрый день, AutoPro Riga</div>
+                    <div class="dash-date" id="dash-today-date"></div>
+                </div>
+
+                <!-- Блок 1: Четыре карточки быстрой сводки -->
+                <div class="dash-quick-grid">
+                    <!-- Кликабельно — переход в Записи -->
+                    <div class="dash-quick-card dash-qcard-orange" onclick="switchSectionById('bookings')">
+                        <div class="dash-qcard-icon">📋</div>
+                        <div class="dash-qcard-value">3</div>
+                        <div class="dash-qcard-label">Новые заявки</div>
+                    </div>
+                    <!-- Кликабельно — переход в Календарь -->
+                    <div class="dash-quick-card dash-qcard-blue" onclick="switchSectionById('calendar')">
+                        <div class="dash-qcard-icon">📅</div>
+                        <div class="dash-qcard-value">5</div>
+                        <div class="dash-qcard-label">Записей сегодня</div>
+                    </div>
+                    <!-- Не кликабельно — только информация -->
+                    <div class="dash-quick-card dash-qcard-green no-click">
+                        <div class="dash-qcard-icon">⚡</div>
+                        <div class="dash-qcard-value">78%</div>
+                        <div class="dash-qcard-label">Загрузка сегодня</div>
+                    </div>
+                    <!-- Не кликабельно — только информация -->
+                    <div class="dash-quick-card dash-qcard-yellow no-click">
+                        <div class="dash-qcard-icon">⭐</div>
+                        <div class="dash-qcard-value">4.7</div>
+                        <div class="dash-qcard-label">Рейтинг</div>
+                    </div>
+                </div>
+
+                <!-- Блок 2: Расписание на сегодня -->
+                <div class="dash-block">
+                    <div class="dash-block-title">
+                        <span>Расписание</span>
+                        <span class="dash-block-date">Сегодня, 27 апреля</span>
+                    </div>
+                    <table class="dash-schedule-table">
+                        <thead>
+                            <tr>
+                                <th>Время</th>
+                                <th>Клиент</th>
+                                <th>Автомобиль</th>
+                                <th>Работа</th>
+                                <th>Механик</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>10:00</td>
+                                <td>Андрей П.</td>
+                                <td>VW Golf 7</td>
+                                <td>Замена масла</td>
+                                <td>Алексей К.</td>
+                                <td><span class="sched-badge">✅ Подтверждено</span></td>
+                            </tr>
+                            <tr>
+                                <td>11:00</td>
+                                <td>Елена С.</td>
+                                <td>Toyota Corolla</td>
+                                <td>Диагностика</td>
+                                <td>Дмитрий В.</td>
+                                <td><span class="sched-badge">✅ Подтверждено</span></td>
+                            </tr>
+                            <!-- Ожидающая запись — оранжевый фон -->
+                            <tr class="sched-row-waiting">
+                                <td>13:00</td>
+                                <td>Марис Б.</td>
+                                <td>BMW 320d</td>
+                                <td>Тормозные колодки</td>
+                                <td>Марис Л.</td>
+                                <td><span class="sched-badge">⏳ Ожидает</span></td>
+                            </tr>
+                            <!-- Свободный слот — зелёный фон -->
+                            <tr class="sched-row-free">
+                                <td>14:00</td>
+                                <td>Свободно</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td><span class="sched-badge">🟢 Свободно</span></td>
+                            </tr>
+                            <tr>
+                                <td>15:00</td>
+                                <td>Виктор К.</td>
+                                <td>Audi A4 2.0 TDI</td>
+                                <td>Ремень ГРМ</td>
+                                <td>Алексей К.</td>
+                                <td><span class="sched-badge">✅ Подтверждено</span></td>
+                            </tr>
+                            <!-- Свободный слот — зелёный фон -->
+                            <tr class="sched-row-free">
+                                <td>16:00</td>
+                                <td>Свободно</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td>—</td>
+                                <td><span class="sched-badge">🟢 Свободно</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Блок 3: Нижний ряд — отзывы + быстрые действия -->
+                <div class="dash-bottom-row">
+
+                    <!-- Левый блок: Последние отзывы -->
+                    <div class="dash-block" style="margin-bottom:0">
+                        <div class="dash-block-title"><span>Последние отзывы</span></div>
+                        <div class="dash-review-item">
+                            <div class="dash-review-meta">
+                                <span class="dash-review-name">Мартиньш К.</span>
+                                <span class="dash-review-stars">★★★★★</span>
+                                <span class="dash-review-date">18 апр. 2026</span>
+                            </div>
+                            <div class="dash-review-text">Быстро и качественно. Поменяли масло и фильтр за 40 минут, без очереди.</div>
+                        </div>
+                        <div class="dash-review-item">
+                            <div class="dash-review-meta">
+                                <span class="dash-review-name">Анна Л.</span>
+                                <span class="dash-review-stars">★★★★☆</span>
+                                <span class="dash-review-date">15 апр. 2026</span>
+                            </div>
+                            <div class="dash-review-text">Записалась онлайн, приняли вовремя. Диагностика ясная, цена адекватная.</div>
+                        </div>
+                        <!-- Переход в раздел Статистика → отзывы -->
+                        <span class="dash-all-reviews" onclick="switchSectionById('stats')">Все отзывы →</span>
+                    </div>
+
+                    <!-- Правый блок: Быстрые действия -->
+                    <div class="dash-block" style="margin-bottom:0">
+                        <div class="dash-block-title"><span>Быстрые действия</span></div>
+                        <!-- Функция пока не реализована -->
+                        <button class="dash-action-btn" onclick="alert('Функция в разработке')">➕ Добавить запись вручную</button>
+                        <!-- Открываем форму сметы в новой вкладке -->
+                        <button class="dash-action-btn" onclick="window.open('smeta.html', '_blank')">🧾 Создать смету</button>
+                        <!-- Переходим в Профиль → вкладка Финансы -->
+                        <button class="dash-action-btn" onclick="openProfileFinance()">📊 Финансовый отчёт</button>
+                    </div>
+
+                </div>
+
+            </div><!-- /section-home -->
 
             <!-- ==================
                  РАЗДЕЛ: ПРОФИЛЬ (три вкладки: Информация / Финансы / Учёт часов)
@@ -1213,7 +1712,7 @@
             <!-- ==================
                  РАЗДЕЛ: ЗАПИСИ
                  ================== -->
-            <div class="section active" id="section-bookings">
+            <div class="section" id="section-bookings">
                 <div class="booking-tabs">
                     <button class="tab-btn active" onclick="filterBookings('new', this)">Новые (3)</button>
                     <button class="tab-btn" onclick="filterBookings('confirmed', this)">Подтверждённые (2)</button>
@@ -1331,7 +1830,11 @@
         document.getElementById('login-screen').style.display = 'none';
         const dash = document.getElementById('dashboard-screen');
         dash.style.display = 'flex';
-        renderBookings();
+        // Активируем раздел "Главная" по умолчанию
+        const homeNav = document.querySelector('.nav-item[data-section="home"]');
+        switchSection(homeNav);
+        initDashDate();
+        renderBookings(); // предзагружаем данные раздела "Записи"
     }
 
     function doLogout() {
@@ -1345,6 +1848,7 @@
     // ПЕРЕКЛЮЧЕНИЕ РАЗДЕЛОВ МЕНЮ
     // ============================
     const sectionTitles = {
+        home:      'Главная',
         profile:   'Профиль',
         stats:     'Статистика',
         bookings:  'Записи',
@@ -1366,10 +1870,34 @@
         if (target === 'calendar') renderCalendar();
     }
 
+    // Быстрый переход в любой раздел по имени секции (используется в дашборде и карточках)
+    function switchSectionById(sectionId) {
+        const navItem = document.querySelector(`.nav-item[data-section="${sectionId}"]`);
+        if (navItem) switchSection(navItem);
+    }
+
     // Быстрый переход в календарь из карточки заявки
     function switchToCalendar() {
-        const calNav = document.querySelector('.nav-item[data-section="calendar"]');
-        switchSection(calNav);
+        switchSectionById('calendar');
+    }
+
+    // Переход в Профиль → вкладка Финансы (из кнопки быстрых действий на дашборде)
+    function openProfileFinance() {
+        switchSectionById('profile');
+        // Ищем кнопку вкладки "Финансы" и активируем её
+        const finBtn = document.querySelector('.profile-tab[onclick*="finance"]');
+        if (finBtn) switchProfileTab('finance', finBtn);
+    }
+
+    // Устанавливает сегодняшнюю дату в шапке дашборда
+    function initDashDate() {
+        const months = [
+            'января','февраля','марта','апреля','мая','июня',
+            'июля','августа','сентября','октября','ноября','декабря'
+        ];
+        const now = new Date();
+        const el = document.getElementById('dash-today-date');
+        if (el) el.textContent = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
     }
 
     // ============================
@@ -2304,6 +2832,37 @@
             </table>
         </div>`;
     }
+
+    // ============================
+    // УВЕДОМЛЕНИЯ — колокольчик
+    // ============================
+
+    // Открыть / закрыть дропдаун
+    function toggleNotif(e) {
+        e.stopPropagation();
+        document.getElementById('notif-dropdown').classList.toggle('open');
+    }
+
+    // Отметить все уведомления как прочитанные
+    function markAllRead() {
+        // Убираем фон непрочитанных и меняем точки на серые
+        document.querySelectorAll('.notif-item.unread').forEach(item => {
+            item.classList.remove('unread');
+            item.classList.add('read');
+            item.querySelector('.notif-dot').className = 'notif-dot grey';
+        });
+        // Скрываем бейдж на колокольчике
+        document.getElementById('notif-badge').classList.add('hidden');
+    }
+
+    // Клик вне панели закрывает её
+    document.addEventListener('click', function(e) {
+        const wrap = document.getElementById('notif-wrap');
+        const dropdown = document.getElementById('notif-dropdown');
+        if (wrap && !wrap.contains(e.target)) {
+            dropdown.classList.remove('open');
+        }
+    });
 </script>
 </body>
 </html>
