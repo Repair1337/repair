@@ -1899,6 +1899,32 @@
                             <tr><td>Технический осмотр (подготовка)</td><td>от 30 €</td></tr>
                         </table>
                     </div>
+
+                    <!-- QR-код сервиса -->
+                    <div class="profile-block">
+                        <h3>QR-код вашего сервиса</h3>
+                        <div style="text-align:center; padding-top:4px;">
+                            <!-- SVG заполняется JavaScript-ом при загрузке страницы -->
+                            <svg id="qr-svg" width="200" height="200" xmlns="http://www.w3.org/2000/svg"
+                                 style="display:block; margin:0 auto; border:1px solid #e8e8e8; border-radius:6px; background:#fff;"></svg>
+                            <p style="font-size:0.875rem; color:#777; margin:14px 0 16px; line-height:1.5;">
+                                Клиент сканирует код и попадает на страницу записи вашего сервиса
+                            </p>
+                            <div style="display:flex; gap:10px; justify-content:center;">
+                                <button onclick="alert('Функция в разработке')"
+                                    style="padding:9px 18px; background:#f5f5f5; border:1.5px solid #e0e0e0; border-radius:7px; font-size:0.875rem; font-family:sans-serif; color:#555; cursor:pointer; transition:border-color .15s,color .15s;"
+                                    onmouseover="this.style.borderColor='#aaa'" onmouseout="this.style.borderColor='#e0e0e0'">
+                                    📥 Скачать QR-код
+                                </button>
+                                <button onclick="alert('Функция в разработке')"
+                                    style="padding:9px 18px; background:#f5f5f5; border:1.5px solid #e0e0e0; border-radius:7px; font-size:0.875rem; font-family:sans-serif; color:#555; cursor:pointer; transition:border-color .15s,color .15s;"
+                                    onmouseover="this.style.borderColor='#aaa'" onmouseout="this.style.borderColor='#e0e0e0'">
+                                    🖨 Распечатать
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div><!-- /ptab-info -->
 
                 <!-- ===== Вкладка: Финансы ===== -->
@@ -3572,6 +3598,53 @@
         // Скрываем бейдж на колокольчике
         document.getElementById('notif-badge').classList.add('hidden');
     }
+
+    // ============================
+    // QR-КОД — декоративный SVG с реалистичным паттерном
+    // Три угловых маркера (finder patterns) как у настоящего QR
+    // ============================
+    (function buildQrSvg() {
+        // Матрица 21×21: 1 = чёрный модуль, 0 = белый
+        // Угловые маркеры (7×7) в трёх углах, разделители, timing-паттерны
+        const M = [
+            [1,1,1,1,1,1,1, 0, 1,0,1,1,0,0, 1,1,1,1,1,1,1],
+            [1,0,0,0,0,0,1, 0, 1,1,0,1,1,0, 1,0,0,0,0,0,1],
+            [1,0,1,1,1,0,1, 0, 0,1,1,0,1,0, 1,0,1,1,1,0,1],
+            [1,0,1,1,1,0,1, 0, 1,0,0,1,0,0, 1,0,1,1,1,0,1],
+            [1,0,1,1,1,0,1, 0, 0,1,1,0,1,0, 1,0,1,1,1,0,1],
+            [1,0,0,0,0,0,1, 0, 1,1,0,1,0,0, 1,0,0,0,0,0,1],
+            [1,1,1,1,1,1,1, 0, 1,0,1,0,1,0, 1,1,1,1,1,1,1],
+            [0,0,0,0,0,0,0, 0, 0,1,0,1,0,0, 0,0,0,0,0,0,0],
+            [1,0,1,0,1,1,1, 1, 1,0,1,0,1,1, 0,1,0,1,1,0,1],
+            [0,1,0,1,0,0,0, 0, 0,1,0,1,0,0, 1,0,1,0,0,1,0],
+            [1,1,0,0,1,0,1, 1, 1,0,1,0,1,1, 1,0,0,1,0,1,1],
+            [0,0,1,1,0,1,0, 0, 0,1,0,1,0,0, 0,1,1,0,1,0,0],
+            [1,0,1,0,1,0,1, 1, 1,0,1,0,1,0, 1,0,1,1,0,1,1],
+            [0,0,0,0,0,0,0, 0, 1,1,0,1,0,1, 0,1,0,0,1,0,0],
+            [1,1,1,1,1,1,1, 0, 0,0,1,0,1,0, 1,0,1,1,0,0,1],
+            [1,0,0,0,0,0,1, 0, 1,1,0,1,0,1, 0,1,0,0,1,1,0],
+            [1,0,1,1,1,0,1, 0, 0,0,1,0,1,0, 1,1,0,1,0,0,1],
+            [1,0,1,1,1,0,1, 0, 1,1,0,1,0,1, 0,0,1,0,1,1,0],
+            [1,0,1,1,1,0,1, 0, 0,0,1,0,1,0, 1,0,0,1,1,0,1],
+            [1,0,0,0,0,0,1, 0, 1,0,0,1,0,1, 0,1,1,0,0,1,0],
+            [1,1,1,1,1,1,1, 0, 0,1,1,0,1,0, 1,0,0,1,0,0,1],
+        ];
+        const cs  = 9;                             // размер одного модуля в px
+        const off = Math.round((200 - 21 * cs) / 2); // отступ от края (~5px)
+        const svg = document.getElementById('qr-svg');
+        if (!svg) return;
+        const parts = [];
+        M.forEach((row, r) => {
+            row.forEach((cell, c) => {
+                if (cell) {
+                    parts.push(
+                        `<rect x="${off + c * cs}" y="${off + r * cs}" width="${cs}" height="${cs}" fill="#1a1a1a"/>`
+                    );
+                }
+            });
+        });
+        svg.innerHTML = parts.join('');
+    })();
 
     // Клик вне панели закрывает её
     document.addEventListener('click', function(e) {
