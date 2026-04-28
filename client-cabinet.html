@@ -69,12 +69,19 @@
         .price-badge-premium { background: #f3e8ff; color: #7a3abf; }
 
         /* ===== ПОИСК СЕРВИСОВ ===== */
-        .search-bar-wrap { margin-bottom: 16px; }
-        .search-input { width: 100%; padding: 12px 18px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 0.95rem; font-family: sans-serif; outline: none; background: #fff; transition: border-color 0.15s; }
+        /* Строка поиска с кнопкой фильтров */
+        .search-bar-wrap { margin-bottom: 12px; display: flex; gap: 10px; align-items: center; }
+        .search-input { flex: 1; min-width: 0; padding: 12px 18px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 0.95rem; font-family: sans-serif; outline: none; background: #fff; transition: border-color 0.15s; }
         .search-input:focus { border-color: #e30613; }
 
-        /* Панель фильтров — четыре группы тегов */
-        .filter-panel { background: #fff; border: 1px solid #e8e8e8; border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 13px; }
+        /* Кнопка раскрытия панели фильтров */
+        .filter-toggle-btn { padding: 10px 16px; border: 2px solid #e0e0e0; border-radius: 8px; background: #fff; font-size: 0.88rem; font-family: sans-serif; color: #555; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: border-color 0.15s, color 0.15s, background 0.15s; }
+        .filter-toggle-btn:hover { border-color: #e30613; color: #e30613; }
+        .filter-toggle-btn.has-filters { border-color: #e30613; color: #e30613; background: #fff5f5; font-weight: 700; }
+
+        /* Панель фильтров — по умолчанию скрыта, раскрывается плавно */
+        .filter-panel { background: #fff; border: 1px solid #e8e8e8; border-radius: 10px; display: flex; flex-direction: column; gap: 13px; overflow: hidden; max-height: 0; padding: 0 20px; margin-bottom: 0; transition: max-height 0.3s ease, padding 0.3s ease, margin 0.3s ease; }
+        .filter-panel.open { max-height: 600px; padding: 16px 20px; margin-bottom: 20px; }
         .filter-group-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #bbb; margin-bottom: 6px; }
         .filter-tags { display: flex; gap: 6px; flex-wrap: wrap; }
         .filter-tag { padding: 5px 13px; border: 1px solid #e0e0e0; border-radius: 20px; background: #fff; font-size: 0.81rem; font-family: sans-serif; color: #555; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
@@ -365,15 +372,16 @@
         <section class="section active" id="sect-search">
             <div class="sect-title">🔍 Найти автосервис</div>
 
-            <!-- Строка поиска -->
+            <!-- Строка поиска + кнопка раскрытия фильтров -->
             <div class="search-bar-wrap">
                 <input class="search-input" type="text" id="search-input"
                        placeholder="Поиск по названию, адресу или специализации..."
                        oninput="onSearchInput(this.value)">
+                <button class="filter-toggle-btn" id="filter-toggle-btn" onclick="toggleFilterPanel()">⚙ Фильтры</button>
             </div>
 
-            <!-- Панель фильтров: четыре группы тегов -->
-            <div class="filter-panel">
+            <!-- Панель фильтров: скрыта по умолчанию, раскрывается кнопкой выше -->
+            <div class="filter-panel" id="filter-panel">
 
                 <!-- Группа 1: Специализация -->
                 <div class="filter-group">
@@ -880,7 +888,27 @@ function setFilterTag(group, value, btn) {
         btn.closest('.filter-tags').querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
         btn.classList.add('active');
     }
+    updateFilterBadge();
     renderServiceCards();
+}
+
+// ── Раскрыть / свернуть панель фильтров ──────────────────────────────
+function toggleFilterPanel() {
+    document.getElementById('filter-panel').classList.toggle('open');
+}
+
+// Обновить кнопку: показать красный счётчик активных фильтров
+function updateFilterBadge() {
+    const count = [
+        filters.spec  !== 'all',
+        filters.brand !== 'all',
+        filters.rating !== 'any',
+        filters.price !== 'any'
+    ].filter(Boolean).length;
+
+    const btn = document.getElementById('filter-toggle-btn');
+    btn.textContent = count > 0 ? `⚙ Фильтры (${count})` : '⚙ Фильтры';
+    btn.classList.toggle('has-filters', count > 0);
 }
 
 // ── Фильтрация: возвращает подходящие сервисы ─────────────────────────
