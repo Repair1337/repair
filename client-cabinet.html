@@ -2,7 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#e30613">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23e30613'/><text x='50' y='72' font-family='sans-serif' font-size='65' font-weight='bold' fill='white' text-anchor='middle'>R</text></svg>">
     <title>RepairTech — Личный кабинет клиента</title>
     <style>
@@ -296,17 +299,300 @@
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         /* ===== АДАПТИВ ===== */
-        @media (max-width: 720px) {
-            .cars-grid, .service-cards-grid { grid-template-columns: 1fr; }
-            .months-grid { grid-template-columns: repeat(3, 1fr); }
-            .booking-card { flex-wrap: wrap; }
-            .bk-actions { width: 100%; margin-top: 6px; }
-        }
-        @media (max-width: 600px) {
-            .nav-btn { padding: 6px 6px; font-size: 0.72rem; }
-            .cab-nav { gap: 0; }
-            .months-grid { grid-template-columns: repeat(2, 1fr); }
-            .week-grid { grid-template-columns: repeat(7, minmax(38px, 1fr)); overflow-x: auto; }
+
+        /* Мобильные UI-элементы скрыты на десктопе по умолчанию */
+        .mob-header, .mob-menu-overlay, .mob-side-menu,
+        .mob-bottom-nav, .mob-day-nav { display: none; }
+
+        /* ─── Мобильные стили (≤ 768px) ─── */
+        @media (max-width: 768px) {
+
+            /* Скрыть десктопную шапку */
+            .cab-header { display: none; }
+
+            /* Мобильная фиксированная шапка */
+            .mob-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                position: fixed;
+                top: 0; left: 0; right: 0;
+                height: 56px;
+                background: #fff;
+                border-bottom: 3px solid #e30613;
+                padding: 0 16px;
+                z-index: 150;
+            }
+            .mob-logo {
+                font-size: 1.4rem;
+                font-weight: 800;
+                color: #e30613;
+                letter-spacing: -0.5px;
+            }
+            /* Кнопка бургер-меню */
+            .mob-burger {
+                background: none;
+                border: none;
+                font-size: 1.6rem;
+                cursor: pointer;
+                min-width: 44px; min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 8px;
+                color: #333;
+                padding: 0;
+                transition: background 0.15s;
+            }
+            .mob-burger:active { background: #f0f0f0; }
+
+            /* Полупрозрачный фон за боковым меню */
+            .mob-menu-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 160;
+                animation: mobFadeIn 0.25s ease;
+            }
+            .mob-menu-overlay.show { display: block; }
+
+            @keyframes mobFadeIn { from { opacity:0; } to { opacity:1; } }
+
+            /* Боковое меню: выезжает справа */
+            .mob-side-menu {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 0; right: 0; bottom: 0;
+                width: 280px;
+                background: #fff;
+                z-index: 170;
+                padding: 12px 0 24px;
+                transform: translateX(100%);
+                transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+                box-shadow: -4px 0 20px rgba(0,0,0,0.12);
+                overflow-y: auto;
+            }
+            .mob-side-menu.open { transform: translateX(0); }
+
+            /* Крестик закрытия бокового меню */
+            .mob-side-close {
+                background: none;
+                border: none;
+                font-size: 1.3rem;
+                color: #aaa;
+                cursor: pointer;
+                align-self: flex-end;
+                min-width: 44px; min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0 16px;
+                margin-bottom: 4px;
+            }
+            .mob-side-close:active { color: #333; }
+
+            /* Пункты бокового меню — минимум 52px (удобно для пальца) */
+            .mob-side-item {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                text-align: left;
+                background: none;
+                border: none;
+                font-size: 1rem;
+                font-family: sans-serif;
+                color: #333;
+                padding: 0 20px;
+                min-height: 52px;
+                cursor: pointer;
+                border-left: 3px solid transparent;
+                transition: background 0.12s;
+            }
+            .mob-side-item:active { background: #f5f5f5; }
+            .mob-side-item.active {
+                color: #e30613;
+                font-weight: 700;
+                background: rgba(227,6,19,0.05);
+                border-left-color: #e30613;
+            }
+
+            /* Кнопка "Выйти" в боковом меню */
+            .mob-side-logout {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: calc(100% - 32px);
+                margin: 16px 16px 0;
+                background: none;
+                border: 1px solid #e0e0e0;
+                font-size: 0.95rem;
+                font-family: sans-serif;
+                color: #999;
+                min-height: 48px;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: background 0.12s, color 0.12s;
+            }
+            .mob-side-logout:active { background: #f5f5f5; color: #555; }
+
+            /* Нижняя панель навигации (как в мобильных приложениях) */
+            .mob-bottom-nav {
+                display: flex;
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                height: 60px;
+                background: #fff;
+                border-top: 1px solid #e8e8e8;
+                z-index: 150;
+                box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+                padding-bottom: env(safe-area-inset-bottom, 0);
+            }
+            /* Кнопки нижней панели: минимум 44px (стандарт Apple) */
+            .mob-bottom-btn {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background: none;
+                border: none;
+                cursor: pointer;
+                gap: 2px;
+                padding: 0;
+                color: #aaa;
+                min-height: 44px;
+                transition: color 0.15s;
+            }
+            .mob-bottom-btn:active { opacity: 0.65; }
+            .mob-bottom-icon { font-size: 1.25rem; line-height: 1; }
+            .mob-bottom-label { font-size: 0.63rem; font-family: sans-serif; letter-spacing: 0.01em; }
+            .mob-bottom-btn.active { color: #e30613; }
+            .mob-bottom-btn.active .mob-bottom-label { font-weight: 700; }
+
+            /* Основной контент: отступы для фиксированных шапки и панели */
+            .cab-main { padding: 76px 16px 80px; max-width: 100%; }
+
+            /* Логин: карточка на всю ширину с крупными полями */
+            .login-box { margin: 0 16px; padding: 28px 20px; border-radius: 12px; }
+            /* font-size: 16px предотвращает авто-зум на iOS */
+            .login-field input { height: 48px; font-size: 16px; padding: 0 14px; }
+            .login-btn { height: 52px; font-size: 1.05rem; }
+
+            /* Поиск: элементы стекаются вертикально на всю ширину */
+            .search-bar-wrap { flex-direction: column; gap: 8px; align-items: stretch; }
+            .search-input { width: 100%; height: 48px; font-size: 16px; padding: 0 16px; }
+            .filter-toggle-btn { width: 100%; height: 48px; font-size: 0.95rem; text-align: center; }
+
+            /* Сортировка вертикально */
+            .sort-row { flex-direction: column; align-items: flex-start; gap: 8px; margin-bottom: 12px; }
+            .sort-select { width: 100%; height: 44px; font-size: 16px; }
+
+            /* Карточки сервисов: одна колонка */
+            .service-cards-grid { grid-template-columns: 1fr; gap: 14px; }
+            .service-card { border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+            /* Убрать hover на тачскрине, заменить на active */
+            .service-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); transform: none; }
+            .service-card:active { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+            /* Фото-заглушка */
+            .srv-photo { height: 120px; }
+            /* Кнопки карточки сервиса на всю ширину */
+            .srv-btns { flex-direction: column; gap: 8px; }
+            .srv-btns .btn-sm {
+                width: 100%; height: 48px; font-size: 0.95rem;
+                display: flex; align-items: center; justify-content: center;
+                border-radius: 8px; padding: 0;
+            }
+
+            /* Мои машины: одна колонка */
+            .cars-grid { grid-template-columns: 1fr; gap: 14px; }
+            .car-card { border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+            .car-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); transform: none; }
+            .car-card:active { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+            .car-btns .btn-sm { min-height: 44px; }
+
+            /* Мои записи */
+            .booking-list { gap: 12px; }
+            .booking-card {
+                flex-wrap: wrap; border-radius: 12px;
+                padding: 14px 14px; gap: 12px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            }
+            .booking-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+            .booking-card:active { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+            .bk-actions { width: 100%; margin-top: 0; }
+            .btn-cancel, .btn-review { display: block; width: 100%; height: 44px; font-size: 0.9rem; text-align: center; }
+
+            /* Добавить машину */
+            .btn-add-car { height: 52px; font-size: 1rem; border-radius: 12px; }
+
+            /* Заголовки разделов */
+            .sect-title { font-size: 1.2rem; padding-bottom: 8px; margin-bottom: 16px; }
+
+            /* Профиль */
+            .profile-card { max-width: 100%; border-radius: 12px; padding: 22px 16px; }
+            .profile-stats { gap: 10px; }
+            .p-stat { padding: 10px 16px; flex: 1; }
+            .btn-edit { width: 100%; height: 44px; }
+
+            /* Таймлайн истории */
+            .timeline { padding-left: 26px; }
+            .tl-date { min-width: 58px; font-size: 0.7rem; }
+            .tl-cost { font-size: 0.88rem; }
+            .tl-header { gap: 8px; padding: 12px 12px; }
+
+            /* Запись: выбор сервиса */
+            .booking-select-wrap { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .booking-select-wrap select { width: 100%; height: 48px; font-size: 16px; }
+
+            /* Месяцы: 2 колонки (было 4) */
+            .months-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .month-card { padding: 14px 8px; border-radius: 12px; }
+            .month-card:hover:not(.month-past) { box-shadow: none; transform: none; }
+            .month-card:active:not(.month-past) { background: rgba(227,6,19,0.04); border-color: #e30613; }
+
+            /* Мобильная навигация по дням недели (показывать 3 из 7) */
+            .mob-day-nav {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 12px;
+                background: #f9f9f9;
+                border-radius: 8px;
+                padding: 8px 10px;
+            }
+            .mob-day-label {
+                flex: 1;
+                text-align: center;
+                font-size: 0.85rem;
+                font-weight: 600;
+                color: #555;
+            }
+
+            /* Неделя: 3 колонки (были 7) */
+            .week-grid { grid-template-columns: repeat(3, 1fr) !important; overflow: visible !important; gap: 8px; }
+
+            /* Кнопки недели: минимальный размер для пальца */
+            .week-nav-btn { min-height: 44px; min-width: 44px; padding: 0 12px; }
+
+            /* Модальное окно записи: полноэкранное снизу */
+            .modal-overlay { padding: 0; align-items: flex-end; }
+            .modal-box {
+                border-radius: 20px 20px 0 0;
+                max-width: 100%; max-height: 90vh;
+                width: 100%;
+                padding: 24px 16px 32px;
+            }
+            /* Поля формы: 16px предотвращает авто-зум iOS */
+            .form-input { font-size: 16px; height: 48px; padding: 0 13px; }
+            .modal-submit { height: 52px; font-size: 1.05rem; }
+
+            /* Тост выше нижней панели */
+            .toast { bottom: 72px; }
+
+            /* Теги фильтров: минимальная высота для пальца */
+            .filter-tag { min-height: 36px; display: flex; align-items: center; }
         }
     </style>
 </head>
@@ -350,6 +636,27 @@
      КАБИНЕТ (виден сразу, без логина)
 ══════════════════════════════════════════════ -->
 <div id="cabinet">
+
+    <!-- ══ МОБИЛЬНАЯ ШАПКА (скрыта на десктопе) ══ -->
+    <div class="mob-header" id="mob-header">
+        <span class="mob-logo">RepairTech</span>
+        <button class="mob-burger" id="mob-burger" onclick="toggleMobMenu()" aria-label="Меню">☰</button>
+    </div>
+
+    <!-- Полупрозрачный фон за боковым меню -->
+    <div class="mob-menu-overlay" id="mob-menu-overlay" onclick="closeMobMenu()"></div>
+
+    <!-- Боковое меню (выезжает справа при нажатии на бургер) -->
+    <div class="mob-side-menu" id="mob-side-menu">
+        <button class="mob-side-close" onclick="closeMobMenu()" aria-label="Закрыть">✕</button>
+        <button class="mob-side-item active" data-section="search"   onclick="switchSectionMob(this)">🔍 Поиск сервиса</button>
+        <button class="mob-side-item"        data-section="booking"  onclick="switchSectionMob(this)">📅 Запись</button>
+        <button class="mob-side-item"        data-section="cars"     onclick="switchSectionMob(this)">🚗 Мои машины</button>
+        <button class="mob-side-item"        data-section="bookings" onclick="switchSectionMob(this)">📋 Мои записи</button>
+        <button class="mob-side-item"        data-section="history"  onclick="switchSectionMob(this)">🔧 История</button>
+        <button class="mob-side-item"        data-section="profile"  onclick="switchSectionMob(this)">👤 Профиль</button>
+        <button class="mob-side-logout" onclick="doLogout(); closeMobMenu()">Выйти</button>
+    </div>
 
     <!-- ШАПКА -->
     <header class="cab-header">
@@ -490,6 +797,12 @@
                     <button class="week-nav-btn" onclick="prevWeek()">← Назад</button>
                     <span class="week-label" id="week-label"></span>
                     <button class="week-nav-btn" onclick="nextWeek()">Вперёд →</button>
+                </div>
+                <!-- Мобильная навигация по дням (только мобильный, скрыта на десктопе) -->
+                <div class="mob-day-nav" id="mob-day-nav">
+                    <button class="week-nav-btn mob-day-prev" onclick="mobDayPrev()">← Пред.</button>
+                    <span class="mob-day-label" id="mob-day-label">—</span>
+                    <button class="week-nav-btn mob-day-next" onclick="mobDayNext()">Дальше →</button>
                 </div>
                 <div class="week-grid" id="week-grid"></div>
             </div>
@@ -655,6 +968,27 @@
         </section>
 
     </main>
+
+    <!-- ══ НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ (скрыта на десктопе) ══ -->
+    <nav class="mob-bottom-nav" id="mob-bottom-nav" aria-label="Основная навигация">
+        <button class="mob-bottom-btn active" data-section="search"   onclick="switchSectionMob(this)">
+            <span class="mob-bottom-icon">🔍</span>
+            <span class="mob-bottom-label">Поиск</span>
+        </button>
+        <button class="mob-bottom-btn" data-section="cars"     onclick="switchSectionMob(this)">
+            <span class="mob-bottom-icon">🚗</span>
+            <span class="mob-bottom-label">Машины</span>
+        </button>
+        <button class="mob-bottom-btn" data-section="bookings" onclick="switchSectionMob(this)">
+            <span class="mob-bottom-icon">📋</span>
+            <span class="mob-bottom-label">Записи</span>
+        </button>
+        <button class="mob-bottom-btn" data-section="profile"  onclick="switchSectionMob(this)">
+            <span class="mob-bottom-icon">👤</span>
+            <span class="mob-bottom-label">Профиль</span>
+        </button>
+    </nav>
+
 </div>
 
 <!-- ══ МОДАЛЬНОЕ ОКНО — ФОРМА ЗАПИСИ (уровень 3) ══ -->
@@ -830,6 +1164,7 @@ function switchSection(btn) {
     document.getElementById('sect-' + sec).classList.add('active');
 
     if (sec === 'history') renderTimeline();
+    syncMobileNav(sec);
 }
 
 // ── Авторизация ───────────────────────────────────────────────────────
@@ -850,6 +1185,7 @@ function doLogin() {
             if (target === 'history') renderTimeline();
         }
     }
+    syncMobileNav(target || 'search');
 }
 
 // кнопка "Вернуться без входа"
@@ -866,6 +1202,7 @@ function doLogout() {
     document.querySelector('.nav-btn[data-section="search"]').classList.add('active');
     document.getElementById('sect-search').classList.add('active');
     document.getElementById('hist-filter').value = 'all';
+    syncMobileNav('search');
 }
 
 // ── Текстовый поиск ───────────────────────────────────────────────────
@@ -1091,6 +1428,7 @@ function renderMonths() {
 function selectMonth(year, month) {
     selectedMonth = { year, month };
     weekOffset = 0;
+    mobileDayOffset = 0;
     document.getElementById('bc2-month').textContent = MONTHS_RU[month - 1] + ' 2026';
     showBookingLevel(2);
     renderWeek();
@@ -1131,6 +1469,7 @@ function renderWeek() {
 
         const col = document.createElement('div');
         col.className = 'week-day-col';
+        col.dataset.day = d;
 
         // заголовок дня
         const hdr = document.createElement('div');
@@ -1169,10 +1508,11 @@ function renderWeek() {
         }
         grid.appendChild(col);
     }
+    showMobileDays(); // на мобильном показываем только 3 дня
 }
 
-function prevWeek() { weekOffset--; renderWeek(); }
-function nextWeek() { weekOffset++; renderWeek(); }
+function prevWeek() { weekOffset--; mobileDayOffset = 0; renderWeek(); }
+function nextWeek() { weekOffset++; mobileDayOffset = 0; renderWeek(); }
 
 // ── Уровень 3: модальная форма записи ────────────────────────────────
 function openModal(date, time) {
@@ -1325,6 +1665,74 @@ function showToast(msg) {
     if (toastTimer) clearTimeout(toastTimer);
     toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
+
+// ── Мобильная навигация ───────────────────────────────────────────────
+
+// Синхронизировать нижнюю панель и боковое меню с активным разделом
+function syncMobileNav(section) {
+    document.querySelectorAll('.mob-bottom-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.section === section);
+    });
+    document.querySelectorAll('.mob-side-item[data-section]').forEach(b => {
+        b.classList.toggle('active', b.dataset.section === section);
+    });
+}
+
+// Переключить раздел из мобильного меню или нижней панели
+function switchSectionMob(btn) {
+    closeMobMenu();
+    const sec = btn.dataset.section;
+    const desktopBtn = document.querySelector(`.nav-btn[data-section="${sec}"]`);
+    if (desktopBtn) switchSection(desktopBtn);
+}
+
+// Открыть/закрыть боковое меню
+function toggleMobMenu() {
+    const menu    = document.getElementById('mob-side-menu');
+    const overlay = document.getElementById('mob-menu-overlay');
+    const isOpen  = menu.classList.toggle('open');
+    overlay.classList.toggle('show', isOpen);
+}
+
+function closeMobMenu() {
+    document.getElementById('mob-side-menu').classList.remove('open');
+    document.getElementById('mob-menu-overlay').classList.remove('show');
+}
+
+// ── Мобильный трёхдневный вид недели ─────────────────────────────────
+let mobileDayOffset = 0; // индекс первого из 3 отображаемых дней (0–4)
+
+// Показать только 3 из 7 столбцов недели начиная с mobileDayOffset
+function showMobileDays() {
+    if (window.innerWidth > 768) {
+        // на десктопе сбрасываем: показываем все 7 дней
+        document.querySelectorAll('#week-grid .week-day-col').forEach(c => c.style.display = '');
+        return;
+    }
+    document.querySelectorAll('#week-grid .week-day-col').forEach(col => {
+        const d = parseInt(col.dataset.day || 0);
+        col.style.display = (d >= mobileDayOffset && d < mobileDayOffset + 3) ? '' : 'none';
+    });
+    // Обновить подпись с диапазоном дат
+    if (selectedMonth) {
+        const monday = getWeekMonday();
+        const parts  = [];
+        for (let i = mobileDayOffset; i < Math.min(mobileDayOffset + 3, 7); i++) {
+            const dt = new Date(monday);
+            dt.setDate(monday.getDate() + i);
+            parts.push(dt.getDate() + ' ' + MONTHS_RU[dt.getMonth()].slice(0, 3) + '.');
+        }
+        const lbl = document.getElementById('mob-day-label');
+        if (lbl) lbl.textContent = parts.join(' – ');
+    }
+    // Блокировать кнопки на границах
+    document.querySelectorAll('.mob-day-prev').forEach(b => b.disabled = (mobileDayOffset === 0));
+    document.querySelectorAll('.mob-day-next').forEach(b => b.disabled = (mobileDayOffset >= 4));
+}
+
+// Сдвиг вида на день назад / вперёд
+function mobDayPrev() { if (mobileDayOffset > 0) { mobileDayOffset--; showMobileDays(); } }
+function mobDayNext() { if (mobileDayOffset < 4) { mobileDayOffset++; showMobileDays(); } }
 
 // ── Инициализация ─────────────────────────────────────────────────────
 renderServiceCards(); // карточки сервисов с фильтрами
