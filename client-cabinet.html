@@ -300,27 +300,41 @@
 
         /* ===== АДАПТИВ ===== */
 
-        /* Мобильные UI-элементы скрыты на десктопе по умолчанию */
-        .mob-header, .mob-menu-overlay, .mob-side-menu,
-        .mob-bottom-nav, .mob-day-nav { display: none; }
+        /* Мобильные UI-элементы скрыты на десктопе */
+        .mob-header, .mob-bottom-nav, .mob-day-nav { display: none; }
+
+        /* Оверлей фото и мобильные элементы карточек — скрыты на десктопе */
+        .srv-photo-rating, .srv-photo-title { display: none; }
+        .car-plate, .car-status-stripe { display: none; }
+
+        /* Обёртка строки поиска с иконкой лупы */
+        .search-input-wrap { flex: 1; min-width: 0; }
+        .search-icon-inner { display: none; }
+
+        /* ─── Анимации ─── */
+        @keyframes mobFadeIn     { from { opacity:0; } to { opacity:1; } }
+        @keyframes sectionFadeIn { from { opacity:0; } to { opacity:1; } }
+        @keyframes loginLogoIn   { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes loginFieldIn  { from { opacity:0; transform:translateY(10px);  } to { opacity:1; transform:translateY(0); } }
 
         /* ─── Мобильные стили (≤ 768px) ─── */
         @media (max-width: 768px) {
 
+            html { scroll-behavior: smooth; }
+
             /* Скрыть десктопную шапку */
             .cab-header { display: none; }
 
-            /* Мобильная фиксированная шапка */
+            /* ── Мобильная шапка: только логотип по центру ── */
             .mob-header {
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
+                justify-content: center;
                 position: fixed;
                 top: 0; left: 0; right: 0;
                 height: 56px;
                 background: #fff;
                 border-bottom: 3px solid #e30613;
-                padding: 0 16px;
                 z-index: 150;
             }
             .mob-logo {
@@ -329,127 +343,18 @@
                 color: #e30613;
                 letter-spacing: -0.5px;
             }
-            /* Кнопка бургер-меню */
-            .mob-burger {
-                background: none;
-                border: none;
-                font-size: 1.6rem;
-                cursor: pointer;
-                min-width: 44px; min-height: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 8px;
-                color: #333;
-                padding: 0;
-                transition: background 0.15s;
-            }
-            .mob-burger:active { background: #f0f0f0; }
 
-            /* Полупрозрачный фон за боковым меню */
-            .mob-menu-overlay {
-                display: none;
-                position: fixed;
-                inset: 0;
-                background: rgba(0,0,0,0.5);
-                z-index: 160;
-                animation: mobFadeIn 0.25s ease;
-            }
-            .mob-menu-overlay.show { display: block; }
-
-            @keyframes mobFadeIn { from { opacity:0; } to { opacity:1; } }
-
-            /* Боковое меню: выезжает справа */
-            .mob-side-menu {
-                display: flex;
-                flex-direction: column;
-                position: fixed;
-                top: 0; right: 0; bottom: 0;
-                width: 280px;
-                background: #fff;
-                z-index: 170;
-                padding: 12px 0 24px;
-                transform: translateX(100%);
-                transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-                box-shadow: -4px 0 20px rgba(0,0,0,0.12);
-                overflow-y: auto;
-            }
-            .mob-side-menu.open { transform: translateX(0); }
-
-            /* Крестик закрытия бокового меню */
-            .mob-side-close {
-                background: none;
-                border: none;
-                font-size: 1.3rem;
-                color: #aaa;
-                cursor: pointer;
-                align-self: flex-end;
-                min-width: 44px; min-height: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 0 16px;
-                margin-bottom: 4px;
-            }
-            .mob-side-close:active { color: #333; }
-
-            /* Пункты бокового меню — минимум 52px (удобно для пальца) */
-            .mob-side-item {
-                display: flex;
-                align-items: center;
-                width: 100%;
-                text-align: left;
-                background: none;
-                border: none;
-                font-size: 1rem;
-                font-family: sans-serif;
-                color: #333;
-                padding: 0 20px;
-                min-height: 52px;
-                cursor: pointer;
-                border-left: 3px solid transparent;
-                transition: background 0.12s;
-            }
-            .mob-side-item:active { background: #f5f5f5; }
-            .mob-side-item.active {
-                color: #e30613;
-                font-weight: 700;
-                background: rgba(227,6,19,0.05);
-                border-left-color: #e30613;
-            }
-
-            /* Кнопка "Выйти" в боковом меню */
-            .mob-side-logout {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: calc(100% - 32px);
-                margin: 16px 16px 0;
-                background: none;
-                border: 1px solid #e0e0e0;
-                font-size: 0.95rem;
-                font-family: sans-serif;
-                color: #999;
-                min-height: 48px;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: background 0.12s, color 0.12s;
-            }
-            .mob-side-logout:active { background: #f5f5f5; color: #555; }
-
-            /* Нижняя панель навигации (как в мобильных приложениях) */
+            /* ── Нижняя панель навигации: 5 кнопок ── */
             .mob-bottom-nav {
                 display: flex;
                 position: fixed;
                 bottom: 0; left: 0; right: 0;
-                height: 60px;
+                height: 64px;
                 background: #fff;
-                border-top: 1px solid #e8e8e8;
                 z-index: 150;
-                box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
                 padding-bottom: env(safe-area-inset-bottom, 0);
             }
-            /* Кнопки нижней панели: минимум 44px (стандарт Apple) */
             .mob-bottom-btn {
                 flex: 1;
                 display: flex;
@@ -459,140 +364,300 @@
                 background: none;
                 border: none;
                 cursor: pointer;
-                gap: 2px;
-                padding: 0;
-                color: #aaa;
-                min-height: 44px;
-                transition: color 0.15s;
+                gap: 3px;
+                padding: 8px 0 0;
+                color: #999;
+                position: relative;
+                transition: color 0.2s;
             }
-            .mob-bottom-btn:active { opacity: 0.65; }
-            .mob-bottom-icon { font-size: 1.25rem; line-height: 1; }
-            .mob-bottom-label { font-size: 0.63rem; font-family: sans-serif; letter-spacing: 0.01em; }
+            .mob-bottom-btn:active { opacity: 0.7; }
+            /* Иконка 24px с пружинистой анимацией при активации */
+            .mob-bottom-icon {
+                font-size: 24px;
+                line-height: 1;
+                display: block;
+                transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+            }
+            .mob-bottom-label { font-size: 10px; font-family: sans-serif; }
+
+            /* Активная кнопка: красный цвет + иконка слегка увеличена */
             .mob-bottom-btn.active { color: #e30613; }
+            .mob-bottom-btn.active .mob-bottom-icon { transform: scale(1.15); }
             .mob-bottom-btn.active .mob-bottom-label { font-weight: 700; }
 
-            /* Основной контент: отступы для фиксированных шапки и панели */
-            .cab-main { padding: 76px 16px 80px; max-width: 100%; }
-
-            /* Логин: карточка на всю ширину с крупными полями */
-            .login-box { margin: 0 16px; padding: 28px 20px; border-radius: 12px; }
-            /* font-size: 16px предотвращает авто-зум на iOS */
-            .login-field input { height: 48px; font-size: 16px; padding: 0 14px; }
-            .login-btn { height: 52px; font-size: 1.05rem; }
-
-            /* Поиск: элементы стекаются вертикально на всю ширину */
-            .search-bar-wrap { flex-direction: column; gap: 8px; align-items: stretch; }
-            .search-input { width: 100%; height: 48px; font-size: 16px; padding: 0 16px; }
-            .filter-toggle-btn { width: 100%; height: 48px; font-size: 0.95rem; text-align: center; }
-
-            /* Сортировка вертикально */
-            .sort-row { flex-direction: column; align-items: flex-start; gap: 8px; margin-bottom: 12px; }
-            .sort-select { width: 100%; height: 44px; font-size: 16px; }
-
-            /* Карточки сервисов: одна колонка */
-            .service-cards-grid { grid-template-columns: 1fr; gap: 14px; }
-            .service-card { border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-            /* Убрать hover на тачскрине, заменить на active */
-            .service-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); transform: none; }
-            .service-card:active { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-            /* Фото-заглушка */
-            .srv-photo { height: 120px; }
-            /* Кнопки карточки сервиса на всю ширину */
-            .srv-btns { flex-direction: column; gap: 8px; }
-            .srv-btns .btn-sm {
-                width: 100%; height: 48px; font-size: 0.95rem;
-                display: flex; align-items: center; justify-content: center;
-                border-radius: 8px; padding: 0;
+            /* Красная точка над активной иконкой */
+            .mob-bottom-btn.active::before {
+                content: '';
+                position: absolute;
+                top: 5px; left: 50%;
+                transform: translateX(-50%);
+                width: 5px; height: 5px;
+                background: #e30613;
+                border-radius: 50%;
             }
 
-            /* Мои машины: одна колонка */
-            .cars-grid { grid-template-columns: 1fr; gap: 14px; }
-            .car-card { border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-            .car-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); transform: none; }
-            .car-card:active { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-            .car-btns .btn-sm { min-height: 44px; }
+            /* Контент: отступы для фиксированных шапки и нижней панели */
+            .cab-main { padding: 76px 16px 84px; max-width: 100%; }
 
-            /* Мои записи */
+            /* Плавное появление раздела при переключении (0.25с fade) */
+            .section.active { animation: sectionFadeIn 0.25s ease both; }
+
+            /* ── Поиск: pill-строка с иконкой лупы слева ── */
+            .search-bar-wrap { flex-direction: column; gap: 8px; align-items: stretch; }
+            .search-input-wrap { position: relative; }
+            .search-icon-inner {
+                display: block;
+                position: absolute;
+                left: 14px; top: 50%;
+                transform: translateY(-50%);
+                font-size: 1rem;
+                pointer-events: none;
+                z-index: 1;
+            }
+            .search-input {
+                width: 100%; height: 48px; font-size: 16px;
+                padding: 0 16px 0 44px;
+                border-radius: 25px;
+            }
+            .filter-toggle-btn { width: 100%; height: 48px; font-size: 0.95rem; text-align: center; border-radius: 12px; }
+
+            /* Сортировка */
+            .sort-row { flex-direction: column; align-items: flex-start; gap: 8px; margin-bottom: 12px; }
+            .sort-select { width: 100%; height: 44px; font-size: 16px; border-radius: 12px; }
+
+            /* ── Карточки сервисов: одна колонка, скруглённые ── */
+            .service-cards-grid { grid-template-columns: 1fr; gap: 16px; }
+            .service-card {
+                border-radius: 16px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                border: none; overflow: hidden;
+            }
+            .service-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); transform: none; }
+            .service-card:active { opacity: 0.97; }
+
+            /* Фото с градиентом: прозрачный → тёмный снизу */
+            .srv-photo {
+                height: 140px;
+                position: relative;
+                overflow: hidden;
+            }
+            .srv-photo::after {
+                content: '';
+                position: absolute; inset: 0;
+                background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.45) 100%);
+                pointer-events: none;
+            }
+            /* Иконку-заглушку скрываем — вместо неё оверлей */
+            .srv-photo-icon, .srv-photo-label { display: none; }
+
+            /* Название сервиса белым текстом поверх фото снизу */
+            .srv-photo-title {
+                display: block;
+                position: absolute;
+                bottom: 10px; left: 14px; right: 14px;
+                color: #fff;
+                font-size: 1.05rem; font-weight: 800;
+                text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+                z-index: 1;
+            }
+
+            /* Рейтинговый бейдж в правом верхнем углу фото */
+            .srv-photo-rating {
+                display: flex; align-items: center; gap: 3px;
+                position: absolute;
+                top: 10px; right: 10px;
+                background: rgba(255,255,255,0.95);
+                border-radius: 20px; padding: 4px 9px;
+                font-size: 0.82rem; font-weight: 700;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+                z-index: 1;
+            }
+            .srv-photo-reviews { font-weight: 400; color: #888; font-size: 0.75rem; }
+
+            /* Скрыть дублирующий блок рейтинга в теле карточки */
+            .srv-rating-wrap { display: none; }
+
+            /* Кнопки карточки сервиса */
+            .srv-btns { flex-direction: column; gap: 10px; }
+            .srv-btns .btn-sm {
+                width: 100%; height: 48px; font-size: 0.95rem;
+                display: flex; align-items: center; justify-content: center; padding: 0;
+            }
+            /* "Записаться" — красная пилюля с тенью */
+            .srv-btns .btn-red { border-radius: 25px; box-shadow: 0 2px 8px rgba(227,6,19,0.2); }
+            /* "Подробнее" — только красный текст с подчёркиванием */
+            .srv-btns .btn-outline {
+                background: transparent !important;
+                border: none !important;
+                color: #e30613 !important;
+                text-decoration: underline;
+                height: 36px; box-shadow: none;
+            }
+
+            /* ── Мои машины: одна колонка, скруглённые ── */
+            .cars-grid { grid-template-columns: 1fr; gap: 16px; }
+            .car-card {
+                border-radius: 16px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+                padding: 0; overflow: hidden;
+                border: 1px solid #e8e8e8;
+            }
+            .car-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); transform: none; }
+            .car-card:active { opacity: 0.97; }
+
+            /* Цветная полоска 4px сверху карточки машины */
+            .car-status-stripe { display: block; height: 4px; width: 100%; }
+            .car-status-stripe--green  { background: #2ecc71; }
+            .car-status-stripe--orange { background: #f39c12; }
+
+            /* Внутренний отступ для элементов карточки (т.к. padding на карточке = 0) */
+            .car-card-top { padding: 14px 16px 0; margin-bottom: 10px; }
+            .car-details  { padding: 0 16px; }
+            .car-vin      { margin: 6px 16px; }
+            .car-to       { padding: 0 16px; margin-bottom: 10px; }
+            .car-btns     { padding: 0 16px 16px; }
+
+            /* Гос. номер в стиле настоящего номерного знака */
+            .car-plate {
+                display: inline-block;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 1.15rem; font-weight: 700;
+                letter-spacing: 0.08em;
+                color: #1a1a1a;
+                background: #fffde7;
+                border: 2px solid #bbb;
+                border-radius: 6px;
+                padding: 3px 10px;
+                margin-bottom: 5px;
+            }
+            /* Марка и модель жирным */
+            .car-name { font-size: 1rem; font-weight: 800; }
+            /* Компактные данные */
+            .car-dl { font-size: 0.68rem; }
+            .car-dv { font-size: 0.81rem; }
+            .car-vin { font-size: 0.72rem; }
+            .car-to { font-size: 0.8rem; }
+            .car-btns .btn-sm { min-height: 44px; border-radius: 12px; }
+            .car-btns .btn-red { border-radius: 25px; }
+
+            /* ── Мои записи ── */
             .booking-list { gap: 12px; }
             .booking-card {
-                flex-wrap: wrap; border-radius: 12px;
-                padding: 14px 14px; gap: 12px;
+                flex-wrap: wrap; border-radius: 16px;
+                padding: 14px; gap: 12px;
                 box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             }
             .booking-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-            .booking-card:active { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
             .bk-actions { width: 100%; margin-top: 0; }
-            .btn-cancel, .btn-review { display: block; width: 100%; height: 44px; font-size: 0.9rem; text-align: center; }
+            .btn-cancel, .btn-review { display: block; width: 100%; height: 44px; font-size: 0.9rem; text-align: center; border-radius: 12px; }
+            .btn-review { border-radius: 25px; }
 
             /* Добавить машину */
             .btn-add-car { height: 52px; font-size: 1rem; border-radius: 12px; }
 
-            /* Заголовки разделов */
-            .sect-title { font-size: 1.2rem; padding-bottom: 8px; margin-bottom: 16px; }
+            /* Заголовки разделов крупнее и жирнее */
+            .sect-title { font-size: 1.25rem; font-weight: 800; padding-bottom: 8px; margin-bottom: 16px; }
 
-            /* Профиль */
-            .profile-card { max-width: 100%; border-radius: 12px; padding: 22px 16px; }
+            /* ── Профиль ── */
+            .profile-card { max-width: 100%; border-radius: 16px; padding: 22px 16px; }
             .profile-stats { gap: 10px; }
-            .p-stat { padding: 10px 16px; flex: 1; }
-            .btn-edit { width: 100%; height: 44px; }
+            .p-stat { padding: 10px 16px; flex: 1; border-radius: 12px; }
+            .btn-edit { width: 100%; height: 44px; border-radius: 12px; }
 
-            /* Таймлайн истории */
+            /* ── Таймлайн истории ── */
             .timeline { padding-left: 26px; }
             .tl-date { min-width: 58px; font-size: 0.7rem; }
             .tl-cost { font-size: 0.88rem; }
-            .tl-header { gap: 8px; padding: 12px 12px; }
+            .tl-header { gap: 8px; padding: 12px; }
+            .tl-card { border-radius: 12px; }
 
-            /* Запись: выбор сервиса */
+            /* ── Запись: выбор сервиса ── */
             .booking-select-wrap { flex-direction: column; align-items: flex-start; gap: 8px; }
-            .booking-select-wrap select { width: 100%; height: 48px; font-size: 16px; }
+            .booking-select-wrap select { width: 100%; height: 48px; font-size: 16px; border-radius: 12px; }
 
-            /* Месяцы: 2 колонки (было 4) */
+            /* Месяцы: 2 колонки */
             .months-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .month-card { padding: 14px 8px; border-radius: 12px; }
             .month-card:hover:not(.month-past) { box-shadow: none; transform: none; }
             .month-card:active:not(.month-past) { background: rgba(227,6,19,0.04); border-color: #e30613; }
 
-            /* Мобильная навигация по дням недели (показывать 3 из 7) */
+            /* Мобильная навигация по дням (3 из 7) */
             .mob-day-nav {
-                display: flex;
-                align-items: center;
-                gap: 8px;
+                display: flex; align-items: center; gap: 8px;
                 margin-bottom: 12px;
-                background: #f9f9f9;
-                border-radius: 8px;
-                padding: 8px 10px;
+                background: #f9f9f9; border-radius: 8px; padding: 8px 10px;
             }
-            .mob-day-label {
-                flex: 1;
-                text-align: center;
-                font-size: 0.85rem;
-                font-weight: 600;
-                color: #555;
-            }
+            .mob-day-label { flex: 1; text-align: center; font-size: 0.85rem; font-weight: 600; color: #555; }
 
-            /* Неделя: 3 колонки (были 7) */
+            /* Неделя: 3 колонки */
             .week-grid { grid-template-columns: repeat(3, 1fr) !important; overflow: visible !important; gap: 8px; }
+            .week-nav-btn { min-height: 44px; min-width: 44px; padding: 0 12px; border-radius: 12px; }
 
-            /* Кнопки недели: минимальный размер для пальца */
-            .week-nav-btn { min-height: 44px; min-width: 44px; padding: 0 12px; }
-
-            /* Модальное окно записи: полноэкранное снизу */
+            /* Модальное окно снизу экрана */
             .modal-overlay { padding: 0; align-items: flex-end; }
             .modal-box {
                 border-radius: 20px 20px 0 0;
-                max-width: 100%; max-height: 90vh;
-                width: 100%;
+                max-width: 100%; max-height: 90vh; width: 100%;
                 padding: 24px 16px 32px;
             }
-            /* Поля формы: 16px предотвращает авто-зум iOS */
-            .form-input { font-size: 16px; height: 48px; padding: 0 13px; }
-            .modal-submit { height: 52px; font-size: 1.05rem; }
+            /* 16px предотвращает авто-зум iOS */
+            .form-input { font-size: 16px; height: 48px; padding: 0 13px; border-radius: 12px; }
+            .modal-submit { height: 52px; font-size: 1.05rem; border-radius: 25px; }
 
             /* Тост выше нижней панели */
-            .toast { bottom: 72px; }
+            .toast { bottom: 76px; }
 
-            /* Теги фильтров: минимальная высота для пальца */
+            /* Теги фильтров */
             .filter-tag { min-height: 36px; display: flex; align-items: center; }
+
+            /* Все кнопки: скругление минимум 12px */
+            .btn-sm { border-radius: 12px; }
+
+            /* Кратковременное затемнение при нажатии */
+            button:active { opacity: 0.8; transition: opacity 0.1s; }
+
+            /* ── Экран логина: красивый мобильный вид ── */
+            .login-overlay {
+                background: #f5f5f5;
+                align-items: flex-start;
+                padding-top: 60px;
+            }
+            .login-box {
+                border: none; box-shadow: none; background: transparent;
+                padding: 28px 24px; margin: 0;
+            }
+            /* Логотип появляется сверху */
+            .login-logo {
+                font-size: 2.4rem; margin-bottom: 4px;
+                animation: loginLogoIn 0.5s ease both;
+            }
+            /* Подпись чуть позже */
+            .login-title {
+                font-size: 0.88rem; margin-bottom: 32px;
+                animation: loginLogoIn 0.5s 0.1s ease both;
+            }
+            /* Поля ввода: скруглённые, красная рамка при фокусе */
+            .login-field {
+                animation: loginFieldIn 0.4s 0.25s ease both;
+            }
+            .login-field input {
+                height: 52px; font-size: 16px; padding: 0 16px;
+                border-radius: 12px; background: #fff;
+                transition: border-color 0.2s, box-shadow 0.2s;
+            }
+            .login-field input:focus {
+                border-color: #e30613;
+                box-shadow: 0 0 0 3px rgba(227,6,19,0.1);
+            }
+            /* Кнопка «Войти»: красная пилюля с тенью */
+            .login-btn {
+                height: 52px; font-size: 1.05rem;
+                border-radius: 25px;
+                box-shadow: 0 4px 16px rgba(227,6,19,0.3);
+                animation: loginFieldIn 0.4s 0.4s ease both;
+            }
+            .login-back { animation: loginFieldIn 0.4s 0.5s ease both; }
+            .login-reg  { animation: loginFieldIn 0.4s 0.55s ease both; }
         }
     </style>
 </head>
@@ -637,25 +702,9 @@
 ══════════════════════════════════════════════ -->
 <div id="cabinet">
 
-    <!-- ══ МОБИЛЬНАЯ ШАПКА (скрыта на десктопе) ══ -->
+    <!-- ══ МОБИЛЬНАЯ ШАПКА: только логотип по центру ══ -->
     <div class="mob-header" id="mob-header">
         <span class="mob-logo">RepairTech</span>
-        <button class="mob-burger" id="mob-burger" onclick="toggleMobMenu()" aria-label="Меню">☰</button>
-    </div>
-
-    <!-- Полупрозрачный фон за боковым меню -->
-    <div class="mob-menu-overlay" id="mob-menu-overlay" onclick="closeMobMenu()"></div>
-
-    <!-- Боковое меню (выезжает справа при нажатии на бургер) -->
-    <div class="mob-side-menu" id="mob-side-menu">
-        <button class="mob-side-close" onclick="closeMobMenu()" aria-label="Закрыть">✕</button>
-        <button class="mob-side-item active" data-section="search"   onclick="switchSectionMob(this)">🔍 Поиск сервиса</button>
-        <button class="mob-side-item"        data-section="booking"  onclick="switchSectionMob(this)">📅 Запись</button>
-        <button class="mob-side-item"        data-section="cars"     onclick="switchSectionMob(this)">🚗 Мои машины</button>
-        <button class="mob-side-item"        data-section="bookings" onclick="switchSectionMob(this)">📋 Мои записи</button>
-        <button class="mob-side-item"        data-section="history"  onclick="switchSectionMob(this)">🔧 История</button>
-        <button class="mob-side-item"        data-section="profile"  onclick="switchSectionMob(this)">👤 Профиль</button>
-        <button class="mob-side-logout" onclick="doLogout(); closeMobMenu()">Выйти</button>
     </div>
 
     <!-- ШАПКА -->
@@ -681,9 +730,13 @@
 
             <!-- Строка поиска + кнопка раскрытия фильтров -->
             <div class="search-bar-wrap">
-                <input class="search-input" type="text" id="search-input"
-                       placeholder="Поиск по названию, адресу или специализации..."
-                       oninput="onSearchInput(this.value)">
+                <!-- Обёртка с иконкой лупы слева (pill на мобильном) -->
+                <div class="search-input-wrap">
+                    <span class="search-icon-inner">🔍</span>
+                    <input class="search-input" type="text" id="search-input"
+                           placeholder="Поиск по названию, адресу или специализации..."
+                           oninput="onSearchInput(this.value)">
+                </div>
                 <button class="filter-toggle-btn" id="filter-toggle-btn" onclick="toggleFilterPanel()">⚙ Фильтры</button>
             </div>
 
@@ -817,8 +870,14 @@
 
                 <!-- Volkswagen Golf 7 -->
                 <div class="car-card">
+                    <!-- Зелёная полоска: машина активна -->
+                    <div class="car-status-stripe car-status-stripe--green"></div>
                     <div class="car-card-top">
-                        <div class="car-name">Volkswagen Golf 7<br>1.4 TSI</div>
+                        <div>
+                            <!-- Гос. номер в стиле номерного знака (только мобильный) -->
+                            <div class="car-plate">LM-4521</div>
+                            <div class="car-name">Volkswagen Golf 7 · 1.4 TSI</div>
+                        </div>
                         <span class="badge badge-green">Активна</span>
                     </div>
                     <div class="car-details">
@@ -835,10 +894,15 @@
                     </div>
                 </div>
 
-                <!-- Audi A4 — скоро ТО (менее месяца) -->
+                <!-- Audi A4 — скоро ТО -->
                 <div class="car-card">
+                    <!-- Оранжевая полоска: скоро ТО -->
+                    <div class="car-status-stripe car-status-stripe--orange"></div>
                     <div class="car-card-top">
-                        <div class="car-name">Audi A4<br>2.0 TDI</div>
+                        <div>
+                            <div class="car-plate">NK-8834</div>
+                            <div class="car-name">Audi A4 · 2.0 TDI</div>
+                        </div>
                         <span class="badge badge-orange">Скоро ТО</span>
                     </div>
                     <div class="car-details">
@@ -969,7 +1033,7 @@
 
     </main>
 
-    <!-- ══ НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ (скрыта на десктопе) ══ -->
+    <!-- ══ НИЖНЯЯ ПАНЕЛЬ НАВИГАЦИИ: 5 кнопок (скрыта на десктопе) ══ -->
     <nav class="mob-bottom-nav" id="mob-bottom-nav" aria-label="Основная навигация">
         <button class="mob-bottom-btn active" data-section="search"   onclick="switchSectionMob(this)">
             <span class="mob-bottom-icon">🔍</span>
@@ -982,6 +1046,10 @@
         <button class="mob-bottom-btn" data-section="bookings" onclick="switchSectionMob(this)">
             <span class="mob-bottom-icon">📋</span>
             <span class="mob-bottom-label">Записи</span>
+        </button>
+        <button class="mob-bottom-btn" data-section="history"  onclick="switchSectionMob(this)">
+            <span class="mob-bottom-icon">🔧</span>
+            <span class="mob-bottom-label">История</span>
         </button>
         <button class="mob-bottom-btn" data-section="profile"  onclick="switchSectionMob(this)">
             <span class="mob-bottom-icon">👤</span>
@@ -1335,6 +1403,10 @@ function buildServiceCard(s) {
     return `
     <div class="service-card" data-id="${s.id}">
         <div class="srv-photo" style="background:${s.photoBg}">
+            <!-- Рейтинговый бейдж в правом верхнем углу (только мобильный) -->
+            <div class="srv-photo-rating">⭐ ${s.rating} <span class="srv-photo-reviews">(${s.reviews})</span></div>
+            <!-- Название сервиса поверх фото снизу (только мобильный) -->
+            <div class="srv-photo-title">${s.name}</div>
             <span class="srv-photo-icon">🏭</span>
             <span class="srv-photo-label">Фото сервиса</span>
         </div>
@@ -1686,18 +1758,9 @@ function switchSectionMob(btn) {
     if (desktopBtn) switchSection(desktopBtn);
 }
 
-// Открыть/закрыть боковое меню
-function toggleMobMenu() {
-    const menu    = document.getElementById('mob-side-menu');
-    const overlay = document.getElementById('mob-menu-overlay');
-    const isOpen  = menu.classList.toggle('open');
-    overlay.classList.toggle('show', isOpen);
-}
-
-function closeMobMenu() {
-    document.getElementById('mob-side-menu').classList.remove('open');
-    document.getElementById('mob-menu-overlay').classList.remove('show');
-}
+// Боковое меню удалено — навигация через нижнюю панель
+function toggleMobMenu() {}
+function closeMobMenu() {}
 
 // ── Мобильный трёхдневный вид недели ─────────────────────────────────
 let mobileDayOffset = 0; // индекс первого из 3 отображаемых дней (0–4)
