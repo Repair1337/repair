@@ -3,9 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23e30613'/><text x='50' y='72' font-family='sans-serif' font-size='65' font-weight='bold' fill='white' text-anchor='middle'>R</text></svg>">
-    <title>RepairTech — Панель управления</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23e30613'/><path d='M28 78L28 22L56 22C70 22 76 31 76 42C76 53 68 58 56 58L28 58M46 58L70 78' fill='none' stroke='white' stroke-width='10' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+    <title>Repair — Панель управления</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;900&display=swap');
+        /* Логотип Repair.: R и точка — красные (#e30613), font-weight 900, на 40% крупнее */
+        .logo-r, .logo-dot { font-family: 'Montserrat', sans-serif; font-weight: 900; color: #e30613; font-size: 1.4em; line-height: 1; vertical-align: baseline; }
+        /* epair — тёмный (#1a1a1a), тонкий (font-weight 300) */
+        .logo-epair { font-family: 'Montserrat', sans-serif; font-weight: 300; color: #1a1a1a; }
+
         /* ===== СБРОС И БАЗОВЫЕ СТИЛИ ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -35,13 +41,12 @@
             max-width: 400px;
         }
 
+        /* Экран входа: base 48px → epair 48px, R через .logo-r (1.4em ≈ 67px) */
         .login-logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #e30613;
+            font-size: 48px;
             text-align: center;
-            margin-bottom: 6px;
-            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            line-height: 1.2;
         }
 
         .login-subtitle {
@@ -1647,8 +1652,8 @@
      ============================ -->
 <div id="login-screen">
     <div class="login-card">
-        <div class="login-logo">RepairTech</div>
-        <div class="login-subtitle">Вход для автосервисов</div>
+        <div class="login-logo"><span class="logo-r">R</span><span class="logo-epair">epair</span><span class="logo-dot">.</span></div>
+        <div class="login-subtitle">Панель управления</div>
 
         <label for="email">Email</label>
         <input type="text" id="email" placeholder="например: info@autopro.lv">
@@ -3112,7 +3117,7 @@
                 { name: 'Запчасти и материалы',  amount: 2100 },
                 { name: 'Аренда помещения',      amount: 800  },
                 { name: 'Коммунальные услуги',   amount: 320  },
-                { name: 'Комиссия RepairTech',   amount: 250  },
+                { name: 'Комиссия Repair',   amount: 250  },
                 { name: 'Прочее',                amount: 50   }
             ],
             revenue: [
@@ -3142,7 +3147,7 @@
                 { name: 'Запчасти и материалы',  amount: 1980 },
                 { name: 'Аренда помещения',      amount: 800  },
                 { name: 'Коммунальные услуги',   amount: 350  },
-                { name: 'Комиссия RepairTech',   amount: 230  },
+                { name: 'Комиссия Repair',   amount: 230  },
                 { name: 'Прочее',                amount: 120  }
             ],
             revenue: [
@@ -3172,7 +3177,7 @@
                 { name: 'Запчасти и материалы',  amount: 6200  },
                 { name: 'Аренда помещения',      amount: 2400  },
                 { name: 'Коммунальные услуги',   amount: 980   },
-                { name: 'Комиссия RepairTech',   amount: 420   },
+                { name: 'Комиссия Repair',   amount: 420   },
                 { name: 'Прочее',                amount: 200   }
             ],
             revenue: [
@@ -3202,7 +3207,7 @@
                 { name: 'Запчасти и материалы',  amount: 8300  },
                 { name: 'Аренда помещения',      amount: 3200  },
                 { name: 'Коммунальные услуги',   amount: 1280  },
-                { name: 'Комиссия RepairTech',   amount: 560   },
+                { name: 'Комиссия Repair',   amount: 560   },
                 { name: 'Прочее',                amount: 160   }
             ],
             revenue: [
@@ -4007,7 +4012,7 @@
             <div class="modal-field">
                 <label class="modal-label">Источник записи</label>
                 <select class="modal-select" id="m-source">
-                    <option>Через RepairTech</option>
+                    <option>Через Repair</option>
                     <option>По телефону</option>
                     <option>Пришёл без записи</option>
                 </select>
