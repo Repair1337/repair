@@ -105,11 +105,12 @@
 
         /* Сетка и карточки сервисов */
         .service-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-        .service-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 22px; overflow: hidden; transition: box-shadow 0.2s, transform 0.15s; }
-        .service-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.09); transform: translateY(-2px); }
+        .service-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 22px; overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .service-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); transform: translateY(-4px); }
         .service-card.hidden { display: none; }
 
-        .srv-photo { margin: -22px -22px 16px -22px; height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
+        /* position: relative нужен для абсолютного позиционирования бейджа внутри фото */
+        .srv-photo { margin: -22px -22px 16px -22px; height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; position: relative; overflow: hidden; }
         .srv-photo-icon { font-size: 2rem; line-height: 1; }
         .srv-photo-label { font-size: 0.72rem; color: #aaa; }
 
@@ -424,12 +425,123 @@
         .about-link  { font-size: 0.82rem; color: #e30613; text-decoration: none; cursor: pointer; }
         .about-link:hover { text-decoration: underline; }
 
+        /* ===== ПРИВЕТСТВЕННЫЙ БАННЕР ===== */
+        .welcome-banner {
+            background: linear-gradient(135deg, #e30613, #c40510);
+            border-radius: 16px;
+            padding: 24px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .welcome-banner-title { font-size: 24px; font-weight: 800; line-height: 1.2; margin-bottom: 6px; }
+        .welcome-banner-sub   { font-size: 14px; opacity: 0.88; }
+        /* Отступ слева чтобы эмодзи не прилипал к тексту */
+        .welcome-banner-icon  { font-size: 48px; line-height: 1; flex-shrink: 0; margin-left: 16px; }
+
+        /* ===== СОВЕТ ДНЯ ===== */
+        .tip-card {
+            background: #fff8e1;
+            border-radius: 12px;
+            border-left: 4px solid #ffc107;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+        }
+        .tip-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .tip-card-title  { font-weight: 700; font-size: 0.9rem; color: #5a4000; }
+        /* opacity: 0 при fade-анимации смены совета */
+        .tip-text        { font-size: 0.875rem; color: #5a4000; line-height: 1.55; transition: opacity 0.2s; }
+        .tip-text.fading { opacity: 0; }
+        .tip-next-btn {
+            font-size: 0.78rem; color: #b8860b;
+            background: none; border: 1px solid #ffc107; border-radius: 20px;
+            padding: 4px 12px; cursor: pointer; white-space: nowrap; flex-shrink: 0;
+            font-family: sans-serif; transition: background 0.15s, color 0.15s;
+        }
+        .tip-next-btn:hover { background: #ffc107; color: #fff; }
+
+        /* ===== БЫСТРЫЕ КАТЕГОРИИ ===== */
+        .quick-cats {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .quick-cats::-webkit-scrollbar { display: none; }
+        .quick-cat {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 6px; cursor: pointer; flex-shrink: 0; user-select: none;
+        }
+        .quick-cat-circle {
+            width: 64px; height: 64px;
+            background: #fff; border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; line-height: 1;
+            border: 2px solid transparent;
+            transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+        }
+        .quick-cat:hover .quick-cat-circle { box-shadow: 0 6px 20px rgba(0,0,0,0.18); transform: translateY(-2px); }
+        .quick-cat.active .quick-cat-circle { border-color: #e30613; box-shadow: 0 4px 16px rgba(227,6,19,0.25); }
+        .quick-cat-label { font-size: 11px; color: #666; text-align: center; line-height: 1.3; max-width: 64px; }
+
+        /* ===== БЕЙДЖИ НА ФОТО КАРТОЧКИ СЕРВИСА ===== */
+        .srv-badge {
+            position: absolute; top: 10px; left: 10px; z-index: 2;
+            padding: 3px 10px; border-radius: 20px;
+            font-size: 0.72rem; font-weight: 700; white-space: nowrap;
+        }
+        .srv-badge-top     { background: #e30613; color: #fff; }
+        .srv-badge-popular { background: #ff7300; color: #fff; }
+
+        /* ===== РАССТОЯНИЕ И МИНИ-УСЛУГИ НА КАРТОЧКЕ ===== */
+        .srv-distance      { font-size: 0.79rem; color: #aaa; margin-bottom: 4px; }
+        .srv-mini-services { font-size: 0.78rem; color: #999; margin-bottom: 10px; line-height: 1.4; }
+
+        /* ===== БЛОК "ПОЧЕМУ REPAIR." ===== */
+        .why-repair {
+            margin-top: 32px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .why-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 22px 18px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .why-card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+        .why-card-icon  { font-size: 2rem; margin-bottom: 10px; line-height: 1; display: block; }
+        .why-card-title { font-weight: 700; font-size: 0.92rem; color: #1a1a1a; margin-bottom: 6px; }
+        .why-card-text  { font-size: 0.81rem; color: #888; line-height: 1.55; }
+
+        /* ===== АНИМАЦИИ ПОЯВЛЕНИЯ (staggered fade-in) ===== */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .anim-d0 { animation: fadeSlideUp 0.4s 0.00s ease both; }
+        .anim-d1 { animation: fadeSlideUp 0.4s 0.10s ease both; }
+        .anim-d2 { animation: fadeSlideUp 0.4s 0.20s ease both; }
+        .anim-d3 { animation: fadeSlideUp 0.4s 0.30s ease both; }
+        .anim-d4 { animation: fadeSlideUp 0.4s 0.40s ease both; }
+        .anim-d5 { animation: fadeSlideUp 0.4s 0.50s ease both; }
+
         /* ===== ПЛАВНЫЙ ПЕРЕХОД ДЛЯ ТЁМНОЙ ТЕМЫ ===== */
         body, .cab-header, .mob-header, .mob-bottom-nav,
         .service-card, .car-card, .booking-card, .profile-card,
         .tl-card, .about-block, .settings-group-title,
         .settings-row-label, .settings-row-desc, .settings-row,
-        .theme-card, .lang-card, .sect-title {
+        .theme-card, .lang-card, .sect-title,
+        .tip-card, .quick-cat-circle, .why-card {
             transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
 
@@ -497,6 +609,22 @@
         body.dark-theme .tl-cost              { color: #e0e0e0; }
         body.dark-theme .month-card           { border-color: #333; background: #1e1e1e; color: #b0b0b0; }
         body.dark-theme .toast                { background: #333; }
+
+        /* Новые элементы в тёмной теме */
+        /* Баннер остаётся красным — изменений не нужно */
+        body.dark-theme .tip-card           { background: #2a2500; border-left-color: #ffc107; }
+        body.dark-theme .tip-card-title     { color: #ffd54f; }
+        body.dark-theme .tip-text           { color: #ffd54f; }
+        body.dark-theme .tip-next-btn       { color: #ffc107; border-color: #ffc107; }
+        body.dark-theme .tip-next-btn:hover { background: #ffc107; color: #2a2500; }
+        body.dark-theme .quick-cat-circle   { background: #2a2a2a; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+        body.dark-theme .quick-cat-label    { color: #b0b0b0; }
+        body.dark-theme .quick-cat.active .quick-cat-circle { box-shadow: 0 4px 16px rgba(227,6,19,0.35); }
+        body.dark-theme .why-card           { background: #1e1e1e; }
+        body.dark-theme .why-card-title     { color: #e0e0e0; }
+        body.dark-theme .why-card-text      { color: #b0b0b0; }
+        body.dark-theme .srv-distance       { color: #b0b0b0; }
+        body.dark-theme .srv-mini-services  { color: #b0b0b0; }
 
         /* ===== ТОСТ ===== */
         .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(8px); background: #1a1a1a; color: #fff; padding: 11px 22px; border-radius: 8px; font-size: 0.9rem; opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; z-index: 999; white-space: nowrap; }
@@ -697,6 +825,19 @@
                 text-decoration: underline;
                 height: 36px; box-shadow: none;
             }
+
+            /* ── Приветственный баннер: вертикально по центру ── */
+            .welcome-banner {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+                padding: 20px 18px;
+            }
+            .welcome-banner-title { font-size: 20px; }
+            .welcome-banner-icon  { font-size: 40px; margin-left: 0; }
+
+            /* ── Блок "Почему Repair." — одна колонка ── */
+            .why-repair { grid-template-columns: 1fr; gap: 12px; margin-top: 20px; }
 
             /* ── Мои машины: одна колонка, скруглённые ── */
             .cars-grid { grid-template-columns: 1fr; gap: 16px; }
@@ -944,8 +1085,26 @@
         <section class="section active" id="sect-search">
             <div class="sect-title">🔍 Найти автосервис</div>
 
+            <!-- Приветственный баннер -->
+            <div class="welcome-banner anim-d0">
+                <div class="welcome-banner-text">
+                    <div class="welcome-banner-title">Добро пожаловать в Repair.</div>
+                    <div class="welcome-banner-sub">Найдите лучший автосервис рядом с вами</div>
+                </div>
+                <div class="welcome-banner-icon">🔧</div>
+            </div>
+
+            <!-- Совет дня: случайный при загрузке, кнопка "Другой совет" -->
+            <div class="tip-card anim-d1">
+                <div class="tip-card-header">
+                    <span class="tip-card-title">💡 Совет дня</span>
+                    <button class="tip-next-btn" onclick="nextTip()">Другой совет</button>
+                </div>
+                <div class="tip-text" id="tip-text"></div>
+            </div>
+
             <!-- Строка поиска + кнопка раскрытия фильтров -->
-            <div class="search-bar-wrap">
+            <div class="search-bar-wrap anim-d2">
                 <!-- Обёртка с иконкой лупы слева (pill на мобильном) -->
                 <div class="search-input-wrap">
                     <span class="search-icon-inner">🔍</span>
@@ -1022,12 +1181,34 @@
                 </select>
             </div>
 
+            <!-- Быстрые категории по типу работы (горизонтальный скролл на мобильном) -->
+            <div class="quick-cats anim-d3" id="quick-cats"></div>
+
             <!-- Карточки рендерятся через JS при инициализации -->
-            <div class="service-cards-grid" id="service-cards-grid"></div>
+            <div class="service-cards-grid anim-d4" id="service-cards-grid"></div>
 
             <!-- Сообщение когда ни одна карточка не прошла фильтр -->
             <div class="no-results" id="no-results" style="display:none">
                 По вашим критериям ничего не найдено. Попробуйте изменить фильтры.
+            </div>
+
+            <!-- Блок "Почему Repair." — три преимущества платформы -->
+            <div class="why-repair anim-d5">
+                <div class="why-card">
+                    <span class="why-card-icon">🔒</span>
+                    <div class="why-card-title">Только проверенные сервисы</div>
+                    <div class="why-card-text">Все сервисы зарегистрированы как SIA и прошли проверку</div>
+                </div>
+                <div class="why-card">
+                    <span class="why-card-icon">💰</span>
+                    <div class="why-card-title">Прозрачные цены</div>
+                    <div class="why-card-text">Знайте стоимость ремонта до визита в сервис</div>
+                </div>
+                <div class="why-card">
+                    <span class="why-card-icon">📋</span>
+                    <div class="why-card-title">История ремонтов</div>
+                    <div class="why-card-text">Вся история обслуживания вашего автомобиля в одном месте</div>
+                </div>
             </div>
 
         </section>
@@ -1502,6 +1683,32 @@ const SERVICES_DATA = [
     }
 ];
 
+// ── Советы дня — 7 вариантов, случайный при загрузке ─────────────────
+const TIPS = [
+    'Проверяйте уровень масла каждые 1000 км — это продлит жизнь двигателя на годы.',
+    'Тормозные колодки обычно служат 30–50 тысяч км. Скрип при торможении — сигнал к замене.',
+    'Давление в шинах стоит проверять раз в месяц. Правильное давление экономит до 3% топлива.',
+    'Антифриз нужно менять каждые 2–3 года, даже если уровень в норме — со временем он теряет свойства.',
+    'Перед зимой проверьте аккумулятор — 80% зимних поломок связаны именно с ним.',
+    'Фильтр салона стоит менять каждые 15–20 тысяч км — это влияет на здоровье и работу кондиционера.',
+    'Не прогревайте двигатель на месте дольше 1–2 минут — лучше ехать на низких оборотах первые 5 минут.',
+];
+let currentTipIndex = Math.floor(Math.random() * TIPS.length);
+
+// ── Бейджи на фото карточек ───────────────────────────────────────────
+const SRV_BADGES = {
+    autopro: { text: '⭐ Топ рейтинг', cls: 'srv-badge-top'     },
+    topauto: { text: '🔥 Популярный',  cls: 'srv-badge-popular' },
+};
+
+// ── Расстояние до сервиса (демо-данные) ──────────────────────────────
+const SRV_DISTANCES = {
+    autopro:  '1.2 км от вас',
+    mehanika: '2.8 км от вас',
+    garage:   '4.1 км от вас',
+    topauto:  '3.5 км от вас',
+};
+
 // Совместимость с разделом записи (booking)
 const SERVICES = SERVICES_DATA.map(s => ({ id: s.id, name: s.name }));
 
@@ -1713,9 +1920,25 @@ function buildServiceCard(s) {
         `<div class="price-row"><span class="price-name">${p.name}</span><span class="price-val">${p.price}</span></div>`
     ).join('');
 
+    // бейдж топ/популярный в левом верхнем углу фото
+    const badge    = SRV_BADGES[s.id];
+    const badgeHtml = badge
+        ? `<div class="srv-badge ${badge.cls}">${badge.text}</div>`
+        : '';
+
+    // расстояние от клиента (демо-данные)
+    const dist     = SRV_DISTANCES[s.id];
+    const distHtml = dist ? `<div class="srv-distance">🚗 ${dist}</div>` : '';
+
+    // мини-список первых 2 популярных услуг с ценами
+    const miniHtml = s.priceList.slice(0, 2)
+        .map(p => `${p.name} ${p.price}`).join(' · ');
+
     return `
     <div class="service-card" data-id="${s.id}">
         <div class="srv-photo" style="background:${s.photoBg}">
+            <!-- Бейдж топ/популярный в левом верхнем углу (десктоп) -->
+            ${badgeHtml}
             <!-- Рейтинговый бейдж в правом верхнем углу (только мобильный) -->
             <div class="srv-photo-rating">⭐ ${s.rating} <span class="srv-photo-reviews">(${s.reviews})</span></div>
             <!-- Название сервиса поверх фото снизу (только мобильный) -->
@@ -1733,6 +1956,8 @@ function buildServiceCard(s) {
         <div style="margin-bottom:8px"><span class="price-badge ${priceCls}">${s.priceCategory} ${s.priceName}</span></div>
         <div class="srv-addr">📍 ${s.addr}</div>
         <div class="srv-hours">🕐 ${s.hours}</div>
+        ${distHtml}
+        <div class="srv-mini-services">${miniHtml}</div>
         <div class="spec-tags">${specTagsHtml}</div>
         <div class="srv-btns">
             <button class="btn-sm btn-red"     onclick="goToBooking('${s.id}')">Записаться</button>
@@ -2144,7 +2369,68 @@ function showMobileDays() {
 function mobDayPrev() { if (mobileDayOffset > 0) { mobileDayOffset--; showMobileDays(); } }
 function mobDayNext() { if (mobileDayOffset < 4) { mobileDayOffset++; showMobileDays(); } }
 
+// ── Совет дня ─────────────────────────────────────────────────────────
+function initTipCard() {
+    const el = document.getElementById('tip-text');
+    if (el) el.textContent = TIPS[currentTipIndex];
+}
+
+// Кнопка "Другой совет": fade-out → смена текста → fade-in
+function nextTip() {
+    const el = document.getElementById('tip-text');
+    if (!el) return;
+    el.classList.add('fading');
+    setTimeout(() => {
+        currentTipIndex = (currentTipIndex + 1) % TIPS.length;
+        el.textContent = TIPS[currentTipIndex];
+        el.classList.remove('fading');
+    }, 200);
+}
+
+// ── Быстрые категории ─────────────────────────────────────────────────
+const QUICK_CATS_DATA = [
+    { emoji: '🛢', label: 'Замена масла',    spec: 'ТО'             },
+    { emoji: '🔍', label: 'Диагностика',     spec: 'Диагностика'    },
+    { emoji: '🛞', label: 'Шины и диски',    spec: 'Ходовая'        },
+    { emoji: '⚡', label: 'Электрика',       spec: 'Электрика'      },
+    { emoji: '🔧', label: 'Ходовая',         spec: 'Ходовая'        },
+    { emoji: '🎨', label: 'Кузовной ремонт', spec: 'Кузовной ремонт'},
+];
+
+function renderQuickCats() {
+    const wrap = document.getElementById('quick-cats');
+    if (!wrap) return;
+    wrap.innerHTML = QUICK_CATS_DATA.map(c => `
+        <div class="quick-cat" onclick="onQuickCat(this,'${c.spec}')">
+            <div class="quick-cat-circle">${c.emoji}</div>
+            <span class="quick-cat-label">${c.label}</span>
+        </div>
+    `).join('');
+}
+
+// Клик по быстрой категории — активирует фильтр специализации
+// Повторный клик на уже активной категории — сбрасывает фильтр
+function onQuickCat(el, spec) {
+    const allCats  = document.querySelectorAll('.quick-cat');
+    const isActive = el.classList.contains('active');
+
+    allCats.forEach(c => c.classList.remove('active'));
+
+    if (isActive) {
+        // Повторный клик — сброс на "Все"
+        const allBtn = document.querySelector('[data-group="spec"][data-value="all"]');
+        if (allBtn) setFilterTag('spec', 'all', allBtn);
+    } else {
+        el.classList.add('active');
+        // Активируем соответствующий тег в скрытой панели фильтров
+        const tagBtn = document.querySelector(`[data-group="spec"][data-value="${spec}"]`);
+        if (tagBtn) setFilterTag('spec', spec, tagBtn);
+    }
+}
+
 // ── Инициализация ─────────────────────────────────────────────────────
+initTipCard();        // показываем случайный совет дня
+renderQuickCats();    // рендерим быстрые категории
 renderServiceCards(); // карточки сервисов с фильтрами
 renderMonths();       // сетка месяцев
 renderTimeline();     // таймлайн (рендерим заранее для быстрого переключения)
