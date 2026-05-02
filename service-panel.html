@@ -2,7 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a1a1a">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23e30613'/><path d='M28 78L28 22L56 22C70 22 76 31 76 42C76 53 68 58 56 58L28 58M46 58L70 78' fill='none' stroke='white' stroke-width='10' stroke-linecap='round' stroke-linejoin='round'/></svg>">
     <title>Repair — Панель управления</title>
     <style>
@@ -1642,6 +1643,315 @@
         .dash-action-btn:last-child { margin-bottom: 0; }
         .dash-action-btn:hover      { background: #efefef; border-color: #d0d0d0; transform: translateX(3px); }
         .dash-action-btn:active     { transform: scale(0.97); }
+
+        /* ===================================================
+           МОБИЛЬНАЯ АДАПТАЦИЯ — экраны до 767px включительно
+           Десктоп (768px+) остаётся без изменений
+           =================================================== */
+
+        /* Мобильные элементы — по умолчанию скрыты на десктопе */
+        .mob-header-logo { display: none; }
+        .mob-bottomnav   { display: none; }
+
+        @media (max-width: 767px) {
+
+            /* ===== БОКОВОЕ МЕНЮ — скрыть на мобильном ===== */
+            .sidebar { display: none !important; }
+
+            /* ===== КОНТЕНТ: убираем отступ от сайдбара ===== */
+            .content-area { margin-left: 0; }
+
+            /* ===== ШАПКА → превращается в мобильную верхнюю панель ===== */
+            .content-header {
+                position: fixed;
+                top: 0; left: 0; right: 0;
+                height: 56px;
+                padding: 0 16px;
+                z-index: 200;
+            }
+
+            /* Заголовок раздела по центру */
+            .content-header-title {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 0.9rem;
+                white-space: nowrap;
+            }
+
+            /* Логотип в шапке — показываем на мобильном */
+            .mob-header-logo { display: block; font-size: 1.2rem; }
+
+            /* Онлайн-индикатор "AutoPro Riga" — скрыть */
+            .header-online { display: none; }
+
+            /* Основной контент: отступ под шапкой и над нижней панелью */
+            .content-body {
+                padding: 72px 16px 16px;
+            }
+
+            /* ===== НИЖНЯЯ НАВИГАЦИЯ ===== */
+            .mob-bottomnav {
+                display: flex;
+                position: fixed;
+                bottom: 0; left: 0; right: 0;
+                height: 64px;
+                padding-bottom: env(safe-area-inset-bottom);
+                background: #1a1a1a;
+                z-index: 200;
+                align-items: stretch;
+            }
+
+            .mob-nav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                flex: 1;
+                gap: 3px;
+                cursor: pointer;
+                -webkit-tap-highlight-color: transparent;
+                transition: transform 0.12s ease;
+            }
+
+            .mob-nav-item:active { transform: scale(1.15); }
+            .mob-nav-icon  { font-size: 22px; line-height: 1; color: #888; }
+            .mob-nav-label { font-size: 10px; color: #888; }
+            .mob-nav-item.active .mob-nav-icon,
+            .mob-nav-item.active .mob-nav-label { color: #e30613; }
+
+            /* ===== ОТСТУП ПОД НИЖНЕЙ НАВИГАЦИЕЙ ===== */
+            .content-area {
+                padding-bottom: calc(64px + env(safe-area-inset-bottom));
+            }
+
+            /* ===== ЭКРАН ЛОГИНА ===== */
+            .login-card {
+                padding: 32px 24px;
+                border-radius: 20px;
+                animation: loginCardIn 0.4s ease both;
+            }
+
+            @keyframes loginCardIn {
+                from { opacity: 0; transform: translateY(28px); }
+                to   { opacity: 1; transform: translateY(0); }
+            }
+
+            .login-logo { font-size: 52px; animation: loginFadeDown 0.4s ease both; }
+            .login-subtitle { animation: loginFadeDown 0.4s 0.1s ease both; }
+
+            @keyframes loginFadeDown {
+                from { opacity: 0; transform: translateY(-14px); }
+                to   { opacity: 1; transform: translateY(0); }
+            }
+
+            /* Поля ввода: шрифт 16px предотвращает авто-зум на iOS */
+            .login-card input {
+                border-radius: 12px;
+                min-height: 50px;
+                font-size: 16px;
+                padding: 12px 16px;
+            }
+
+            .login-btn { border-radius: 25px; min-height: 50px; }
+
+            /* ===== ДАШБОРД: карточки 2×2 ===== */
+            .dash-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+                margin-bottom: 16px;
+            }
+
+            .dash-greeting { font-size: 1.1rem; }
+            .dash-date     { font-size: 0.82rem; }
+
+            .dash-quick-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin-bottom: 16px;
+            }
+
+            .dash-qcard-value { font-size: 1.9rem; }
+            .dash-qcard-icon  { font-size: 1.4rem; margin-bottom: 5px; }
+
+            /* Расписание — горизонтальный скролл */
+            .dash-schedule-wrap {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                margin: 0 -4px;
+            }
+            .dash-schedule-table { min-width: 480px; font-size: 0.8rem; }
+
+            /* Нижний ряд дашборда — одна колонка */
+            .dash-bottom-row { grid-template-columns: 1fr; gap: 14px; }
+            .dash-block { border-radius: 14px; }
+
+            /* Кнопки быстрых действий */
+            .dash-action-btn {
+                min-height: 48px;
+                font-size: 0.9rem;
+                border-radius: 10px;
+            }
+            .dash-action-btn:active { opacity: 0.8; transform: none; }
+
+            /* ===== ЗАПИСИ ===== */
+            .booking-tabs { flex-wrap: nowrap; gap: 6px; }
+            .tab-btn {
+                flex: 1;
+                min-height: 44px;
+                padding: 10px 8px;
+                font-size: 0.8rem;
+                text-align: center;
+                border-radius: 10px;
+                white-space: nowrap;
+            }
+            .booking-card { border-radius: 14px; }
+            .booking-body { padding: 14px; }
+            .booking-info span { display: block; margin-bottom: 2px; }
+            .booking-actions { gap: 8px; margin-top: 12px; }
+
+            /* Кнопки Подтвердить / Отклонить — 48px */
+            .action-btn {
+                flex: 1;
+                min-height: 48px;
+                font-size: 0.9rem;
+                padding: 12px 10px;
+                border-radius: 10px;
+            }
+
+            /* Кнопка чата — на всю ширину */
+            .chat-open-btn {
+                width: 100%;
+                min-height: 44px;
+                justify-content: center;
+                font-size: 0.875rem;
+                border-radius: 10px;
+            }
+
+            /* ===== СТАТИСТИКА ===== */
+            .stat-cards { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .stat-card-value { font-size: 1.7rem; }
+            .bar-label { min-width: 120px; font-size: 0.8rem; }
+            .bar-count { min-width: 56px; font-size: 0.74rem; }
+
+            /* ===== ПРОФИЛЬ ===== */
+            .profile-top { flex-direction: column; align-items: flex-start; gap: 10px; }
+
+            /* Вкладки — горизонтальный скролл без полосы прокрутки */
+            .profile-tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                flex-wrap: nowrap;
+                scrollbar-width: none;
+                margin: 0 -16px;
+                padding: 0 16px;
+            }
+            .profile-tabs::-webkit-scrollbar { display: none; }
+            .profile-tab {
+                white-space: nowrap;
+                min-height: 44px;
+                padding: 10px 18px;
+                flex-shrink: 0;
+            }
+
+            .profile-block { border-radius: 12px; padding: 16px; }
+            .profile-info-row { flex-direction: column; gap: 3px; }
+            .profile-info-label { min-width: auto; }
+
+            /* ===== ФИНАНСЫ ===== */
+            .fin-period-btn { min-height: 44px; padding: 8px 12px; font-size: 0.8rem; }
+
+            .fin-kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .fin-kpi-value { font-size: 1.4rem; }
+            .fin-kpi-label, .fin-kpi-delta { font-size: 0.72rem; }
+
+            .fin-block { border-radius: 12px; overflow-x: auto; }
+            .fin-bar-label { min-width: 115px; font-size: 0.78rem; }
+            .fin-bar-info  { min-width: 68px;  font-size: 0.72rem; }
+            .fin-table { min-width: 380px; }
+            .fin-table td, .fin-table th { padding: 8px 10px; font-size: 0.8rem; }
+
+            /* Сравнение с прошлым месяцем */
+            .fin-cmp-val   { min-width: 64px; font-size: 0.7rem; }
+            .fin-cmp-label { min-width: 54px; font-size: 0.78rem; }
+
+            /* ===== УЧЁТ ЧАСОВ ===== */
+            .mech-cards-grid { grid-template-columns: 1fr; gap: 10px; }
+
+            .mech-detail { padding: 16px; }
+            .mech-detail-top { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .period-tabs { flex-wrap: wrap; gap: 6px; }
+            .period-btn { min-height: 44px; padding: 8px 14px; }
+
+            /* Диаграмма часов — вертикальный стек */
+            .hours-chart-wrap { flex-direction: column; gap: 14px; }
+            .hours-stat-block { min-width: auto; width: 100%; }
+
+            /* ===== КАЛЕНДАРЬ: 3 дня ===== */
+            .cal-nav { gap: 8px; }
+            #cal-week-label {
+                order: -1;
+                width: 100%;
+                text-align: center;
+                font-size: 0.85rem;
+            }
+            .cal-nav-btn { min-height: 44px; padding: 10px 12px; font-size: 0.82rem; flex: 1; }
+
+            /* Сетка дней: 3 колонки */
+            .cal-days { grid-template-columns: repeat(3, 1fr); min-width: 0; gap: 5px; }
+
+            /* Слоты в календаре — чуть удобнее для касания */
+            .mech-book-btn { min-height: 28px; padding: 4px 8px; font-size: 0.62rem; }
+
+            /* ===== ИСТОРИЯ ===== */
+            .hist-toolbar { flex-direction: column; gap: 8px; }
+            .hist-period  { width: 100%; }
+            .hist-footer  { flex-direction: column; gap: 10px; align-items: flex-start; }
+            .hist-more-btn { min-height: 44px; width: 100%; text-align: center; border-radius: 10px; }
+
+            /* ===== МОДАЛЬНОЕ ОКНО — sheet снизу ===== */
+            .modal-overlay { align-items: flex-end; padding: 0; }
+            .modal-window  { border-radius: 20px 20px 0 0; max-width: 100%; max-height: 92vh; }
+            .modal-row     { grid-template-columns: 1fr; }
+            .modal-input, .modal-select, .modal-textarea { font-size: 16px; }
+
+            /* ===== ЧАТ — sheet снизу ===== */
+            .chat-overlay { align-items: flex-end; padding: 0; }
+            .chat-window  { border-radius: 20px 20px 0 0; max-width: 100%; max-height: 85vh; }
+            .chat-input   { font-size: 16px; }
+
+            /* ===== УВЕДОМЛЕНИЯ — фиксированный дропдаун ===== */
+            .notif-dropdown {
+                position: fixed;
+                top: 60px;
+                right: 12px;
+                left: 12px;
+                width: auto;
+            }
+
+            /* ===== ОБЩИЕ: кнопки минимум 44px ===== */
+            .cal-nav-btn, .hist-more-btn, .notif-mark-btn,
+            .fin-period-btn, .logout-btn { min-height: 44px; }
+
+            /* Плавный переход между разделами */
+            .section.active { animation: sectionFadeIn 0.25s ease both; }
+
+            @keyframes sectionFadeIn {
+                from { opacity: 0; transform: translateY(8px); }
+                to   { opacity: 1; transform: translateY(0); }
+            }
+
+            /* Скруглённые карточки */
+            .profile-block, .stats-block, .dash-block,
+            .booking-card, .fin-block, .mech-detail { border-radius: 16px; }
+
+            /* Active state для тач (вместо hover) */
+            .dash-quick-card:active { opacity: 0.8; transform: none; box-shadow: none; }
+            .tab-btn:active         { opacity: 0.8; }
+            .booking-card:active    { opacity: 0.95; }
+
+        } /* /media max-width 767px */
     </style>
 </head>
 <body>
@@ -1714,6 +2024,8 @@
     <div class="content-area">
 
         <div class="content-header">
+            <!-- Логотип в шапке — виден только на мобильном -->
+            <span class="mob-header-logo"><span class="logo-r">R</span><span class="logo-epair">epair</span><span class="logo-dot">.</span></span>
             <div class="content-header-title" id="section-title">Главная</div>
 
             <!-- Правая часть шапки: колокольчик + название сервиса -->
@@ -1834,6 +2146,7 @@
                         <span>Расписание</span>
                         <span class="dash-block-date">Сегодня, 27 апреля</span>
                     </div>
+                    <div class="dash-schedule-wrap">
                     <table class="dash-schedule-table">
                         <thead>
                             <tr>
@@ -1899,6 +2212,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div><!-- /dash-schedule-wrap -->
                 </div>
 
                 <!-- Блок 3: Нижний ряд — отзывы + быстрые действия -->
@@ -2255,6 +2569,31 @@
 
         </div><!-- /content-body -->
     </div><!-- /content-area -->
+
+    <!-- НИЖНЯЯ МОБИЛЬНАЯ НАВИГАЦИЯ (фиксированная, 5 разделов) -->
+    <nav class="mob-bottomnav" id="mob-bottomnav">
+        <div class="mob-nav-item active" data-section="home" onclick="switchSectionMob(this)">
+            <span class="mob-nav-icon">🏠</span>
+            <span class="mob-nav-label">Главная</span>
+        </div>
+        <div class="mob-nav-item" data-section="bookings" onclick="switchSectionMob(this)">
+            <span class="mob-nav-icon">📋</span>
+            <span class="mob-nav-label">Записи</span>
+        </div>
+        <div class="mob-nav-item" data-section="calendar" onclick="switchSectionMob(this)">
+            <span class="mob-nav-icon">📅</span>
+            <span class="mob-nav-label">Календарь</span>
+        </div>
+        <div class="mob-nav-item" data-section="estimates" onclick="switchSectionMob(this)">
+            <span class="mob-nav-icon">🧾</span>
+            <span class="mob-nav-label">Сметы</span>
+        </div>
+        <div class="mob-nav-item" data-section="profile" onclick="switchSectionMob(this)">
+            <span class="mob-nav-icon">👤</span>
+            <span class="mob-nav-label">Профиль</span>
+        </div>
+    </nav>
+
 </div><!-- /dashboard-screen -->
 
 <script>
@@ -2328,6 +2667,8 @@
         switchSection(homeNav);
         initDashDate();
         renderBookings(); // предзагружаем данные раздела "Записи"
+        // Синхронизируем нижнюю навигацию
+        syncMobNav('home');
     }
 
     function doLogout() {
@@ -2360,8 +2701,24 @@
 
         document.getElementById('section-title').textContent = sectionTitles[target] || '';
 
+        // Синхронизируем нижнюю мобильную навигацию
+        syncMobNav(target);
+
         if (target === 'calendar') renderCalendar();
         if (target === 'history')  renderHistory();
+    }
+
+    // Обновляет активный пункт нижней навигации
+    function syncMobNav(sectionId) {
+        document.querySelectorAll('.mob-nav-item').forEach(el => {
+            el.classList.toggle('active', el.dataset.section === sectionId);
+        });
+    }
+
+    // Переключение раздела из нижней навигации
+    function switchSectionMob(clickedItem) {
+        const navItem = document.querySelector(`.nav-item[data-section="${clickedItem.dataset.section}"]`);
+        if (navItem) switchSection(navItem);
     }
 
     // Быстрый переход в любой раздел по имени секции (используется в дашборде и карточках)
@@ -2815,6 +3172,8 @@
 
     // Смещение недели: 0 = текущая
     let weekOffset = 0;
+    // Мобильное смещение дней внутри недели (0–4 для показа 3 дней из 6 рабочих)
+    let calMobileDayOffset = 0;
 
     function getMondayOfWeek(offset) {
         const today = new Date();
@@ -2839,8 +3198,35 @@
         return `${names[d.getDay()]} ${dd}.${mm}`;
     }
 
-    function calPrevWeek() { weekOffset--; renderCalendar(); }
-    function calNextWeek() { weekOffset++; renderCalendar(); }
+    function calPrevWeek() {
+        if (window.innerWidth <= 767) {
+            // На мобильном: шаг 3 дня назад; при достижении начала — переходим на предыдущую неделю
+            if (calMobileDayOffset > 0) {
+                calMobileDayOffset = Math.max(0, calMobileDayOffset - 3);
+            } else {
+                weekOffset--;
+                calMobileDayOffset = 3; // показываем Чт–Пт–Сб предыдущей недели
+            }
+        } else {
+            weekOffset--;
+        }
+        renderCalendar();
+    }
+
+    function calNextWeek() {
+        if (window.innerWidth <= 767) {
+            // На мобильном: шаг 3 дня вперёд; при достижении конца — переходим на следующую неделю
+            if (calMobileDayOffset < 3) {
+                calMobileDayOffset = Math.min(4, calMobileDayOffset + 3);
+            } else {
+                weekOffset++;
+                calMobileDayOffset = 0;
+            }
+        } else {
+            weekOffset++;
+        }
+        renderCalendar();
+    }
 
     // ============================
     // РЕНДЕР КАЛЕНДАРЯ — ИЗМЕНЕНИЕ 2
@@ -2848,14 +3234,25 @@
     // показывая статус каждого из 4 механиков
     // ============================
     function renderCalendar() {
-        const monday = getMondayOfWeek(weekOffset);
-        const saturday = new Date(monday);
+        const isMobile  = window.innerWidth <= 767;
+        const monday    = getMondayOfWeek(weekOffset);
+        const saturday  = new Date(monday);
         saturday.setDate(monday.getDate() + 5);
 
-        const months = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+        const months   = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
         const fmtShort = d => `${d.getDate()} ${months[d.getMonth()]}`;
+
+        // На мобильном показываем 3 дня начиная с calMobileDayOffset, на десктопе — всю неделю
+        const startDay = isMobile ? calMobileDayOffset : 0;
+        const numDays  = isMobile ? 3 : 7;
+
+        const endDay = new Date(monday);
+        endDay.setDate(monday.getDate() + startDay + numDays - 1);
+
         document.getElementById('cal-week-label').textContent =
-            `${fmtShort(monday)} — ${fmtShort(saturday)} ${monday.getFullYear()}`;
+            isMobile
+                ? `${fmtShort(new Date(monday.getTime() + startDay * 86400000))} — ${fmtShort(endDay)} ${monday.getFullYear()}`
+                : `${fmtShort(monday)} — ${fmtShort(saturday)} ${monday.getFullYear()}`;
 
         const WEEKDAY_SLOTS  = ['10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
         const SATURDAY_SLOTS = ['10:00','11:00','12:00','13:00','14:00'];
@@ -2863,7 +3260,7 @@
 
         let html = '<div class="cal-days">';
 
-        for (let i = 0; i < 7; i++) {
+        for (let i = startDay; i < startDay + numDays; i++) {
             const day = new Date(monday);
             day.setDate(monday.getDate() + i);
             const dateStr    = formatDate(day);
@@ -3346,6 +3743,7 @@
         </div>
         <div class="fin-block">
             <h3>Выплаты механикам за период</h3>
+            <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
             <table class="fin-table">
                 <thead><tr>
                     <th>Механик</th>
@@ -3360,6 +3758,7 @@
                     <td>${totalPay.toLocaleString('ru')}€</td>
                 </tr></tfoot>
             </table>
+            </div>
         </div>
         <div class="fin-block">
             <h3>Сравнение с прошлым месяцем</h3>
