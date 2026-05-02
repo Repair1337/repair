@@ -300,6 +300,204 @@
         .btn-edit { padding: 9px 22px; background: #f0f0f0; border: none; border-radius: 7px; font-size: 0.9rem; font-family: sans-serif; font-weight: 600; color: #333; cursor: pointer; transition: background 0.15s; }
         .btn-edit:hover { background: #e4e4e4; }
 
+        /* ===== ВКЛАДКИ ПРОФИЛЯ ===== */
+        .profile-tabs-wrap {
+            display: flex;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 24px;
+        }
+        .profile-tab-btn {
+            padding: 10px 22px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-size: 0.95rem;
+            font-family: sans-serif;
+            color: #888;
+            cursor: pointer;
+            margin-bottom: -2px;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .profile-tab-btn:hover { color: #555; }
+        .profile-tab-btn.active { color: #e30613; border-bottom-color: #e30613; font-weight: 700; }
+        .profile-tab-pane { display: none; }
+        .profile-tab-pane.active { display: block; animation: sectionFadeIn 0.2s ease both; }
+
+        /* ===== НАСТРОЙКИ: группы ===== */
+        .settings-group { margin-bottom: 28px; }
+        .settings-group-title {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #bbb;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        /* ===== СТРОКА ПЕРЕКЛЮЧАТЕЛЯ ===== */
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .settings-row:last-child { border-bottom: none; }
+        .settings-row-label { font-size: 0.9rem; color: #333; }
+        .settings-row-desc  { font-size: 0.78rem; color: #aaa; margin-top: 2px; }
+
+        /* ===== TOGGLE SWITCH ===== */
+        .toggle-switch {
+            position: relative;
+            width: 46px;
+            height: 26px;
+            flex-shrink: 0;
+            cursor: pointer;
+            display: block;
+        }
+        .toggle-track {
+            position: absolute;
+            inset: 0;
+            background: #ddd;
+            border-radius: 13px;
+            transition: background 0.25s ease;
+        }
+        .toggle-thumb {
+            position: absolute;
+            top: 3px; left: 3px;
+            width: 20px; height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.22);
+            transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .toggle-switch.on .toggle-track  { background: #e30613; }
+        .toggle-switch.on .toggle-thumb  { transform: translateX(20px); }
+
+        /* ===== ВЫБОР ТЕМЫ ===== */
+        .theme-cards { display: flex; gap: 12px; }
+        .theme-card {
+            flex: 1;
+            padding: 14px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.88rem;
+            font-family: sans-serif;
+            color: #555;
+            background: #f9f9f9;
+            transition: border-color 0.2s, background 0.2s, color 0.2s;
+            line-height: 1.6;
+        }
+        .theme-card:active { opacity: 0.8; }
+        .theme-card.active { border-color: #e30613; background: #fff5f5; color: #e30613; font-weight: 600; }
+        .theme-card-icon { font-size: 1.5rem; display: block; margin-bottom: 4px; }
+
+        /* ===== ВЫБОР ЯЗЫКА ===== */
+        .lang-cards { display: flex; gap: 10px; }
+        .lang-card {
+            flex: 1;
+            padding: 12px 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-family: sans-serif;
+            color: #555;
+            background: #f9f9f9;
+            transition: border-color 0.2s, background 0.2s, color 0.2s;
+            line-height: 1.5;
+        }
+        .lang-card:active { opacity: 0.8; }
+        .lang-card.active { border-color: #e30613; background: #fff5f5; color: #e30613; font-weight: 600; }
+        .lang-card-flag { font-size: 1.4rem; display: block; margin-bottom: 4px; }
+
+        /* ===== О ПРИЛОЖЕНИИ ===== */
+        .about-block { background: #f9f9f9; border-radius: 12px; padding: 16px 18px; }
+        .about-name  { font-size: 1rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+        .about-ver   { font-size: 0.82rem; color: #888; margin-bottom: 14px; }
+        .about-links { display: flex; gap: 16px; flex-wrap: wrap; }
+        .about-link  { font-size: 0.82rem; color: #e30613; text-decoration: none; cursor: pointer; }
+        .about-link:hover { text-decoration: underline; }
+
+        /* ===== ПЛАВНЫЙ ПЕРЕХОД ДЛЯ ТЁМНОЙ ТЕМЫ ===== */
+        body, .cab-header, .mob-header, .mob-bottom-nav,
+        .service-card, .car-card, .booking-card, .profile-card,
+        .tl-card, .about-block, .settings-group-title,
+        .settings-row-label, .settings-row-desc, .settings-row,
+        .theme-card, .lang-card, .sect-title {
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        /* ===== ТЁМНАЯ ТЕМА ===== */
+        body.dark-theme                  { background: #121212; color: #e0e0e0; }
+        body.dark-theme .cab-header      { background: #1a1a1a; border-bottom-color: #333; }
+        body.dark-theme .nav-btn         { color: #aaa; }
+        body.dark-theme .nav-btn.active  { color: #e30613; }
+        body.dark-theme .cab-service-name { color: #e0e0e0; }
+        body.dark-theme .logo-epair      { color: #fff; }
+        body.dark-theme .mob-header      { background: #1a1a1a; }
+        body.dark-theme .mob-logo .logo-epair { color: #fff; }
+        body.dark-theme .mob-bottom-nav  { background: #1a1a1a; box-shadow: 0 -1px 0 #333; }
+        body.dark-theme .mob-bottom-btn  { color: #555; }
+        body.dark-theme .mob-bottom-btn.active { color: #e30613; }
+        body.dark-theme .sect-title      { color: #e0e0e0; border-bottom-color: #333; }
+        body.dark-theme .profile-tabs-wrap { border-bottom-color: #333; }
+        body.dark-theme .profile-tab-btn { color: #555; }
+        body.dark-theme .profile-tab-btn.active { color: #e30613; border-bottom-color: #e30613; }
+
+        /* Карточки */
+        body.dark-theme .service-card,
+        body.dark-theme .car-card,
+        body.dark-theme .profile-card,
+        body.dark-theme .tl-card,
+        body.dark-theme .about-block    { background: #1e1e1e; border-color: #333; }
+        body.dark-theme .booking-card   { background: #1e1e1e; border-color: #333; box-shadow: none; }
+
+        /* Поля и фильтры */
+        body.dark-theme .search-input,
+        body.dark-theme .sort-select    { background: #2a2a2a; border-color: #444; color: #e0e0e0; }
+        body.dark-theme .filter-tag     { background: #2a2a2a; border-color: #444; color: #ccc; }
+        body.dark-theme .filter-tag.active { background: #3a0808; border-color: #e30613; color: #e30613; }
+        body.dark-theme .filter-toggle-btn { background: #2a2a2a; border-color: #444; color: #aaa; }
+
+        /* Текст */
+        body.dark-theme .srv-name, body.dark-theme .car-name,
+        body.dark-theme .bk-service, body.dark-theme .profile-name,
+        body.dark-theme .tl-service, body.dark-theme .about-name { color: #e0e0e0; }
+        body.dark-theme .srv-addr, body.dark-theme .srv-work,
+        body.dark-theme .car-dv, body.dark-theme .bk-date,
+        body.dark-theme .pr-value, body.dark-theme .tl-mechanic { color: #aaa; }
+        body.dark-theme .pr-label { color: #555; }
+
+        /* Настройки */
+        body.dark-theme .settings-group-title { color: #555; border-bottom-color: #2a2a2a; }
+        body.dark-theme .settings-row         { border-bottom-color: #222; }
+        body.dark-theme .settings-row-label   { color: #e0e0e0; }
+        body.dark-theme .settings-row-desc    { color: #555; }
+        body.dark-theme .toggle-track         { background: #444; }
+        body.dark-theme .toggle-switch.on .toggle-track { background: #e30613; }
+        body.dark-theme .theme-card           { background: #2a2a2a; border-color: #444; color: #aaa; }
+        body.dark-theme .theme-card.active    { border-color: #e30613; background: #2a0808; color: #e30613; }
+        body.dark-theme .lang-card            { background: #2a2a2a; border-color: #444; color: #aaa; }
+        body.dark-theme .lang-card.active     { border-color: #e30613; background: #2a0808; color: #e30613; }
+
+        /* Прочее */
+        body.dark-theme .p-stat               { background: #2a2a2a; }
+        body.dark-theme .profile-avatar       { background: rgba(227,6,19,0.15); }
+        body.dark-theme .btn-edit             { background: #2a2a2a; color: #aaa; }
+        body.dark-theme .btn-add-car          { background: #2a2a2a; border-color: #444; color: #ccc; }
+        body.dark-theme .btn-sm.btn-outline   { border-color: #444; color: #aaa; }
+        body.dark-theme .tl-comment           { background: #2a2a2a; border-left-color: #555; color: #aaa; }
+        body.dark-theme .tl-dlist li          { border-bottom-color: #333; }
+        body.dark-theme .tl-cost              { color: #e0e0e0; }
+        body.dark-theme .month-card           { border-color: #333; background: #1e1e1e; color: #aaa; }
+        body.dark-theme .toast                { background: #333; }
+
         /* ===== ТОСТ ===== */
         .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(8px); background: #1a1a1a; color: #fff; padding: 11px 22px; border-radius: 8px; font-size: 0.9rem; opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; z-index: 999; white-space: nowrap; }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -621,6 +819,18 @@
 
             /* Кратковременное затемнение при нажатии */
             button:active { opacity: 0.8; transition: opacity 0.1s; }
+
+            /* ── Вкладки профиля на мобильном ── */
+            .profile-tabs-wrap {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                margin: 0 -16px;
+                padding: 0 16px;
+                flex-wrap: nowrap;
+            }
+            .profile-tabs-wrap::-webkit-scrollbar { display: none; }
+            .profile-tab-btn { white-space: nowrap; flex-shrink: 0; min-height: 44px; }
 
             /* ── Экран логина: красивый мобильный вид ── */
             .login-overlay {
@@ -1012,29 +1222,126 @@
         <section class="section" id="sect-profile">
             <div class="sect-title">👤 Мой профиль</div>
 
-            <div class="profile-card">
-                <div class="profile-avatar">👤</div>
-                <div class="profile-name">Андрей Петров</div>
-
-                <div class="profile-rows">
-                    <span class="pr-label">Телефон</span>      <span class="pr-value">+371 29 123 456</span>
-                    <span class="pr-label">Email</span>         <span class="pr-value">andrej.petrov@inbox.lv</span>
-                    <span class="pr-label">Зарегистрирован</span><span class="pr-value">Январь 2026</span>
-                </div>
-
-                <div class="profile-stats">
-                    <div class="p-stat">
-                        <div class="p-stat-val">2</div>
-                        <div class="p-stat-lbl">Машины</div>
-                    </div>
-                    <div class="p-stat">
-                        <div class="p-stat-val">6</div>
-                        <div class="p-stat-lbl">Визитов</div>
-                    </div>
-                </div>
-
-                <button class="btn-edit" onclick="showToast('Редактирование профиля — функция в разработке')">Редактировать</button>
+            <!-- Вкладки: Информация / Настройки -->
+            <div class="profile-tabs-wrap">
+                <button class="profile-tab-btn active" onclick="switchProfileTab('info', this)">Информация</button>
+                <button class="profile-tab-btn" onclick="switchProfileTab('settings', this)">⚙ Настройки</button>
             </div>
+
+            <!-- Вкладка: Информация (исходный контент) -->
+            <div class="profile-tab-pane active" id="ptab-info">
+                <div class="profile-card">
+                    <div class="profile-avatar">👤</div>
+                    <div class="profile-name">Андрей Петров</div>
+
+                    <div class="profile-rows">
+                        <span class="pr-label">Телефон</span>      <span class="pr-value">+371 29 123 456</span>
+                        <span class="pr-label">Email</span>         <span class="pr-value">andrej.petrov@inbox.lv</span>
+                        <span class="pr-label">Зарегистрирован</span><span class="pr-value">Январь 2026</span>
+                    </div>
+
+                    <div class="profile-stats">
+                        <div class="p-stat">
+                            <div class="p-stat-val">2</div>
+                            <div class="p-stat-lbl">Машины</div>
+                        </div>
+                        <div class="p-stat">
+                            <div class="p-stat-val">6</div>
+                            <div class="p-stat-lbl">Визитов</div>
+                        </div>
+                    </div>
+
+                    <button class="btn-edit" onclick="showToast('Редактирование профиля — функция в разработке')">Редактировать</button>
+                </div>
+            </div>
+
+            <!-- Вкладка: Настройки -->
+            <div class="profile-tab-pane" id="ptab-settings">
+
+                <!-- Группа 1: Уведомления -->
+                <div class="settings-group">
+                    <div class="settings-group-title">Уведомления</div>
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-row-label">Push-уведомления</div>
+                            <div class="settings-row-desc">Уведомления в браузере и на телефон</div>
+                        </div>
+                        <div class="toggle-switch on" onclick="toggleSwitch(this)">
+                            <div class="toggle-track"></div>
+                            <div class="toggle-thumb"></div>
+                        </div>
+                    </div>
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-row-label">Email-уведомления</div>
+                            <div class="settings-row-desc">На andrej.petrov@inbox.lv</div>
+                        </div>
+                        <div class="toggle-switch on" onclick="toggleSwitch(this)">
+                            <div class="toggle-track"></div>
+                            <div class="toggle-thumb"></div>
+                        </div>
+                    </div>
+                    <div class="settings-row">
+                        <div>
+                            <div class="settings-row-label">SMS-уведомления</div>
+                            <div class="settings-row-desc">На +371 29 123 456</div>
+                        </div>
+                        <div class="toggle-switch" onclick="toggleSwitch(this)">
+                            <div class="toggle-track"></div>
+                            <div class="toggle-thumb"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Группа 2: Оформление -->
+                <div class="settings-group">
+                    <div class="settings-group-title">Оформление</div>
+                    <div class="theme-cards">
+                        <button class="theme-card active" id="theme-light" onclick="setTheme('light')">
+                            <span class="theme-card-icon">☀</span>
+                            Светлая тема
+                        </button>
+                        <button class="theme-card" id="theme-dark" onclick="setTheme('dark')">
+                            <span class="theme-card-icon">🌙</span>
+                            Тёмная тема
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Группа 3: Язык -->
+                <div class="settings-group">
+                    <div class="settings-group-title">Язык</div>
+                    <div class="lang-cards">
+                        <button class="lang-card" data-lang="lv" onclick="pickLang(this)">
+                            <span class="lang-card-flag">🇱🇻</span>
+                            Latviešu
+                        </button>
+                        <button class="lang-card" data-lang="en" onclick="pickLang(this)">
+                            <span class="lang-card-flag">🇬🇧</span>
+                            English
+                        </button>
+                        <button class="lang-card active" data-lang="ru" onclick="pickLang(this)">
+                            <span class="lang-card-flag">🇷🇺</span>
+                            Русский
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Группа 4: О приложении -->
+                <div class="settings-group">
+                    <div class="settings-group-title">О приложении</div>
+                    <div class="about-block">
+                        <div class="about-name">Repair. — маркетплейс автосервисов</div>
+                        <div class="about-ver">Версия 0.1.0 (MVP)</div>
+                        <div class="about-links">
+                            <span class="about-link" onclick="showToast('Открывается в полной версии')">Политика конфиденциальности</span>
+                            <span class="about-link" onclick="showToast('Открывается в полной версии')">Условия использования</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /ptab-settings -->
+
         </section>
 
     </main>
@@ -1766,6 +2073,40 @@ function switchSectionMob(btn) {
 
 // Боковое меню удалено — навигация через нижнюю панель
 function toggleMobMenu() {}
+
+// ── Вкладки профиля ──────────────────────────────────────────────────
+function switchProfileTab(tab, btn) {
+    document.querySelectorAll('.profile-tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.profile-tab-pane').forEach(p => p.classList.remove('active'));
+    document.getElementById('ptab-' + tab).classList.add('active');
+}
+
+// ── Переключатели уведомлений ─────────────────────────────────────────
+function toggleSwitch(el) {
+    el.classList.toggle('on');
+}
+
+// ── Тема оформления ───────────────────────────────────────────────────
+function setTheme(theme) {
+    if (theme === 'dark') {
+        document.body.classList.add('dark-theme');
+        document.getElementById('theme-light').classList.remove('active');
+        document.getElementById('theme-dark').classList.add('active');
+    } else {
+        document.body.classList.remove('dark-theme');
+        document.getElementById('theme-light').classList.add('active');
+        document.getElementById('theme-dark').classList.remove('active');
+    }
+}
+
+// ── Выбор языка (макет) ───────────────────────────────────────────────
+function pickLang(btn) {
+    // Если уже активная — ничего не делаем
+    if (btn.classList.contains('active')) return;
+    // Показываем тост, язык не меняем
+    showToast('Смена языка будет доступна в полной версии');
+}
 function closeMobMenu() {}
 
 // ── Мобильный трёхдневный вид недели ─────────────────────────────────
